@@ -19,6 +19,7 @@
 
 ## ✨ Features
 
+- 🧭 **Interactive 3D view**: drag with mouse or touch to rotate and tilt the orbital plane; double-click to reset the view
 - 🪐 **8 planets + the Sun** with colors, relative sizes and orbital speeds proportional to the real astronomical periods
 - 🌙 **Toggleable moons layer**: the Moon always orbits Earth, and the *Moons* switch reveals the major moons of Mars, Jupiter, Saturn, Uranus and Neptune — all clickable
 - 🛰 **Complete moon systems**: dedicated views (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) include every IAU-recognised moon in the 2026 JPL catalogue, with clickable cards and orbital data

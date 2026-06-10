@@ -19,6 +19,7 @@
 
 ## ✨ Caratteristiche
 
+- 🧭 **Vista 3D interattiva**: trascina con mouse o touch per ruotare e inclinare il piano orbitale; doppio clic per ripristinare la visuale
 - 🪐 **8 pianeti + Sole** con colori, dimensioni relative e velocità orbitali proporzionali ai veri periodi astronomici
 - 🌙 **Layer lune attivabile**: la Luna orbita sempre intorno alla Terra, e con l'interruttore *Lune* compaiono anche le lune principali di Marte, Giove, Saturno, Urano e Nettuno — tutte cliccabili
 - 🛰 **Sistemi di lune completi**: le viste dedicate (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) includono tutte le lune riconosciute dalla IAU nel catalogo JPL 2026, con schede cliccabili e dati orbitali

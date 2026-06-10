@@ -37,8 +37,11 @@
     display: block;
     cursor: crosshair;
     transform-origin: var(--transizione-x, 50%) var(--transizione-y, 50%);
+    touch-action: none;
   }
   canvas#cielo.su-pianeta { cursor: pointer; }
+  canvas#cielo.ruotabile { cursor: grab; }
+  canvas#cielo.ruotando { cursor: grabbing; }
 
   /* ---------- transizione tra sistema e pianeta ---------- */
   .transizione-vista {
@@ -850,7 +853,7 @@ const TXT = {
     tempo: "Tempo simulato",
     giorno: "giorno",
     anni: "anni terrestri",
-    suggerimento: "— clicca su un corpo celeste per esplorarlo —",
+    suggerimento: "— trascina per ruotare · clicca un corpo per esplorarlo —",
     console: "◈ Console di controllo",
     velocita: "Velocità del tempo",
     scala: "Grandezza pianeti",
@@ -886,7 +889,7 @@ const TXT = {
     tempo: "Simulated time",
     giorno: "day",
     anni: "Earth years",
-    suggerimento: "— click a celestial body to explore it —",
+    suggerimento: "— drag to rotate · click a body to explore it —",
     console: "◈ Control console",
     velocita: "Time speed",
     scala: "Planet size",
@@ -2442,6 +2445,8 @@ const stato = {
   mostraLune: false,
   mostraNani: false,
   limiteLune: 20,
+  cameraYaw: -0.24,
+  cameraPitch: 0.56,
   selezionato: null,   // pianeta o SOLE
   hover: null,
 };
@@ -2466,11 +2471,47 @@ function raggiOrbita(p) {
   return { rx, ry };
 }
 
+function proiettaPunto3D(x, z, centroX = CX, centroY = CY) {
+  const cosYaw = Math.cos(stato.cameraYaw);
+  const sinYaw = Math.sin(stato.cameraYaw);
+  const cosPitch = Math.cos(stato.cameraPitch);
+  const sinPitch = Math.sin(stato.cameraPitch);
+  const xRuotata = x * cosYaw - z * sinYaw;
+  const profonditaYaw = x * sinYaw + z * cosYaw;
+  const yProiettata = profonditaYaw * sinPitch;
+  const profondita = profonditaYaw * cosPitch;
+  const focale = Math.max(Math.min(W, H) * 1.25, 420);
+  const scala = Math.max(0.58, Math.min(1.55, focale / (focale + profondita)));
+  return {
+    x: centroX + xRuotata * scala,
+    y: centroY + yProiettata * scala,
+    profondita,
+    scala,
+  };
+}
+
 function posizione(p) {
   const { rx, ry } = raggiOrbita(p);
   const dx = Math.cos(p.angolo) * rx;
-  const dy = Math.sin(p.angolo) * ry;
-  return { x: CX + dx, y: CY + dy, r: Math.hypot(dx, dy), rx, ry };
+  const dz = Math.sin(p.angolo) * ry;
+  const proiettata = proiettaPunto3D(dx, dz);
+  return {
+    ...proiettata,
+    r: Math.hypot(proiettata.x - CX, proiettata.y - CY),
+    rx,
+    ry,
+  };
+}
+
+function tracciaOrbita3D(rx, ry, centroX = CX, centroY = CY) {
+  const segmenti = layoutMobile ? 72 : 120;
+  ctx.beginPath();
+  for (let i = 0; i <= segmenti; i++) {
+    const angolo = (i / segmenti) * Math.PI * 2;
+    const punto = proiettaPunto3D(Math.cos(angolo) * rx, Math.sin(angolo) * ry, centroX, centroY);
+    if (i === 0) ctx.moveTo(punto.x, punto.y);
+    else ctx.lineTo(punto.x, punto.y);
+  }
 }
 
 function disegnaStelle(t) {
@@ -2521,8 +2562,7 @@ function disegnaOrbita(p) {
   ctx.strokeStyle = "rgba(232, 237, 244, 0.09)";
   ctx.lineWidth = 1;
   ctx.setLineDash([]);
-  ctx.beginPath();
-  ctx.ellipse(CX, CY, rx, ry, 0, 0, Math.PI * 2);
+  tracciaOrbita3D(rx, ry);
   ctx.stroke();
 }
 
@@ -2531,8 +2571,7 @@ function disegnaOrbitaNano(p) {
   ctx.strokeStyle = "rgba(111, 227, 255, 0.10)";
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 7]);
-  ctx.beginPath();
-  ctx.ellipse(CX, CY, rx, ry, 0, 0, Math.PI * 2);
+  tracciaOrbita3D(rx, ry);
   ctx.stroke();
   ctx.setLineDash([]);
 }
@@ -2557,7 +2596,7 @@ function colorAlpha(hex, a) {
 
 function disegnaPianeta(p, t) {
   const pos = posizione(p);
-  const r = p.raggio * stato.scalaPianeti;
+  const r = p.raggio * stato.scalaPianeti * pos.scala;
   p._x = pos.x; p._y = pos.y; p._r = r;
 
   // direzione della luce: dal Sole verso il pianeta
@@ -2630,8 +2669,10 @@ function disegnaPianeta(p, t) {
 
 function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
   const angolo = m.fase + (stato.giorni / m.periodo) * Math.PI * 2 * (m.retro ? -1 : 1);
-  const x = cx + Math.cos(angolo) * d;
-  const y = cy + Math.sin(angolo) * d;
+  const punto = proiettaPunto3D(Math.cos(angolo) * d, Math.sin(angolo) * d, cx, cy);
+  const x = punto.x;
+  const y = punto.y;
+  r *= punto.scala;
   m._x = x; m._y = y; m._r = r;
 
   // orbita intorno al pianeta
@@ -2639,8 +2680,7 @@ function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
     ctx.strokeStyle = `rgba(232, 237, 244, ${focus ? 0.09 : 0.06})`;
     ctx.lineWidth = 1;
     ctx.setLineDash([]);
-    ctx.beginPath();
-    ctx.arc(cx, cy, d, 0, Math.PI * 2);
+    tracciaOrbita3D(d, d, cx, cy);
     ctx.stroke();
   }
 
@@ -2799,8 +2839,8 @@ function disegnaVistaLune(t) {
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 7]);
     for (const frazione of [0.2, 0.45, 0.7, 0.92]) {
-      ctx.beginPath();
-      ctx.arc(CX, CY, minD + (maxD - minD) * frazione, 0, Math.PI * 2);
+      const d = minD + (maxD - minD) * frazione;
+      tracciaOrbita3D(d, d);
       ctx.stroke();
     }
     ctx.setLineDash([]);
@@ -2936,8 +2976,38 @@ function corpoSotto(mx, my) {
 }
 
 const etichettaHover = document.getElementById("etichettaHover");
+const trascinamentoCamera = {
+  attivo: false,
+  ruotato: false,
+  ignoraClick: false,
+  pointerId: null,
+  x: 0,
+  y: 0,
+};
+canvas.classList.add("ruotabile");
 
 canvas.addEventListener("pointermove", e => {
+  if (trascinamentoCamera.attivo && e.pointerId === trascinamentoCamera.pointerId) {
+    const dx = e.clientX - trascinamentoCamera.x;
+    const dy = e.clientY - trascinamentoCamera.y;
+    if (!trascinamentoCamera.ruotato && Math.hypot(dx, dy) > 4) {
+      trascinamentoCamera.ruotato = true;
+      canvas.classList.add("ruotando");
+      etichettaHover.classList.remove("visibile");
+    }
+    if (trascinamentoCamera.ruotato) {
+      stato.cameraYaw += dx * 0.008;
+      stato.cameraPitch = Math.max(-1.2, Math.min(1.2, stato.cameraPitch + dy * 0.008));
+      PIANETI.forEach(p => { p.scia.length = 0; });
+      PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+      trascinamentoCamera.x = e.clientX;
+      trascinamentoCamera.y = e.clientY;
+      stato.hover = null;
+      canvas.classList.remove("su-pianeta");
+    }
+    return;
+  }
+
   const corpo = corpoSotto(e.clientX, e.clientY);
   stato.hover = (corpo && corpo !== SOLE) ? corpo : null;
   canvas.classList.toggle("su-pianeta", !!corpo);
@@ -2951,7 +3021,38 @@ canvas.addEventListener("pointermove", e => {
   }
 });
 
+canvas.addEventListener("pointerdown", e => {
+  if (e.button !== undefined && e.button !== 0) return;
+  trascinamentoCamera.attivo = true;
+  trascinamentoCamera.ruotato = false;
+  trascinamentoCamera.pointerId = e.pointerId;
+  trascinamentoCamera.x = e.clientX;
+  trascinamentoCamera.y = e.clientY;
+  canvas.setPointerCapture(e.pointerId);
+});
+
+function terminaRotazioneCamera(e) {
+  if (!trascinamentoCamera.attivo || e.pointerId !== trascinamentoCamera.pointerId) return;
+  trascinamentoCamera.ignoraClick = trascinamentoCamera.ruotato;
+  trascinamentoCamera.attivo = false;
+  trascinamentoCamera.pointerId = null;
+  canvas.classList.remove("ruotando");
+  if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+}
+
+canvas.addEventListener("pointerup", terminaRotazioneCamera);
+canvas.addEventListener("pointercancel", terminaRotazioneCamera);
+canvas.addEventListener("dblclick", e => {
+  e.preventDefault();
+  stato.cameraYaw = -0.24;
+  stato.cameraPitch = 0.56;
+});
+
 canvas.addEventListener("click", e => {
+  if (trascinamentoCamera.ignoraClick) {
+    trascinamentoCamera.ignoraClick = false;
+    return;
+  }
   const corpo = corpoSotto(e.clientX, e.clientY);
   if (corpo) {
     apriScheda(corpo);
