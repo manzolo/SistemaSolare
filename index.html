@@ -189,7 +189,7 @@
     position: fixed;
     top: 142px;
     left: auto;
-    right: 28px;
+    right: 24px;
     width: 38px;
     z-index: 12;
     pointer-events: auto;
@@ -524,9 +524,9 @@
   .scheda {
     position: fixed;
     right: 24px;
-    top: 50%;
+    top: 190px; /* sotto la lente di ricerca (142px + 34px + margine) */
     width: 330px;
-    transform: translateY(-50%) translateX(30px);
+    transform: translateX(30px);
     background: var(--panel);
     border: 1px solid var(--line);
     backdrop-filter: blur(14px);
@@ -537,7 +537,7 @@
   }
   .scheda.visibile {
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: translateX(0);
     pointer-events: auto;
   }
   .scheda::before {
@@ -585,7 +585,8 @@
   .chiudi:hover { color: var(--amber); transform: rotate(90deg); }
 
   .scheda-corpo {
-    max-height: 60vh;
+    /* la scheda parte da 190px: non deve superare il bordo inferiore */
+    max-height: min(60vh, calc(100vh - 264px));
     overflow: hidden auto;
     transition: max-height 0.5s cubic-bezier(.22,1,.36,1), opacity 0.3s;
     border-top: 1px solid var(--line);
@@ -814,7 +815,7 @@
     </div>
     <div class="interruttori">
       <label><input type="checkbox" id="chkOrbite" checked><span class="spia"></span><span id="lblChkOrbite">Orbite</span></label>
-      <label><input type="checkbox" id="chkNomi"><span class="spia"></span><span id="lblChkNomi">Nomi</span></label>
+      <label><input type="checkbox" id="chkNomi" checked><span class="spia"></span><span id="lblChkNomi">Nomi</span></label>
       <label class="solo-principale"><input type="checkbox" id="chkScie"><span class="spia"></span><span id="lblChkScie">Scie</span></label>
       <label class="solo-principale"><input type="checkbox" id="chkLune"><span class="spia"></span><span id="lblChkLune">Lune</span></label>
       <label class="solo-principale"><input type="checkbox" id="chkNani"><span class="spia"></span><span id="lblChkNani">Pianeti nani</span></label>
@@ -2440,7 +2441,7 @@ const stato = {
   scalaOrbite: 1,
   pausa: false,
   mostraOrbite: true,
-  mostraNomi: false,
+  mostraNomi: true,
   mostraScie: false,
   mostraLune: false,
   mostraNani: false,
