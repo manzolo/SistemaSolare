@@ -477,7 +477,17 @@
               transform: translateY(30px); }
     .scheda.visibile { transform: translateY(0); }
     .suggerimento { display: none; }
-    header { padding: 14px 16px 0; }
+    header { gap: 12px; padding: 14px 16px 0; }
+    header h1 {
+      max-width: 145px;
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      line-height: 1.45;
+    }
+    .lato-destro { min-width: 0; gap: 7px; }
+    .cronometro { font-size: 9px; letter-spacing: 0.12em; line-height: 1.55; }
+    .lingue { gap: 4px; }
+    .lingue button { padding: 5px 7px; font-size: 9px; letter-spacing: 0.08em; }
   }
 </style>
 </head>
@@ -1116,6 +1126,35 @@ const PIANETA_FOCUS = PIANETI.find(p => p.slug === FOCUS && p.lune) || null;
 const canvas = document.getElementById("cielo");
 const ctx = canvas.getContext("2d");
 let W = 0, H = 0, CX = 0, CY = 0, RMAX = 0, DPR = 1;
+let ORBIT_X = 0, ORBIT_Y = 0, ORBIT_MIN = 0, layoutMobile = false;
+
+function aggiornaGeometria() {
+  layoutMobile = W <= 720;
+
+  if (!layoutMobile) {
+    CX = W / 2;
+    CY = H / 2;
+    RMAX = Math.min(W, H) / 2 - 30;
+    ORBIT_X = RMAX;
+    ORBIT_Y = RMAX;
+    ORBIT_MIN = 0;
+    return;
+  }
+
+  const header = document.querySelector("header").getBoundingClientRect();
+  const comandi = document.getElementById("pannelloComandi").getBoundingClientRect();
+  const margine = 16;
+  const alto = Math.max(header.bottom + 12, 112);
+  const basso = Math.min(comandi.top - 16, H - 72);
+  const altezzaUtile = Math.max(basso - alto, 210);
+
+  CX = W / 2;
+  CY = alto + altezzaUtile / 2;
+  ORBIT_X = Math.max(92, W / 2 - margine - 12);
+  ORBIT_Y = Math.max(88, altezzaUtile / 2 - 12);
+  RMAX = Math.min(ORBIT_X, ORBIT_Y);
+  ORBIT_MIN = Math.min(42, RMAX * 0.34);
+}
 
 function ridimensiona() {
   DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -1126,9 +1165,7 @@ function ridimensiona() {
   canvas.style.width = W + "px";
   canvas.style.height = H + "px";
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  CX = W / 2;
-  CY = H / 2;
-  RMAX = Math.min(W, H) / 2 - 30;
+  aggiornaGeometria();
   generaStelle();
 }
 window.addEventListener("resize", ridimensiona);
@@ -1174,9 +1211,25 @@ PIANETI.forEach(p => { p.angolo = p.fase; p.scia = []; });
 /* ============================================================
    DISEGNO
    ============================================================ */
+function raggiOrbita(p) {
+  if (!layoutMobile) {
+    const r = p.orbita * RMAX * stato.scalaOrbite;
+    return { rx: r, ry: r };
+  }
+
+  const primaOrbita = PIANETI[0].orbita;
+  const ultimaOrbita = PIANETI[PIANETI.length - 1].orbita;
+  const progressione = (p.orbita - primaOrbita) / (ultimaOrbita - primaOrbita);
+  const rx = (ORBIT_MIN + progressione * (ORBIT_X - ORBIT_MIN)) * stato.scalaOrbite;
+  const ry = (ORBIT_MIN + progressione * (ORBIT_Y - ORBIT_MIN)) * stato.scalaOrbite;
+  return { rx, ry };
+}
+
 function posizione(p) {
-  const r = p.orbita * RMAX * stato.scalaOrbite;
-  return { x: CX + Math.cos(p.angolo) * r, y: CY + Math.sin(p.angolo) * r, r };
+  const { rx, ry } = raggiOrbita(p);
+  const dx = Math.cos(p.angolo) * rx;
+  const dy = Math.sin(p.angolo) * ry;
+  return { x: CX + dx, y: CY + dy, r: Math.hypot(dx, dy), rx, ry };
 }
 
 function disegnaStelle(t) {
@@ -1223,11 +1276,12 @@ function disegnaSole(t) {
 }
 
 function disegnaOrbita(p) {
+  const { rx, ry } = raggiOrbita(p);
   ctx.strokeStyle = "rgba(232, 237, 244, 0.09)";
   ctx.lineWidth = 1;
   ctx.setLineDash([]);
   ctx.beginPath();
-  ctx.arc(CX, CY, p.orbita * RMAX * stato.scalaOrbite, 0, Math.PI * 2);
+  ctx.ellipse(CX, CY, rx, ry, 0, 0, Math.PI * 2);
   ctx.stroke();
 }
 
@@ -1625,6 +1679,8 @@ document.getElementById("schedaTesta").addEventListener("click", () => {
    ============================================================ */
 document.getElementById("comandiTesta").addEventListener("click", () => {
   document.getElementById("pannelloComandi").classList.toggle("chiuso");
+  requestAnimationFrame(aggiornaGeometria);
+  setTimeout(aggiornaGeometria, 480);
 });
 
 const aggiornaSliders = [];
@@ -1841,6 +1897,7 @@ function applicaLingua() {
 
   aggiornaSliders.forEach(f => f());
   aggiornaCronometro();
+  if (layoutMobile) requestAnimationFrame(aggiornaGeometria);
 
   // ritraduce la scheda aperta mantenendone lo stato
   if (stato.selezionato) {
@@ -1870,6 +1927,7 @@ window.addEventListener("keydown", e => {
 if (PIANETA_FOCUS) document.body.classList.add("focus");
 ridimensiona();
 applicaLingua();
+setTimeout(aggiornaGeometria, 1200);
 requestAnimationFrame(ciclo);
 </script>
 </body>
