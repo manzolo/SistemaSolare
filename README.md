@@ -21,7 +21,12 @@
 
 - 🪐 **8 pianeti + Sole** con colori, dimensioni relative e velocità orbitali proporzionali ai veri periodi astronomici
 - 🌙 **Layer lune attivabile**: la Luna orbita sempre intorno alla Terra, e con l'interruttore *Lune* compaiono anche le lune principali di Marte, Giove, Saturno, Urano e Nettuno — tutte cliccabili
-- 🛰 **Sistemi di lune dedicati**: dalla scheda di un pianeta si genera un link (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) che apre una simulazione col pianeta al centro e le sue lune in orbita
+- 🛰 **Sistemi di lune completi**: le viste dedicate (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) includono tutte le lune riconosciute dalla IAU nel catalogo JPL 2026, con schede cliccabili e dati orbitali
+- 📚 **Schede approfondite**: pianeti e lune principali includono più contesto scientifico, curiosità e dettagli; le lune minori riportano scoperta, distanza, periodo, classe e direzione orbitale
+- 🔍 **Ricerca globale**: trova Sole, pianeti, pianeti nani e lune e apre direttamente il corpo o il sistema corretto
+- 🧊 **Pianeti nani**: layer dedicato a Cerere, Plutone, Haumea, Makemake ed Eris
+- 📅 **Configurazione odierna**: il giorno 0 usa la data di apertura e posizioni orbitali approssimate con elementi JPL
+- 🎚️ **Densità delle lune**: nelle viste dedicate puoi mostrare 10, 20 o tutte le lune
 - 🎻 **Sottofondo musicale** in stile documentario — un arrangiamento sintetico dell'*Aria sulla quarta corda* di Bach generato al volo con la Web Audio API — attivabile/disattivabile col pulsante ♪
 - 💡 **Illuminazione realistica**: ogni pianeta è illuminato dal lato rivolto verso il Sole
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano
@@ -54,6 +59,10 @@ xdg-open index.html   # oppure aprilo con doppio click
 ```
 
 Oppure prova subito la **[demo live](https://manzolo.github.io/SistemaSolare/)**.
+
+## 🧪 Perché esiste
+
+Questo progetto nasce per giocare e sperimentare con l'intelligenza artificiale, imparando nel frattempo qualcosa di programmazione e astronomia. Non vuole sostituire un software scientifico professionale: è un laboratorio interattivo costruito soprattutto per curiosità e apprendimento personale.
 
 ## 🔭 Com'è fatto
 

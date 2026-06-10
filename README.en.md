@@ -21,7 +21,12 @@
 
 - 🪐 **8 planets + the Sun** with colors, relative sizes and orbital speeds proportional to the real astronomical periods
 - 🌙 **Toggleable moons layer**: the Moon always orbits Earth, and the *Moons* switch reveals the major moons of Mars, Jupiter, Saturn, Uranus and Neptune — all clickable
-- 🛰 **Dedicated moon systems**: each planet's info card generates a link (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) opening a simulation with the planet at the centre and its moons in orbit
+- 🛰 **Complete moon systems**: dedicated views (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) include every IAU-recognised moon in the 2026 JPL catalogue, with clickable cards and orbital data
+- 📚 **Expanded information cards**: planets and major moons include richer scientific context and facts; minor moons show discovery, distance, period, class and orbital direction
+- 🔍 **Global search**: find the Sun, planets, dwarf planets and moons and open the relevant body or system directly
+- 🧊 **Dwarf planets**: a dedicated layer for Ceres, Pluto, Haumea, Makemake and Eris
+- 📅 **Today's configuration**: day zero uses the opening date and approximate orbital positions derived from JPL elements
+- 🎚️ **Moon density**: dedicated views can display 10, 20 or every moon
 - 🎻 **Background music** in documentary style — a synthetic arrangement of Bach's *Air on the G String* generated on the fly with the Web Audio API — toggled with the ♪ button
 - 💡 **Realistic lighting**: each planet is lit on the side facing the Sun
 - 🪩 **Unique details**: Saturn's rings, Jupiter's bands, a pulsing Sun with halo, twinkling stars
@@ -54,6 +59,10 @@ xdg-open index.html   # or just double-click it
 ```
 
 Or try the **[live demo](https://manzolo.github.io/SistemaSolare/)** right away.
+
+## 🧪 Why it exists
+
+This project was created to play and experiment with artificial intelligence while learning more about programming and astronomy. It is not intended to replace professional scientific software: it is an interactive laboratory built primarily for curiosity and personal learning.
 
 ## 🔭 How it's built
 

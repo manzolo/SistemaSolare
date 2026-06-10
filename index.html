@@ -104,6 +104,113 @@
   .indietro:hover { color: #fff; text-shadow: 0 0 12px rgba(111,227,255,0.8); }
   body.focus .indietro { display: inline-block; }
   body.focus .solo-principale { display: none; }
+  .solo-focus { display: none; }
+  body.focus .solo-focus { display: block; }
+
+  /* ---------- ricerca globale ---------- */
+  .ricerca {
+    position: fixed;
+    top: 142px;
+    left: auto;
+    right: 28px;
+    width: 38px;
+    z-index: 12;
+    pointer-events: auto;
+  }
+  .ricerca.aperta { width: min(320px, 34vw); }
+  .apri-ricerca {
+    position: relative;
+    display: block;
+    width: 38px;
+    height: 34px;
+    margin-left: auto;
+    border: 1px solid rgba(111, 227, 255, 0.35);
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--cyan);
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+  }
+  .apri-ricerca:hover { border-color: var(--cyan); color: #fff; }
+  .apri-ricerca::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 11px;
+    top: 8px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+  .apri-ricerca::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 1px;
+    left: 21px;
+    top: 20px;
+    background: currentColor;
+    transform: rotate(45deg);
+    transform-origin: left center;
+  }
+  .ricerca.aperta .apri-ricerca { display: none; }
+  .pannello-ricerca { display: none; }
+  .ricerca.aperta .pannello-ricerca { display: block; }
+  .pannello-ricerca input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-top-color: rgba(111, 227, 255, 0.45);
+    outline: none;
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+  }
+  .ricerca input:focus { border-color: rgba(111, 227, 255, 0.65); }
+  .risultati-ricerca {
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: rgba(8, 12, 22, 0.96);
+    backdrop-filter: blur(14px);
+  }
+  .risultati-ricerca.visibile { display: block; }
+  .risultato-ricerca {
+    display: block;
+    width: 100%;
+    padding: 9px 11px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--mono);
+  }
+  .risultato-ricerca:hover,
+  .risultato-ricerca.attivo { background: rgba(111, 227, 255, 0.08); }
+  .risultato-ricerca b {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .risultato-ricerca small {
+    color: var(--dim);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+  .nessun-risultato {
+    padding: 11px;
+    color: var(--dim);
+    font-size: 9px;
+    text-align: center;
+  }
 
   /* ---------- selettore lingua ---------- */
   .lingue {
@@ -385,6 +492,25 @@
     padding: 10px 16px 14px;
     opacity: 0.85;
   }
+  .dettagli {
+    padding: 14px 16px 16px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+  .dettagli:empty { display: none; }
+  .dettagli h3 {
+    margin: 2px 0 8px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .dettagli ul { padding-left: 16px; }
+  .dettagli li + li { margin-top: 5px; }
   .griglia-dati {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -489,6 +615,12 @@
     .cronometro { font-size: 9px; letter-spacing: 0.12em; line-height: 1.55; }
     .lingue { gap: 4px; }
     .lingue button { padding: 5px 7px; font-size: 9px; letter-spacing: 0.08em; }
+    .ricerca {
+      top: 112px;
+      right: 16px;
+    }
+    .ricerca.aperta { width: calc(100% - 32px); }
+    body.focus .ricerca { top: 124px; }
   }
 </style>
 </head>
@@ -507,7 +639,8 @@
     <div class="cronometro">
       <span id="lblTempo">Tempo simulato</span><br>
       <b id="contaGiorni">giorno 0</b><br>
-      <span id="contaAnni">0,0 anni terrestri</span>
+      <span id="contaAnni">0,0 anni terrestri</span><br>
+      <span id="contaData"></span>
     </div>
     <div class="lingue" id="selettoreLingue">
       <button data-lingua="it" class="attiva">🇮🇹 Italiano</button>
@@ -515,6 +648,14 @@
     </div>
   </div>
 </header>
+
+<div class="ricerca" id="ricerca">
+  <button class="apri-ricerca" id="apriRicerca" type="button" aria-label="Cerca"></button>
+  <div class="pannello-ricerca">
+    <input id="campoRicerca" type="search" autocomplete="off" placeholder="Cerca pianeti e lune">
+    <div class="risultati-ricerca" id="risultatiRicerca"></div>
+  </div>
+</div>
 
 <div class="suggerimento" id="suggerimento">— clicca su un corpo celeste per esplorarlo —</div>
 <div class="etichetta-hover" id="etichettaHover"></div>
@@ -542,6 +683,10 @@
       <label><span id="lblOrbite">Ampiezza orbite</span> <output id="vOrbite">1.0×</output></label>
       <input type="range" id="sOrbite" min="0.55" max="1.25" value="1" step="0.05">
     </div>
+    <div class="controllo solo-focus">
+      <label><span id="lblLimiteLune">Lune visibili</span> <output id="vLimiteLune">20</output></label>
+      <input type="range" id="sLimiteLune" min="0" max="2" value="1" step="1">
+    </div>
     <div class="bottoni">
       <button id="btnPausa">❚❚ Pausa</button>
       <button id="btnReset">↺ Reset</button>
@@ -552,6 +697,7 @@
       <label><input type="checkbox" id="chkNomi"><span class="spia"></span><span id="lblChkNomi">Nomi</span></label>
       <label class="solo-principale"><input type="checkbox" id="chkScie"><span class="spia"></span><span id="lblChkScie">Scie</span></label>
       <label class="solo-principale"><input type="checkbox" id="chkLune"><span class="spia"></span><span id="lblChkLune">Lune</span></label>
+      <label class="solo-principale"><input type="checkbox" id="chkNani"><span class="spia"></span><span id="lblChkNani">Pianeti nani</span></label>
     </div>
   </div>
 </section>
@@ -569,6 +715,7 @@
     <p class="descrizione" id="schedaDescrizione"></p>
     <dl class="griglia-dati" id="schedaDati"></dl>
     <div class="curiosita" id="schedaCuriosita"></div>
+    <div class="dettagli" id="schedaDettagli"></div>
     <a class="vai-lune" id="schedaLune" href="#" style="display:none"></a>
   </div>
 </aside>
@@ -600,14 +747,21 @@ const TXT = {
     nomi: "Nomi",
     scie: "Scie",
     lune: "Lune",
+    nani: "Pianeti nani",
+    limiteLune: "Lune visibili",
+    tutte: "tutte",
+    cerca: "Cerca pianeti e lune",
+    nessunRisultato: "Nessun corpo celeste trovato",
+    categorie: { stella: "Stella", pianeta: "Pianeta", nano: "Pianeta nano", luna: "Luna" },
     fermo: "fermo",
     unitaVelocita: "g/s",
     locale: "it-IT",
     indietro: "← Sistema Solare",
     musica: "♪ Musica",
+    approfondimenti: "Approfondimenti",
     titoloFocus: nome => `Sistema <span class="sole-titolo">·</span> ${nome}`,
     titoloPaginaFocus: nome => `Sistema di ${nome}`,
-    vaiLune: n => n === 1 ? "Simula la sua luna →" : `Simula le sue ${n} lune principali →`,
+    vaiLune: n => n === 1 ? "Esplora la sua luna →" : `Esplora tutte le ${n} lune →`,
   },
   en: {
     titolo: 'Observatory <span class="sole-titolo">·</span> Solar System',
@@ -629,14 +783,21 @@ const TXT = {
     nomi: "Names",
     scie: "Trails",
     lune: "Moons",
+    nani: "Dwarf planets",
+    limiteLune: "Visible moons",
+    tutte: "all",
+    cerca: "Search planets and moons",
+    nessunRisultato: "No celestial body found",
+    categorie: { stella: "Star", pianeta: "Planet", nano: "Dwarf planet", luna: "Moon" },
     fermo: "frozen",
     unitaVelocita: "d/s",
     locale: "en-US",
     indietro: "← Solar System",
     musica: "♪ Music",
+    approfondimenti: "More details",
     titoloFocus: nome => `${nome} <span class="sole-titolo">·</span> System`,
     titoloPaginaFocus: nome => `${nome} System`,
-    vaiLune: n => n === 1 ? "Simulate its moon →" : `Simulate its ${n} major moons →`,
+    vaiLune: n => n === 1 ? "Explore its moon →" : `Explore all ${n} moons →`,
   },
 };
 
@@ -818,7 +979,7 @@ const PIANETI = [
         ["Distanza dal Sole", "778,5", "mln km"],
         ["Anno", "11,9", "anni terr."],
         ["Giorno", "9,9", "ore"],
-        ["Lune", "95", "confermate"],
+        ["Lune", "115", "riconosciute IAU"],
         ["Temperatura nubi", "−108", "°C"],
       ],
       en: [
@@ -826,7 +987,7 @@ const PIANETI = [
         ["Distance from Sun", "778.5", "M km"],
         ["Year", "11.9", "Earth years"],
         ["Day", "9.9", "hours"],
-        ["Moons", "95", "confirmed"],
+        ["Moons", "115", "IAU-recognised"],
         ["Cloud temperature", "−108", "°C"],
       ],
     },
@@ -850,7 +1011,7 @@ const PIANETI = [
         ["Distanza dal Sole", "1.434", "mln km"],
         ["Anno", "29,5", "anni terr."],
         ["Giorno", "10,7", "ore"],
-        ["Lune", "146", "confermate"],
+        ["Lune", "292", "riconosciute IAU"],
         ["Temperatura nubi", "−139", "°C"],
       ],
       en: [
@@ -858,7 +1019,7 @@ const PIANETI = [
         ["Distance from Sun", "1,434", "M km"],
         ["Year", "29.5", "Earth years"],
         ["Day", "10.7", "hours"],
-        ["Moons", "146", "confirmed"],
+        ["Moons", "292", "IAU-recognised"],
         ["Cloud temperature", "−139", "°C"],
       ],
     },
@@ -882,7 +1043,7 @@ const PIANETI = [
         ["Distanza dal Sole", "2.871", "mln km"],
         ["Anno", "84", "anni terr."],
         ["Giorno", "17,2", "ore"],
-        ["Lune", "28", "confermate"],
+        ["Lune", "29", "riconosciute IAU"],
         ["Temperatura", "−197", "°C"],
       ],
       en: [
@@ -890,7 +1051,7 @@ const PIANETI = [
         ["Distance from Sun", "2,871", "M km"],
         ["Year", "84", "Earth years"],
         ["Day", "17.2", "hours"],
-        ["Moons", "28", "confirmed"],
+        ["Moons", "29", "IAU-recognised"],
         ["Temperature", "−197", "°C"],
       ],
     },
@@ -933,6 +1094,276 @@ const PIANETI = [
   },
 ];
 
+const PIANETI_NANI = [
+  {
+    nome: { it: "Cerere", en: "Ceres" },
+    tipo: { it: "Pianeta nano · fascia principale", en: "Dwarf planet · main belt" },
+    colore: "#b8aaa0", coloreScuro: "#625750",
+    raggio: 2.4, orbita: 0.39, periodo: 1680, slug: "cerere",
+    elementi: { epoch: 2461200.5, e: 0.0797, ma: 274, n: 0.214, peri: 153.5 },
+    descrizione: {
+      it: "Cerere è il corpo più grande della fascia degli asteroidi tra Marte e Giove. La missione Dawn ha rivelato una superficie ricca di sali, ghiaccio d'acqua e tracce di attività geologica relativamente recente.",
+      en: "Ceres is the largest body in the asteroid belt between Mars and Jupiter. The Dawn mission revealed a surface rich in salts, water ice and evidence of comparatively recent geological activity.",
+    },
+    dati: {
+      it: [["Diametro", "939", "km"], ["Distanza media", "2,77", "UA"], ["Anno", "1.680", "giorni"], ["Rotazione", "9,1", "ore"], ["Lune", "0", ""], ["Scoperta", "1801", "G. Piazzi"]],
+      en: [["Diameter", "939", "km"], ["Mean distance", "2.77", "AU"], ["Year", "1,680", "days"], ["Rotation", "9.1", "hours"], ["Moons", "0", ""], ["Discovered", "1801", "G. Piazzi"]],
+    },
+    curiosita: { it: "Le macchie luminose del cratere Occator sono depositi salini lasciati da antiche risalite di acqua salata.", en: "The bright spots in Occator crater are salt deposits left by ancient upwellings of briny water." },
+  },
+  {
+    nome: { it: "Plutone", en: "Pluto" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#d7b397", coloreScuro: "#755344",
+    raggio: 3.1, orbita: 0.91, periodo: 90560, slug: "plutone",
+    elementi: { epoch: 2457588.5, e: 0.252, ma: 38.7, n: 0.00396, peri: 224 },
+    descrizione: {
+      it: "Plutone è un mondo complesso di ghiacci e roccia con montagne, dune, foschie atmosferiche e il vasto ghiacciaio di azoto Sputnik Planitia. Forma con Caronte un sistema quasi binario.",
+      en: "Pluto is a complex world of ice and rock with mountains, dunes, atmospheric haze and the vast nitrogen glacier Sputnik Planitia. Together with Charon it forms an almost binary system.",
+    },
+    dati: {
+      it: [["Diametro", "2.377", "km"], ["Distanza media", "39,6", "UA"], ["Anno", "248", "anni terr."], ["Rotazione", "6,4", "giorni"], ["Lune", "5", ""], ["Sorvolo", "2015", "New Horizons"]],
+      en: [["Diameter", "2,377", "km"], ["Mean distance", "39.6", "AU"], ["Year", "248", "Earth years"], ["Rotation", "6.4", "days"], ["Moons", "5", ""], ["Flyby", "2015", "New Horizons"]],
+    },
+    curiosita: { it: "Il baricentro con Caronte si trova fuori da Plutone: entrambi orbitano attorno a un punto nello spazio.", en: "The barycentre with Charon lies outside Pluto, so both bodies orbit a point in space." },
+  },
+  {
+    nome: { it: "Haumea", en: "Haumea" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#d8e2e5", coloreScuro: "#71838b",
+    raggio: 2.4, orbita: 0.94, periodo: 103000, slug: "haumea",
+    elementi: { epoch: 2461200.5, e: 0.194, ma: 223, n: 0.00349, peri: 3 },
+    descrizione: {
+      it: "Haumea ruota così rapidamente da essere allungata come un ellissoide. È circondata da un anello e possiede due lune, Hiʻiaka e Namaka.",
+      en: "Haumea spins so rapidly that it is stretched into an ellipsoid. It has a ring and two moons, Hiʻiaka and Namaka.",
+    },
+    dati: {
+      it: [["Diametro medio", "≈ 1.600", "km"], ["Distanza media", "43,1", "UA"], ["Anno", "≈ 282", "anni"], ["Rotazione", "3,9", "ore"], ["Lune", "2", ""], ["Anello", "sì", ""]],
+      en: [["Mean diameter", "≈ 1,600", "km"], ["Mean distance", "43.1", "AU"], ["Year", "≈ 282", "years"], ["Rotation", "3.9", "hours"], ["Moons", "2", ""], ["Ring", "yes", ""]],
+    },
+    curiosita: { it: "È uno dei corpi di grandi dimensioni che ruotano più velocemente nel Sistema Solare.", en: "It is one of the fastest-spinning large bodies in the Solar System." },
+  },
+  {
+    nome: { it: "Makemake", en: "Makemake" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#c8906f", coloreScuro: "#6e4433",
+    raggio: 2.5, orbita: 0.97, periodo: 112000, slug: "makemake",
+    elementi: { epoch: 2461200.5, e: 0.159, ma: 170, n: 0.0032, peri: 16.3 },
+    descrizione: {
+      it: "Makemake è un mondo molto freddo e rossastro della fascia di Kuiper. La sua superficie contiene metano, etano e probabilmente azoto congelati.",
+      en: "Makemake is a very cold, reddish world in the Kuiper belt. Its surface contains frozen methane, ethane and probably nitrogen.",
+    },
+    dati: {
+      it: [["Diametro", "≈ 1.430", "km"], ["Distanza media", "45,6", "UA"], ["Anno", "≈ 306", "anni"], ["Rotazione", "22,8", "ore"], ["Lune", "1", "MK2"], ["Scoperta", "2005", ""]],
+      en: [["Diameter", "≈ 1,430", "km"], ["Mean distance", "45.6", "AU"], ["Year", "≈ 306", "years"], ["Rotation", "22.8", "hours"], ["Moons", "1", "MK2"], ["Discovered", "2005", ""]],
+    },
+    curiosita: { it: "La scoperta della sua piccola luna MK2 ha permesso di migliorare le stime della massa del sistema.", en: "The discovery of its small moon MK2 improved estimates of the system's mass." },
+  },
+  {
+    nome: { it: "Eris", en: "Eris" },
+    tipo: { it: "Pianeta nano · disco diffuso", en: "Dwarf planet · scattered disc" },
+    colore: "#e2e0dc", coloreScuro: "#7b7974",
+    raggio: 2.7, orbita: 1, periodo: 205000, slug: "eris",
+    elementi: { epoch: 2461200.5, e: 0.438, ma: 212, n: 0.00176, peri: 187 },
+    descrizione: {
+      it: "Eris è uno dei corpi più massicci oltre Nettuno e percorre un'orbita molto eccentrica e inclinata. La sua scoperta contribuì direttamente alla definizione moderna di pianeta nano.",
+      en: "Eris is one of the most massive bodies beyond Neptune and follows a highly eccentric, inclined orbit. Its discovery directly contributed to the modern definition of a dwarf planet.",
+    },
+    dati: {
+      it: [["Diametro", "2.326", "km"], ["Distanza media", "67,9", "UA"], ["Anno", "≈ 561", "anni"], ["Rotazione", "25,9", "ore"], ["Lune", "1", "Disnomia"], ["Scoperta", "2005", ""]],
+      en: [["Diameter", "2,326", "km"], ["Mean distance", "67.9", "AU"], ["Year", "≈ 561", "years"], ["Rotation", "25.9", "hours"], ["Moons", "1", "Dysnomia"], ["Discovered", "2005", ""]],
+    },
+    curiosita: { it: "Alla massima distanza dal Sole arriva quasi a 98 unità astronomiche.", en: "At aphelion it travels nearly 98 astronomical units from the Sun." },
+  },
+];
+
+const DETTAGLI_CORPI = {
+  Sole: {
+    it: [
+      "Ogni secondo converte circa 600 milioni di tonnellate di idrogeno in elio; una piccola parte della massa diventa energia.",
+      "La luce impiega circa 8 minuti e 20 secondi per raggiungere la Terra.",
+      "Il campo magnetico solare segue un ciclo di circa 11 anni, con macchie, brillamenti ed espulsioni di plasma.",
+    ],
+    en: [
+      "Every second it converts roughly 600 million tonnes of hydrogen into helium; a small fraction of that mass becomes energy.",
+      "Sunlight takes about 8 minutes and 20 seconds to reach Earth.",
+      "Its magnetic activity follows an approximately 11-year cycle of sunspots, flares and plasma eruptions.",
+    ],
+  },
+  Mercurio: {
+    it: [
+      "Il suo nucleo metallico occupa gran parte del pianeta e genera ancora un debole campo magnetico.",
+      "Nelle zone permanentemente in ombra dei crateri polari esistono depositi di ghiaccio d'acqua.",
+      "La risonanza spin-orbita 3:2 gli fa compiere tre rotazioni ogni due rivoluzioni intorno al Sole.",
+    ],
+    en: [
+      "Its metallic core fills much of the planet and still produces a weak magnetic field.",
+      "Permanently shadowed polar craters contain deposits of water ice.",
+      "A 3:2 spin-orbit resonance makes it rotate three times for every two trips around the Sun.",
+    ],
+  },
+  Venere: {
+    it: [
+      "La pressione al suolo è circa 92 volte quella terrestre, simile a quella a quasi un chilometro sotto il mare.",
+      "Le nubi riflettono molta luce, ma l'atmosfera di anidride carbonica intrappola il calore con estrema efficacia.",
+      "Un giorno siderale venusiano dura più del suo anno e la rotazione è retrograda.",
+    ],
+    en: [
+      "Surface pressure is about 92 times Earth's, comparable to the pressure nearly one kilometre beneath the ocean.",
+      "Its clouds reflect abundant sunlight, while the carbon-dioxide atmosphere traps heat extremely efficiently.",
+      "A Venusian sidereal day is longer than its year, and the planet rotates backwards.",
+    ],
+  },
+  Terra: {
+    it: [
+      "La tettonica a placche ricicla la crosta e partecipa al ciclo del carbonio che stabilizza il clima su tempi geologici.",
+      "Il nucleo esterno liquido alimenta il campo magnetico che devia gran parte del vento solare.",
+      "È l'unico mondo noto con oceani superficiali stabili e una biosfera globale.",
+    ],
+    en: [
+      "Plate tectonics recycles the crust and supports the carbon cycle that stabilises climate over geological time.",
+      "Its liquid outer core powers a magnetic field that deflects much of the solar wind.",
+      "It is the only known world with stable surface oceans and a global biosphere.",
+    ],
+  },
+  Marte: {
+    it: [
+      "Valles Marineris è un sistema di canyon lungo oltre 4.000 km.",
+      "Il pianeta conserva calotte polari di ghiaccio d'acqua e anidride carbonica, oltre a molto ghiaccio nel sottosuolo.",
+      "Meteoriti marziani arrivati sulla Terra permettono di studiarne le rocce anche senza una missione di ritorno campioni.",
+    ],
+    en: [
+      "Valles Marineris is a canyon system more than 4,000 km long.",
+      "Mars retains polar caps of water and carbon-dioxide ice, plus extensive underground ice.",
+      "Martian meteorites found on Earth let scientists study its rocks without a sample-return mission.",
+    ],
+  },
+  Giove: {
+    it: [
+      "Ruota in meno di dieci ore: questa velocità lo schiaccia ai poli e alimenta potenti correnti atmosferiche.",
+      "Il suo campo magnetico crea la magnetosfera planetaria più grande del Sistema Solare.",
+      "Le lune galileiane Io, Europa e Ganimede sono legate da una risonanza 4:2:1 che produce intenso riscaldamento mareale.",
+    ],
+    en: [
+      "It rotates in under ten hours, flattening the planet at the poles and driving powerful atmospheric jets.",
+      "Its magnetic field creates the largest planetary magnetosphere in the Solar System.",
+      "Io, Europa and Ganymede share a 4:2:1 resonance that drives intense tidal heating.",
+    ],
+  },
+  Saturno: {
+    it: [
+      "Gli anelli sono composti soprattutto da ghiaccio d'acqua, con frammenti che vanno da polvere a blocchi grandi come edifici.",
+      "Le lune pastore modellano bordi, onde e divisioni negli anelli attraverso risonanze gravitazionali.",
+      "Al polo nord è presente una corrente atmosferica dalla sorprendente forma esagonale.",
+    ],
+    en: [
+      "Its rings consist mainly of water ice, with pieces ranging from dust grains to building-sized blocks.",
+      "Shepherd moons shape ring edges, waves and gaps through gravitational resonances.",
+      "A remarkable hexagon-shaped atmospheric current surrounds the north pole.",
+    ],
+  },
+  Urano: {
+    it: [
+      "L'inclinazione di circa 98 gradi produce stagioni estreme che durano decenni.",
+      "Il colore deriva dal metano atmosferico, che assorbe soprattutto la luce rossa.",
+      "Possiede anelli scuri e stretti, scoperti nel 1977 osservando l'occultazione di una stella.",
+    ],
+    en: [
+      "Its roughly 98-degree axial tilt produces extreme seasons lasting decades.",
+      "Its colour comes from atmospheric methane, which preferentially absorbs red light.",
+      "It has narrow, dark rings discovered in 1977 during a stellar occultation.",
+    ],
+  },
+  Nettuno: {
+    it: [
+      "I venti possono superare 2.000 km/h nonostante il pianeta riceva pochissima energia solare.",
+      "Emette più calore di quanto ne riceva dal Sole, segno di una sorgente energetica interna.",
+      "La cattura di Tritone potrebbe avere sconvolto un antico sistema di satelliti regolari.",
+    ],
+    en: [
+      "Winds can exceed 2,000 km/h even though the planet receives very little sunlight.",
+      "It radiates more heat than it receives from the Sun, revealing a substantial internal energy source.",
+      "The capture of Triton may have disrupted an earlier system of regular moons.",
+    ],
+  },
+  Luna: {
+    it: [
+      "La superficie conserva una cronologia di impatti che sulla Terra è stata cancellata da erosione e tettonica.",
+      "Il lato nascosto ha una crosta mediamente più spessa e molti meno mari basaltici del lato rivolto verso la Terra.",
+      "Ghiaccio d'acqua è stato rilevato nelle regioni polari permanentemente in ombra.",
+    ],
+    en: [
+      "Its surface preserves an impact history erased on Earth by erosion and plate tectonics.",
+      "The far side has a thicker average crust and far fewer basaltic maria than the Earth-facing side.",
+      "Water ice has been detected in permanently shadowed polar regions.",
+    ],
+  },
+  Io: {
+    it: ["Ospita centinaia di vulcani attivi.", "I pennacchi possono salire per centinaia di chilometri.", "Lo zolfo produce i suoi colori gialli, rossi e neri."],
+    en: ["It hosts hundreds of active volcanoes.", "Its plumes can rise hundreds of kilometres.", "Sulphur compounds create its yellow, red and black colours."],
+  },
+  Europa: {
+    it: ["L'oceano globale potrebbe contenere più acqua di tutti gli oceani terrestri.", "La superficie giovane è attraversata da fratture e pochissimi crateri.", "Europa Clipper studierà abitabilità, ghiaccio e composizione."],
+    en: ["Its global ocean may contain more water than all Earth's oceans.", "Its young surface has many fractures and few craters.", "Europa Clipper will investigate its habitability, ice shell and composition."],
+  },
+  Ganimede: {
+    it: ["È più grande di Mercurio.", "Possiede un campo magnetico intrinseco.", "Il suo oceano potrebbe essere disposto in strati alternati di acqua e ghiacci ad alta pressione."],
+    en: ["It is larger than Mercury.", "It has an intrinsic magnetic field.", "Its ocean may form alternating layers of liquid water and high-pressure ice."],
+  },
+  Callisto: {
+    it: ["È il mondo più densamente craterizzato tra i grandi satelliti.", "Potrebbe nascondere un oceano salato.", "La sua superficie è molto antica e geologicamente poco rielaborata."],
+    en: ["It is the most densely cratered of the large moons.", "It may conceal a salty ocean.", "Its surface is ancient and has undergone little geological reworking."],
+  },
+  Encelado: {
+    it: ["I geyser alimentano l'anello E di Saturno.", "Nel pennacchio sono stati rilevati sali, composti organici e fosfati.", "Il fondale oceanico potrebbe ospitare attività idrotermale."],
+    en: ["Its geysers feed Saturn's E ring.", "Salts, organic compounds and phosphates have been detected in the plume.", "Its ocean floor may host hydrothermal activity."],
+  },
+  Titano: {
+    it: ["Ha un ciclo meteorologico del metano con nubi, piogge, fiumi e laghi.", "Sotto la crosta si trova probabilmente un oceano d'acqua.", "La missione Dragonfly esplorerà la chimica organica della superficie."],
+    en: ["It has a methane weather cycle with clouds, rain, rivers and lakes.", "A water ocean probably lies beneath its crust.", "The Dragonfly mission will explore its surface organic chemistry."],
+  },
+  Tritone: {
+    it: ["Voyager 2 osservò geyser scuri di azoto.", "La sua orbita retrograda indica una probabile cattura dalla fascia di Kuiper.", "Sta lentamente spiraleggiando verso Nettuno e in un futuro remoto potrebbe disgregarsi."],
+    en: ["Voyager 2 observed dark nitrogen geysers.", "Its retrograde orbit points to capture from the Kuiper belt.", "It is slowly spiralling inward and may eventually break apart."],
+  },
+  Phobos: {
+    it: ["Orbita più velocemente di quanto Marte ruoti.", "Si avvicina al pianeta di circa due centimetri l'anno.", "Il grande cratere Stickney occupa una parte notevole della sua superficie."],
+    en: ["It orbits faster than Mars rotates.", "It moves roughly two centimetres closer to Mars each year.", "The large Stickney crater dominates much of its surface."],
+  },
+  Deimos: {
+    it: ["La regolite rende più morbidi i contorni dei suoi crateri.", "Si allontana lentamente da Marte.", "La sua forma irregolare misura appena una quindicina di chilometri."],
+    en: ["Loose regolith softens the outlines of its craters.", "It is slowly moving away from Mars.", "Its irregular body is only about fifteen kilometres across."],
+  },
+  Rea: {
+    it: ["È composta soprattutto da ghiaccio d'acqua e roccia.", "La sua superficie mostra terreni luminosi fratturati.", "Una tenue atmosfera di ossigeno e anidride carbonica è stata rilevata dalla missione Cassini."],
+    en: ["It consists mainly of water ice and rock.", "Its surface includes bright fractured terrain.", "Cassini detected an extremely tenuous oxygen and carbon-dioxide atmosphere."],
+  },
+  Giapeto: {
+    it: ["La cresta equatoriale raggiunge altezze di circa 20 km.", "La dicotomia di colore dipende anche dalla migrazione termica del ghiaccio.", "La sua orbita lontana offre una vista privilegiata degli anelli di Saturno."],
+    en: ["Its equatorial ridge reaches heights of roughly 20 km.", "Its colour dichotomy is reinforced by thermal migration of surface ice.", "Its distant orbit provides a broad view of Saturn's rings."],
+  },
+  Miranda: {
+    it: ["Verona Rupes è una delle scarpate più alte note nel Sistema Solare.", "Le grandi coronae suggeriscono una complessa attività interna passata.", "La superficie sembra assemblata da terreni di età e origine diverse."],
+    en: ["Verona Rupes is among the tallest known cliffs in the Solar System.", "Its large coronae suggest complex past internal activity.", "Its surface looks assembled from terrains of different ages and origins."],
+  },
+  Ariel: {
+    it: ["È la più riflettente delle grandi lune di Urano.", "Canyon e pianure lisce indicano attività geologica relativamente recente.", "Potrebbe conservare un oceano profondo sotto la crosta."],
+    en: ["It is the most reflective of Uranus's major moons.", "Canyons and smooth plains point to comparatively recent geological activity.", "It may retain a deep ocean beneath its crust."],
+  },
+  Titania: {
+    it: ["È la più grande luna di Urano.", "Enormi sistemi di faglie testimoniano l'espansione del suo interno.", "Modelli termici consentono la possibile presenza di un oceano residuo."],
+    en: ["It is Uranus's largest moon.", "Enormous fault systems record expansion of its interior.", "Thermal models allow for a possible residual ocean."],
+  },
+  Oberon: {
+    it: ["È la più esterna delle cinque grandi lune di Urano.", "Materiale scuro ricopre il fondo di alcuni crateri.", "La superficie antica registra una lunga storia di impatti."],
+    en: ["It is the outermost of Uranus's five major moons.", "Dark material covers the floors of some craters.", "Its ancient surface records a long history of impacts."],
+  },
+  Proteo: {
+    it: ["È uno dei più grandi corpi non sferici del Sistema Solare.", "Il cratere Pharos misura oltre metà del diametro della luna.", "Fu scoperto nelle immagini di Voyager 2 nel 1989."],
+    en: ["It is one of the largest non-spherical bodies in the Solar System.", "Pharos crater spans more than half the moon's diameter.", "It was discovered in Voyager 2 images in 1989."],
+  },
+};
+
 /* ============================================================
    LUNE DEI PIANETI / PLANETARY MOONS
    ============================================================ */
@@ -956,6 +1387,7 @@ function creaLuna(o) {
     },
     curiosita: o.curiosita || null,
     sempre: !!o.sempre,
+    principale: o.principale !== false,
   };
 }
 
@@ -964,6 +1396,7 @@ PIANETI[2].lune = [{
   nome: { it: "Luna", en: "Moon" },
   colore: "#cdccd4", coloreScuro: "#71707e",
   raggio: 1.8, periodo: 27.32, fase: 2.6, sempre: true,
+  principale: true,
   descrizione: {
     it: "L'unico satellite naturale della Terra e l'unico altro corpo celeste mai visitato dall'essere umano. La sua attrazione gravitazionale genera le maree e stabilizza l'asse terrestre.",
     en: "Earth's only natural satellite and the only other celestial body ever visited by humans. Its gravitational pull drives the tides and stabilises Earth's axis.",
@@ -1108,17 +1541,632 @@ PIANETI[7].lune = [
     } }),
 ];
 
+/* Catalogo completo delle lune riconosciute dalla IAU, dati orbitali JPL 2026.
+   Formato: nome~anno scoperta~semiasse maggiore km~periodo giorni~retrograda */
+const CATALOGO_LUNE_JPL = {
+  jupiter: [
+    "Io~1610~421800.~1.762732~0",
+    "Europa~1610~671100.~3.525463~0",
+    "Ganymede~1610~1070400.~7.155588~0",
+    "Callisto~1610~1882700.~16.690440~0",
+    "Amalthea~1892~181400.~0.499918~0",
+    "Himalia~1904~11439000.~249.9090~0",
+    "Elara~1905~11710700.~258.8861~0",
+    "Pasiphae~1908~23463200.~734.4215~1",
+    "Sinope~1914~23679300.~744.5951~1",
+    "Lysithea~1938~11699100.~258.5035~0",
+    "Carme~1938~23139200.~719.2806~1",
+    "Ananke~1951~21029500.~623.1097~1",
+    "Leda~1974~11145200.~240.3264~0",
+    "Thebe~1979~221900.~0.676105~0",
+    "Adrastea~1979~129000.~0.298260~0",
+    "Metis~1979~128000.~0.294779~0",
+    "Callirrhoe~1999~23789400.~749.7910~1",
+    "Themisto~1975, 2000~7397000.~129.9681~0",
+    "Megaclite~2000~~~",
+    "Taygete~2000~23103400.~717.5917~1",
+    "Chaldene~2000~22926300.~709.3625~1",
+    "Harpalyke~2000~20887500.~616.7833~1",
+    "Kalyke~2000~23298000.~726.7007~1",
+    "Iocaste~2000~21062300.~624.5479~1",
+    "Erinome~2000~23027200.~714.0542~1",
+    "Isonoe~2000~22976300.~711.6604~1",
+    "Praxidike~2000~20931100.~618.7229~1",
+    "Autonoe~2001~23785200.~749.6097~1",
+    "Thyone~2001~20972700.~620.5875~1",
+    "Hermippe~2001~21103600.~626.3799~1",
+    "Aitne~2001~23059400.~715.5396~1",
+    "Eurydome~2001~22894500.~707.8569~1",
+    "Euanthe~2001~20822900.~613.9278~1",
+    "Euporie~2001~19261900.~546.1778~1",
+    "Orthosie~2001~20897800.~617.2347~1",
+    "Sponde~2001~23538700.~737.9542~1",
+    "Kale~2001~23047800.~715.0160~1",
+    "Pasithee~2001~22840800.~705.4090~1",
+    "Hegemone~2003~23342600.~728.7743~1",
+    "Mneme~2003~20815800.~613.6104~1",
+    "Aoede~2003~23773100.~749.0708~1",
+    "Thelxinoe~2003~20972300.~620.5458~1",
+    "Arche~2002~23093200.~717.1056~1",
+    "Kallichore~2003~23017100.~713.5931~1",
+    "Helike~2003~20911400.~617.8625~1",
+    "Carpo~2003~17039500.~454.4000~0",
+    "Eukelade~2003~23062400.~715.6868~1",
+    "Cyllene~2003~23650000.~743.2062~1",
+    "Kore~2003~24203300.~769.4229~1",
+    "Herse~2003~23146700.~719.6264~1",
+    "S/2010 J1~2010~~~",
+    "S/2010 J2~2010~~~",
+    "Dia~2000~12257900.~277.2472~0",
+    "S/2016 J1~2016~~~",
+    "S/2003 J18~2003~~~",
+    "S/2011 J2~2011~~~",
+    "Eirene~2003~23051300.~715.1910~1",
+    "Philophrosyne~2003~~~",
+    "S/2017 J1~2017~~~",
+    "Eupheme~2003~20763400.~611.3160~1",
+    "S/2003 J19~2003~~~",
+    "Valetudo~2016~18690100.~522.0743~0",
+    "S/2017 J2~2017~~~",
+    "S/2017 J3~2017~~~",
+    "Pandia~2017~11479600.~251.2319~0",
+    "S/2017 J5~2017~~~",
+    "S/2017 J6~2017~~~",
+    "S/2017 J7~2017~~~",
+    "S/2017 J8~2017~~~",
+    "S/2017 J9~2017~~~",
+    "Ersa~2018~11399400.~248.6153~0",
+    "S/2011 J1~2011~~~",
+    "S/2003 J2~2003~~~",
+    "S/2003 J4~2003~~~",
+    "S/2003 J9~2003~~~",
+    "S/2003 J10~2003~~~",
+    "S/2003 J12~2003~~~",
+    "S/2003 J16~2003~~~",
+    "S/2003 J23~2003~~~",
+    "S/2003 J24~2003~~~",
+    "S/2010 J3~2010~~~",
+    "S/2010 J4~2010~~~",
+    "S/2010 J5~2010~~~",
+    "S/2010 J6~2010~~~",
+    "S/2011 J3~2011~~~",
+    "S/2011 J4~2011~~~",
+    "S/2011 J5~2011~~~",
+    "S/2011 J6~2011~~~",
+    "S/2016 J3~2016~~~",
+    "S/2016 J4~2016~~~",
+    "S/2017 J10~2017~~~",
+    "S/2017 J11~2017~~~",
+    "S/2017 J12~2017~~~",
+    "S/2017 J13~2017~~~",
+    "S/2017 J14~2017~~~",
+    "S/2017 J15~2017~~~",
+    "S/2017 J16~2017~~~",
+    "S/2017 J17~2017~~~",
+    "S/2017 J18~2017~~~",
+    "S/2018 J2~2018~~~",
+    "S/2018 J3~2018~~~",
+    "S/2018 J4~2018~~~",
+    "S/2018 J5~2018~~~",
+    "S/2021 J1~2021~~~",
+    "S/2021 J2~2021~~~",
+    "S/2021 J3~2021~~~",
+    "S/2021 J4~2021~~~",
+    "S/2021 J5~2021~~~",
+    "S/2021 J6~2021~~~",
+    "S/2021 J7~2021~~~",
+    "S/2021 J8~2021~~~",
+    "S/2022 J1~2022~~~",
+    "S/2022 J2~2022~~~",
+    "S/2022 J3~2022~~~",
+    "S/2024 J1~2024~~~",
+  ].join("|"),
+  saturn: [
+    "Mimas~1789~186000.~0.942422~0",
+    "Enceladus~1789~238400.~1.370218~0",
+    "Tethys~1684~295000.~1.887802~0",
+    "Dione~1684~377700.~2.736916~0",
+    "Rhea~1672~527200.~4.517503~0",
+    "Titan~1655~1221900.~15.945448~0",
+    "Hyperion~1848~1481500.~21.276658~0",
+    "Iapetus~1671~3561700.~79.331002~0",
+    "Phoebe~1898~12929400.~550.303910~1",
+    "Janus~1966, 1980~151500.~0.697353~0",
+    "Epimetheus~1977, 1980~151400.~0.697012~0",
+    "Helene~1980~377600.~2.736916~0",
+    "Telesto~1980~295000.~1.887802~0",
+    "Calypso~1980~295000.~1.887803~0",
+    "Atlas~1980~137700.~0.604602~0",
+    "Prometheus~1980~139400.~0.615878~0",
+    "Pandora~1980~141700.~0.631369~0",
+    "Pan~1990~133600.~0.575051~0",
+    "Ymir~2000~22955600.~1298.6819~1",
+    "Paaliaq~2000~14997700.~685.7153~0",
+    "Tarvos~2000~18216600.~917.9840~0",
+    "Ijiraq~2000~11344700.~451.1201~0",
+    "Suttungr~2000~19391900.~1008.2451~1",
+    "Kiviuq~2000~11307400.~448.9076~0",
+    "Mundilfari~2000~18588200.~946.2903~1",
+    "Albiorix~2000~16329200.~779.0701~0",
+    "Skathi~2000~15575400.~725.7313~1",
+    "Erriapus~2000~17506900.~864.9236~0",
+    "Siarnaq~2000~17881100.~892.6799~0",
+    "Thrymr~2000~20330500.~1082.2292~1",
+    "Narvi~2003~19285000.~999.9417~1",
+    "Methone~2004~194700.~1.009549~0",
+    "Pallene~2004~212300.~1.156059~0",
+    "Polydeuces~2004~377600.~2.736916~0",
+    "Daphnis~2005~136500.~0.594080~0",
+    "Aegir~2004~20664400.~1109.1278~1",
+    "Bebhionn~2004~17027300.~829.6437~0",
+    "Bergelmir~2004~19268100.~998.6187~1",
+    "Bestla~2004~20337800.~1082.9444~1",
+    "Farbauti~2004~20290700.~1079.1243~1",
+    "Fenrir~2004~22330800.~1245.9215~1",
+    "Fornjot~2004~24936800.~1470.3618~1",
+    "Hati~2004~19695000.~1032.0236~1",
+    "Hyrrokkin~2004~18340900.~927.4569~1",
+    "Kari~2006~22032100.~1220.9757~1",
+    "Loge~2006~22919200.~1295.5243~1",
+    "Skoll~2006~17623400.~873.5736~1",
+    "Surtur~2006~22748000.~1281.1396~1",
+    "Anthe~2007~198100.~1.038898~0",
+    "Jarnsaxa~2006~19273500.~999.1271~1",
+    "Greip~2006~18380000.~930.4389~1",
+    "Tarqeq~2007~17751000.~882.8514~0",
+    "Aegaeon~2008~167500.~0.808115~0",
+    "Gridr~2004~19250600.~997.3319~1",
+    "Angrboda~2004~20591500.~1103.1986~1",
+    "Skrymir~2004~21447400.~1172.7215~1",
+    "Gerd~2004~20947500.~1131.9062~1",
+    "S/2004 S26~2004~~~",
+    "Eggther~2004~19844600.~1043.8035~1",
+    "S/2004 S29~2004~~~",
+    "Beli~2004~20703700.~1112.2687~1",
+    "Gunnlod~2004~21141800.~1147.7354~1",
+    "Thiazzi~2004~23577500.~1351.8319~1",
+    "S/2004 S34~2004~~~",
+    "Alvaldi~2004~21993800.~1217.8042~1",
+    "Geirrod~2004~22259400.~1240.0465~1",
+    "S/2004 S7~2005~~~",
+    "S/2004 S12~2005~~~",
+    "S/2004 S13~2005~~~",
+    "S/2004 S17~2005~~~",
+    "S/2004 S21~2004~~~",
+    "S/2004 S24~2004~~~",
+    "S/2004 S28~2004~~~",
+    "S/2004 S31~2004~~~",
+    "S/2004 S36~2004~~~",
+    "S/2004 S37~2004~~~",
+    "S/2004 S39~2004~~~",
+    "S/2004 S40~2004~~~",
+    "S/2004 S41~2004~~~",
+    "S/2004 S42~2004~~~",
+    "S/2004 S43~2004~~~",
+    "S/2004 S44~2004~~~",
+    "S/2004 S45~2004~~~",
+    "S/2004 S46~2004~~~",
+    "S/2004 S47~2004~~~",
+    "S/2004 S48~2004~~~",
+    "S/2004 S49~2004~~~",
+    "S/2004 S50~2004~~~",
+    "S/2004 S51~2004~~~",
+    "S/2004 S52~2004~~~",
+    "S/2004 S53~2004~~~",
+    "S/2004 S54~2004~~~",
+    "S/2004 S55~2004~~~",
+    "S/2004 S56~2004~~~",
+    "S/2004 S57~2004~~~",
+    "S/2004 S58~2004~~~",
+    "S/2004 S59~2004~~~",
+    "S/2004 S60~2004~~~",
+    "S/2004 S61~2004~~~",
+    "S/2005 S4~2005~~~",
+    "S/2005 S5~2005~~~",
+    "S/2005 S6~2005~~~",
+    "S/2005 S7~2005~~~",
+    "S/2006 S1~2006~~~",
+    "S/2006 S3~2006~~~",
+    "S/2006 S9~2006~~~",
+    "S/2006 S10~2006~~~",
+    "S/2006 S11~2006~~~",
+    "S/2006 S12~2006~~~",
+    "S/2006 S13~2006~~~",
+    "S/2006 S14~2006~~~",
+    "S/2006 S15~2006~~~",
+    "S/2006 S16~2006~~~",
+    "S/2006 S17~2006~~~",
+    "S/2006 S18~2006~~~",
+    "S/2006 S19~2006~~~",
+    "S/2006 S20~2006~~~",
+    "S/2006 S21~2006~~~",
+    "S/2006 S22~2006~~~",
+    "S/2006 S23~2006~~~",
+    "S/2006 S24~2006~~~",
+    "S/2006 S25~2006~~~",
+    "S/2006 S26~2006~~~",
+    "S/2006 S27~2006~~~",
+    "S/2006 S28~2006~~~",
+    "S/2006 S29~2006~~~",
+    "S/2007 S2~2007~~~",
+    "S/2007 S3~2007~~~",
+    "S/2007 S5~2007~~~",
+    "S/2007 S6~2007~~~",
+    "S/2007 S7~2007~~~",
+    "S/2007 S8~2007~~~",
+    "S/2007 S9~2007~~~",
+    "S/2007 S10~2007~~~",
+    "S/2007 S11~2007~~~",
+    "S/2009 S1~2009~~~",
+    "S/2019 S1~2019~~~",
+    "S/2019 S2~2019~~~",
+    "S/2019 S3~2019~~~",
+    "S/2019 S4~2019~~~",
+    "S/2019 S5~2019~~~",
+    "S/2019 S6~2019~~~",
+    "S/2019 S7~2019~~~",
+    "S/2019 S8~2019~~~",
+    "S/2019 S9~2019~~~",
+    "S/2019 S10~2019~~~",
+    "S/2019 S11~2019~~~",
+    "S/2019 S12~2019~~~",
+    "S/2019 S13~2019~~~",
+    "S/2019 S14~2019~~~",
+    "S/2019 S15~2019~~~",
+    "S/2019 S16~2019~~~",
+    "S/2019 S17~2019~~~",
+    "S/2019 S18~2019~~~",
+    "S/2019 S19~2019~~~",
+    "S/2019 S20~2019~~~",
+    "S/2019 S21~2019~~~",
+    "S/2019 S22~2019~~~",
+    "S/2019 S23~2019~~~",
+    "S/2019 S24~2019~~~",
+    "S/2019 S25~2019~~~",
+    "S/2019 S26~2019~~~",
+    "S/2019 S27~2019~~~",
+    "S/2019 S28~2019~~~",
+    "S/2019 S29~2019~~~",
+    "S/2019 S30~2019~~~",
+    "S/2019 S31~2019~~~",
+    "S/2019 S32~2019~~~",
+    "S/2019 S33~2019~~~",
+    "S/2019 S34~2019~~~",
+    "S/2019 S35~2019~~~",
+    "S/2019 S36~2019~~~",
+    "S/2019 S37~2019~~~",
+    "S/2019 S38~2019~~~",
+    "S/2019 S39~2019~~~",
+    "S/2019 S40~2019~~~",
+    "S/2019 S41~2019~~~",
+    "S/2019 S42~2019~~~",
+    "S/2019 S43~2019~~~",
+    "S/2019 S44~2019~~~",
+    "S/2020 S1~2020~~~",
+    "S/2020 S2~2020~~~",
+    "S/2020 S3~2020~~~",
+    "S/2020 S4~2020~~~",
+    "S/2020 S5~2020~~~",
+    "S/2020 S6~2020~~~",
+    "S/2020 S7~2020~~~",
+    "S/2020 S8~2020~~~",
+    "S/2020 S9~2020~~~",
+    "S/2020 S10~2020~~~",
+    "S/2020 S11~2020~~~",
+    "S/2020 S12~2020~~~",
+    "S/2020 S13~2020~~~",
+    "S/2020 S14~2020~~~",
+    "S/2020 S15~2020~~~",
+    "S/2020 S16~2020~~~",
+    "S/2020 S17~2020~~~",
+    "S/2020 S18~2020~~~",
+    "S/2020 S19~2020~~~",
+    "S/2020 S20~2020~~~",
+    "S/2020 S21~2020~~~",
+    "S/2020 S22~2020~~~",
+    "S/2020 S23~2020~~~",
+    "S/2020 S24~2020~~~",
+    "S/2020 S25~2020~~~",
+    "S/2020 S26~2020~~~",
+    "S/2020 S27~2020~~~",
+    "S/2020 S28~2020~~~",
+    "S/2020 S29~2020~~~",
+    "S/2020 S30~2020~~~",
+    "S/2020 S31~2020~~~",
+    "S/2020 S32~2020~~~",
+    "S/2020 S33~2020~~~",
+    "S/2020 S34~2020~~~",
+    "S/2020 S35~2020~~~",
+    "S/2020 S36~2020~~~",
+    "S/2020 S37~2020~~~",
+    "S/2020 S38~2020~~~",
+    "S/2020 S39~2020~~~",
+    "S/2020 S40~2020~~~",
+    "S/2020 S41~2020~~~",
+    "S/2020 S42~2020~~~",
+    "S/2020 S43~2020~~~",
+    "S/2020 S44~2020~~~",
+    "S/2020 S45~2020~~~",
+    "S/2020 S46~2020~~~",
+    "S/2020 S47~2020~~~",
+    "S/2020 S48~2020~~~",
+    "S/2020 S49~2020~~~",
+    "S/2023 S1~2023~~~",
+    "S/2023 S2~2023~~~",
+    "S/2023 S3~2023~~~",
+    "S/2023 S4~2023~~~",
+    "S/2023 S5~2023~~~",
+    "S/2023 S6~2023~~~",
+    "S/2023 S7~2023~~~",
+    "S/2023 S8~2023~~~",
+    "S/2023 S9~2023~~~",
+    "S/2023 S10~2023~~~",
+    "S/2023 S11~2023~~~",
+    "S/2023 S12~2023~~~",
+    "S/2023 S13~2023~~~",
+    "S/2023 S14~2023~~~",
+    "S/2023 S15~2023~~~",
+    "S/2023 S16~2023~~~",
+    "S/2023 S17~2023~~~",
+    "S/2023 S18~2023~~~",
+    "S/2023 S19~2023~~~",
+    "S/2023 S20~2023~~~",
+    "S/2023 S21~2023~~~",
+    "S/2023 S22~2023~~~",
+    "S/2023 S23~2023~~~",
+    "S/2023 S24~2023~~~",
+    "S/2023 S25~2023~~~",
+    "S/2023 S26~2023~~~",
+    "S/2023 S27~2023~~~",
+    "S/2023 S28~2023~~~",
+    "S/2023 S29~2023~~~",
+    "S/2023 S30~2023~~~",
+    "S/2023 S31~2023~~~",
+    "S/2023 S32~2023~~~",
+    "S/2023 S33~2023~~~",
+    "S/2023 S34~2023~~~",
+    "S/2023 S35~2023~~~",
+    "S/2023 S36~2023~~~",
+    "S/2023 S37~2023~~~",
+    "S/2023 S38~2023~~~",
+    "S/2023 S39~2023~~~",
+    "S/2023 S40~2023~~~",
+    "S/2023 S41~2023~~~",
+    "S/2023 S42~2023~~~",
+    "S/2023 S43~2023~~~",
+    "S/2023 S44~2023~~~",
+    "S/2023 S45~2023~~~",
+    "S/2023 S46~2023~~~",
+    "S/2023 S47~2023~~~",
+    "S/2023 S48~2023~~~",
+    "S/2023 S49~2023~~~",
+    "S/2023 S50~2023~~~",
+    "S/2023 S51~2023~~~",
+    "S/2023 S52~2023~~~",
+    "S/2023 S53~2023~~~",
+    "S/2023 S54~2023~~~",
+    "S/2023 S55~2023~~~",
+    "S/2023 S56~2023~~~",
+    "S/2023 S57~2023~~~",
+    "S/2023 S58~2023~~~",
+    "S/2023 S59~2023~~~",
+    "S/2023 S60~2023~~~",
+    "S/2023 S61~2023~~~",
+    "S/2023 S62~2023~~~",
+    "S/2023 S63~2023~~~",
+  ].join("|"),
+  uranus: [
+    "Ariel~1851~190929.~2.520379~0",
+    "Umbriel~1851~265986.~4.144177~0",
+    "Titania~1787~436298.~8.705869~0",
+    "Oberon~1787~583511.~13.463237~0",
+    "Miranda~1948~129846.~1.413479~0",
+    "Cordelia~1986~49755.~0.3347~0",
+    "Ophelia~1986~53765.~0.3764~0",
+    "Bianca~1986~59170.~0.4347~0",
+    "Cressida~1986~61770.~0.4639~0",
+    "Desdemona~1986~62663.~0.4736~0",
+    "Juliet~1986~64362.~0.4931~0",
+    "Portia~1986~66101.~0.5132~0",
+    "Rosalind~1986~69930.~0.5583~0",
+    "Belinda~1986~75258.~0.6236~0",
+    "Puck~1985~86007.~0.7618~0",
+    "Caliban~1997~7167000.~580.~1",
+    "Sycorax~1997~12193200.~1286.~1",
+    "Prospero~1999~16221000.~1974.~1",
+    "Setebos~1999~17519800.~2215.~1",
+    "Stephano~1999~7951400.~677.~1",
+    "Trinculo~2001~8502600.~749.~1",
+    "Francisco~2001~4275700.~267.~1",
+    "Margaret~2003~14425000.~1655.~0",
+    "Ferdinand~2001~20421400.~2788.~1",
+    "Perdita~1986~76418.~0.6382~0",
+    "Mab~2003~97737.~0.9229~0",
+    "Cupid~2003~74396.~0.6125~0",
+    "S/2025 U1~2025~~~",
+    "S/2023 U1~2023~~~",
+  ].join("|"),
+  neptune: [
+    "Triton~1846~354800.~5.876994~1",
+    "Nereid~1949~5513900.~360.133039~0",
+    "Naiad~1989~48200.~0.293980~0",
+    "Thalassa~1989~50100.~0.311078~0",
+    "Despina~1989~52500.~0.334656~0",
+    "Galatea~1989~62000.~0.428744~0",
+    "Larissa~1989~73500.~0.554989~0",
+    "Proteus~1989~117600.~1.122315~0",
+    "Halimede~2002~16590500.~1879.~1",
+    "Psamathe~2003~47646600.~9149.~1",
+    "Sao~2002~22239900.~2919.~0",
+    "Laomedeia~2002~23499900.~3168.~0",
+    "Neso~2002~49897800.~9805.~1",
+    "Hippocamp~2013~105300.~0.950390~0",
+    "S/2002 N5~2002~~~",
+    "S/2021 N1~2021~~~",
+  ].join("|"),
+};
+
+const INDICE_PIANETI_CATALOGO = { jupiter: 4, saturn: 5, uranus: 6, neptune: 7 };
+const SOGLIA_LUNE_IRREGOLARI = { jupiter: 3000000, saturn: 5000000, uranus: 1000000, neptune: 1000000 };
+const LUNE_PRINCIPALI_EXTRA = new Set([
+  "Amalthea", "Thebe", "Metis", "Himalia",
+  "Mimas", "Tethys", "Dione", "Hyperion", "Phoebe", "Janus", "Epimetheus", "Pan", "Daphnis",
+  "Umbriel", "Puck",
+  "Nereid", "Naiad", "Hippocamp",
+]);
+
+function numeroLocale(n, locale, decimali = 0) {
+  return n.toLocaleString(locale, {
+    minimumFractionDigits: decimali,
+    maximumFractionDigits: decimali,
+  });
+}
+
+function creaLunaCatalogo(pianeta, record, indice, totale) {
+  const [nome, anno, distanzaTesto, periodoTesto, retroTesto] = record.split("~");
+  const distanza = parseFloat(distanzaTesto) || 0;
+  const periodo = parseFloat(periodoTesto) || (180 + indice * 5.7);
+  const classeNota = !!distanza;
+  const irregolare = classeNota && distanza > SOGLIA_LUNE_IRREGOLARI[pianeta];
+  const retro = retroTesto === "1";
+  const nomePianeta = PIANETI[INDICE_PIANETI_CATALOGO[pianeta]].nome;
+  const distanzaIt = distanza ? numeroLocale(distanza, "it-IT") : "non ancora pubblicata";
+  const distanzaEn = distanza ? numeroLocale(distanza, "en-US") : "not yet published";
+  const periodoIt = periodoTesto ? numeroLocale(parseFloat(periodoTesto), "it-IT", parseFloat(periodoTesto) < 10 ? 2 : 1) : "in aggiornamento";
+  const periodoEn = periodoTesto ? numeroLocale(parseFloat(periodoTesto), "en-US", parseFloat(periodoTesto) < 10 ? 2 : 1) : "being refined";
+
+  return {
+    nome: { it: nome, en: nome },
+    tipo: {
+      it: `${classeNota ? (irregolare ? "Satellite irregolare" : "Satellite regolare") : "Satellite catalogato"} di ${nomePianeta.it}`,
+      en: `${classeNota ? (irregolare ? "Irregular" : "Regular") : "Catalogued"} moon of ${nomePianeta.en}`,
+    },
+    colore: irregolare ? "#a7a09a" : "#c5c8ce",
+    coloreScuro: irregolare ? "#59534e" : "#69717a",
+    raggio: irregolare ? 0.72 : 0.9,
+    periodo,
+    distanza,
+    retro,
+    irregolare,
+    principale: LUNE_PRINCIPALI_EXTRA.has(nome),
+    fase: (indice / totale) * Math.PI * 2 + (indice % 7) * 0.19,
+    descrizione: {
+      it: !classeNota
+        ? `${nome} è una luna di ${nomePianeta.it} riconosciuta dalla IAU. La sua orbita è ancora oggetto di affinamento e il catalogo pubblico JPL non riporta ancora tutti i parametri medi.`
+        : irregolare
+        ? `${nome} è una piccola luna irregolare di ${nomePianeta.it}, probabilmente il frammento di un corpo catturato e successivamente spezzato da collisioni. Le lune di questa classe percorrono orbite lontane, inclinate e spesso retrograde.`
+        : `${nome} appartiene al sistema interno di ${nomePianeta.it}. La sua orbita relativamente regolare indica che si è formata insieme al pianeta o al suo disco di satelliti e anelli.`,
+      en: !classeNota
+        ? `${nome} is an IAU-recognised moon of ${nomePianeta.en}. Its orbit is still being refined and the public JPL catalogue does not yet provide every mean parameter.`
+        : irregolare
+        ? `${nome} is a small irregular moon of ${nomePianeta.en}, probably a fragment of a captured body later disrupted by collisions. Moons in this class follow distant, inclined and often retrograde orbits.`
+        : `${nome} belongs to the inner system of ${nomePianeta.en}. Its comparatively regular orbit suggests that it formed with the planet or its original moon-and-ring disk.`,
+    },
+    dati: {
+      it: [
+        ["Scoperta", anno || "—", ""],
+        ["Distanza media", distanzaIt, distanza ? "km" : ""],
+        ["Periodo orbitale", periodoIt, periodoTesto ? "giorni" : ""],
+        ["Moto", retroTesto ? (retro ? "retrogrado" : "progrado") : "in aggiornamento", ""],
+        ["Classe", classeNota ? (irregolare ? "irregolare" : "regolare") : "in aggiornamento", ""],
+        ["Catalogo", "NASA/JPL", "IAU 2026"],
+      ],
+      en: [
+        ["Discovered", anno || "—", ""],
+        ["Mean distance", distanzaEn, distanza ? "km" : ""],
+        ["Orbital period", periodoEn, periodoTesto ? "days" : ""],
+        ["Motion", retroTesto ? (retro ? "retrograde" : "prograde") : "being refined", ""],
+        ["Class", classeNota ? (irregolare ? "irregular" : "regular") : "being refined", ""],
+        ["Catalogue", "NASA/JPL", "IAU 2026"],
+      ],
+    },
+    curiosita: {
+      it: nome.startsWith("S/")
+        ? "La designazione provvisoria verrà sostituita da un nome proprio solo dopo l'approvazione dell'Unione Astronomica Internazionale."
+        : `Il nome ${nome} segue il tema mitologico stabilito dalla IAU per i satelliti di ${nomePianeta.it}.`,
+      en: nome.startsWith("S/")
+        ? "Its provisional designation will be replaced by a proper name only after approval by the International Astronomical Union."
+        : `The name ${nome} follows the IAU mythological naming theme for moons of ${nomePianeta.en}.`,
+    },
+  };
+}
+
+for (const [pianeta, catalogo] of Object.entries(CATALOGO_LUNE_JPL)) {
+  const p = PIANETI[INDICE_PIANETI_CATALOGO[pianeta]];
+  const presenti = new Set((p.lune || []).map(m => m.nome.en));
+  const records = catalogo.split("|");
+  records.forEach((record, indice) => {
+    const nome = record.split("~")[0];
+    if (!presenti.has(nome)) p.lune.push(creaLunaCatalogo(pianeta, record, indice, records.length));
+  });
+}
+
 const SLUG = ["mercurio", "venere", "terra", "marte", "giove", "saturno", "urano", "nettuno"];
 PIANETI.forEach((p, i) => {
   p.slug = SLUG[i];
   if (p.lune) p.lune.forEach((m, j) => {
-    m.tipo = { it: "Satellite di " + p.nome.it, en: "Moon of " + p.nome.en };
+    m.pianeta = p;
+    if (!m.tipo) m.tipo = { it: "Satellite di " + p.nome.it, en: "Moon of " + p.nome.en };
     if (m.fase === undefined) m.fase = j * 2.3 + 0.6;
   });
 });
 
+const ELEMENTI_JPL_1800_2050 = [
+  { e: 0.20563593, eRate: 0.00001906, L: 252.25032350, LRate: 149472.67411175, peri: 77.45779628, periRate: 0.16047689 },
+  { e: 0.00677672, eRate: -0.00004107, L: 181.97909950, LRate: 58517.81538729, peri: 131.60246718, periRate: 0.00268329 },
+  { e: 0.01671123, eRate: -0.00004392, L: 100.46457166, LRate: 35999.37244981, peri: 102.93768193, periRate: 0.32327364 },
+  { e: 0.09339410, eRate: 0.00007882, L: -4.55343205, LRate: 19140.30268499, peri: -23.94362959, periRate: 0.44441088 },
+  { e: 0.04838624, eRate: -0.00013253, L: 34.39644051, LRate: 3034.74612775, peri: 14.72847983, periRate: 0.21252668 },
+  { e: 0.05386179, eRate: -0.00050991, L: 49.95424423, LRate: 1222.49362201, peri: 92.59887831, periRate: -0.41897216 },
+  { e: 0.04725744, eRate: -0.00004397, L: 313.23810451, LRate: 428.48202785, peri: 170.95427630, periRate: 0.40805281 },
+  { e: 0.00859048, eRate: 0.00005105, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464 },
+];
+
+const DATA_BASE = new Date();
+const GIORNO_MS = 86400000;
+
+function giornoGiuliano(data) {
+  return data.getTime() / GIORNO_MS + 2440587.5;
+}
+
+function normalizzaAngolo(gradi) {
+  return ((gradi % 360) + 360) % 360;
+}
+
+function anomaliaVera(MGradi, eccentricita) {
+  const M = normalizzaAngolo(MGradi) * Math.PI / 180;
+  let E = M;
+  for (let i = 0; i < 8; i++) E -= (E - eccentricita * Math.sin(E) - M) / (1 - eccentricita * Math.cos(E));
+  return 2 * Math.atan2(
+    Math.sqrt(1 + eccentricita) * Math.sin(E / 2),
+    Math.sqrt(1 - eccentricita) * Math.cos(E / 2)
+  );
+}
+
+function angoloPianetaOggi(elementi, data) {
+  const T = (giornoGiuliano(data) - 2451545) / 36525;
+  const e = elementi.e + elementi.eRate * T;
+  const peri = elementi.peri + elementi.periRate * T;
+  const M = elementi.L + elementi.LRate * T - peri;
+  return anomaliaVera(M, e) + peri * Math.PI / 180;
+}
+
+function angoloNanoOggi(elementi, data) {
+  const M = elementi.ma + elementi.n * (giornoGiuliano(data) - elementi.epoch);
+  return anomaliaVera(M, elementi.e) + elementi.peri * Math.PI / 180;
+}
+
+PIANETI.forEach((p, i) => {
+  p.fase = angoloPianetaOggi(ELEMENTI_JPL_1800_2050[i], DATA_BASE);
+});
+PIANETI_NANI.forEach(p => {
+  p.fase = angoloNanoOggi(p.elementi, DATA_BASE);
+});
+
 /* vista dedicata alle lune di un pianeta: ?focus=<slug> */
-const FOCUS = new URLSearchParams(location.search).get("focus");
+const PARAMETRI_URL = new URLSearchParams(location.search);
+const FOCUS = PARAMETRI_URL.get("focus");
+const TARGET_INIZIALE = PARAMETRI_URL.get("target");
 const PIANETA_FOCUS = PIANETI.find(p => p.slug === FOCUS && p.lune) || null;
 const VELOCITA_INIZIALE = PIANETA_FOCUS ? 1 : 20;
 
@@ -1204,11 +2252,14 @@ const stato = {
   mostraNomi: false,
   mostraScie: false,
   mostraLune: false,
+  mostraNani: false,
+  limiteLune: 20,
   selezionato: null,   // pianeta o SOLE
   hover: null,
 };
 
 PIANETI.forEach(p => { p.angolo = p.fase; p.scia = []; });
+PIANETI_NANI.forEach(p => { p.angolo = p.fase; p.scia = []; });
 
 /* ============================================================
    DISEGNO
@@ -1220,8 +2271,8 @@ function raggiOrbita(p) {
   }
 
   const primaOrbita = PIANETI[0].orbita;
-  const ultimaOrbita = PIANETI[PIANETI.length - 1].orbita;
-  const progressione = (p.orbita - primaOrbita) / (ultimaOrbita - primaOrbita);
+  const ultimaOrbita = PIANETI_NANI[PIANETI_NANI.length - 1].orbita;
+  const progressione = Math.min((p.orbita - primaOrbita) / (ultimaOrbita - primaOrbita), 1);
   const rx = (ORBIT_MIN + progressione * (ORBIT_X - ORBIT_MIN)) * stato.scalaOrbite;
   const ry = (ORBIT_MIN + progressione * (ORBIT_Y - ORBIT_MIN)) * stato.scalaOrbite;
   return { rx, ry };
@@ -1285,6 +2336,17 @@ function disegnaOrbita(p) {
   ctx.beginPath();
   ctx.ellipse(CX, CY, rx, ry, 0, 0, Math.PI * 2);
   ctx.stroke();
+}
+
+function disegnaOrbitaNano(p) {
+  const { rx, ry } = raggiOrbita(p);
+  ctx.strokeStyle = "rgba(111, 227, 255, 0.10)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 7]);
+  ctx.beginPath();
+  ctx.ellipse(CX, CY, rx, ry, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
 }
 
 function disegnaScia(p) {
@@ -1378,14 +2440,14 @@ function disegnaPianeta(p, t) {
   }
 }
 
-function disegnaSatellite(m, cx, cy, d, r, t, focus) {
+function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
   const angolo = m.fase + (stato.giorni / m.periodo) * Math.PI * 2 * (m.retro ? -1 : 1);
   const x = cx + Math.cos(angolo) * d;
   const y = cy + Math.sin(angolo) * d;
   m._x = x; m._y = y; m._r = r;
 
   // orbita intorno al pianeta
-  if (stato.mostraOrbite) {
+  if (stato.mostraOrbite && mostraOrbita) {
     ctx.strokeStyle = `rgba(232, 237, 244, ${focus ? 0.09 : 0.06})`;
     ctx.lineWidth = 1;
     ctx.setLineDash([]);
@@ -1402,21 +2464,28 @@ function disegnaSatellite(m, cx, cy, d, r, t, focus) {
     const dist = Math.hypot(x - CX, y - CY) || 1;
     lx = (CX - x) / dist; ly = (CY - y) / dist;
   }
-  ctx.shadowColor = colorAlpha(m.colore, 0.7);
-  ctx.shadowBlur = r * 1.4 * stato.luce;
-  const g = ctx.createRadialGradient(
-    x + lx * r * 0.45, y + ly * r * 0.45, r * 0.1,
-    x, y, r * 1.05
-  );
-  g.addColorStop(0, "#ffffff");
-  g.addColorStop(0.3, m.colore);
-  g.addColorStop(0.85, m.coloreScuro);
-  g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.shadowBlur = 0;
+  if (m.principale) {
+    ctx.shadowColor = colorAlpha(m.colore, 0.7);
+    ctx.shadowBlur = r * 1.4 * stato.luce;
+    const g = ctx.createRadialGradient(
+      x + lx * r * 0.45, y + ly * r * 0.45, r * 0.1,
+      x, y, r * 1.05
+    );
+    g.addColorStop(0, "#ffffff");
+    g.addColorStop(0.3, m.colore);
+    g.addColorStop(0.85, m.coloreScuro);
+    g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  } else {
+    ctx.fillStyle = colorAlpha(m.colore, stato.hover === m ? 1 : 0.72);
+    ctx.beginPath();
+    ctx.arc(x, y, stato.hover === m ? r + 1.2 : r, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // anello di selezione
   if (stato.selezionato === m) {
@@ -1431,7 +2500,7 @@ function disegnaSatellite(m, cx, cy, d, r, t, focus) {
   }
 
   // etichetta
-  if ((stato.mostraNomi && focus) || stato.hover === m) {
+  if ((stato.mostraNomi && focus && m.principale) || stato.hover === m) {
     ctx.font = "9px 'IBM Plex Mono', monospace";
     ctx.fillStyle = stato.hover === m ? "#6fe3ff" : "rgba(138, 148, 166, 0.9)";
     ctx.textAlign = "center";
@@ -1444,13 +2513,25 @@ function disegnaLune(p, t) {
   if (!p.lune) return;
   const base = p._r + (p.anelli ? p._r * 1.1 : 0) + 4;
   p.lune.forEach((m, i) => {
-    if (!stato.mostraLune && !m.sempre) { m._x = undefined; return; }
+    if (!m.principale || (!stato.mostraLune && !m.sempre)) { m._x = undefined; return; }
     const d = base + (i + 1) * (3 + 2.2 * stato.scalaPianeti);
     disegnaSatellite(m, p._x, p._y, d, Math.max(m.raggio * stato.scalaPianeti, 0.8), t, false);
   });
 }
 
 // vista dedicata: il pianeta al centro con le sue lune (?focus=<slug>)
+function luneVisibili(p) {
+  if (!Number.isFinite(stato.limiteLune) || stato.limiteLune >= p.lune.length) return p.lune;
+
+  const ordinate = [...p.lune].sort((a, b) => {
+    if (a === stato.selezionato) return -1;
+    if (b === stato.selezionato) return 1;
+    if (a.principale !== b.principale) return a.principale ? -1 : 1;
+    return (a.distanza || Infinity) - (b.distanza || Infinity);
+  });
+  return ordinate.slice(0, stato.limiteLune);
+}
+
 function disegnaVistaLune(t) {
   const p = PIANETA_FOCUS;
   const r = (12 + p.raggio * 1.6) * stato.scalaPianeti;
@@ -1505,12 +2586,45 @@ function disegnaVistaLune(t) {
     ctx.setLineDash([]);
   }
 
-  const n = p.lune.length;
-  p.lune.forEach((m, i) => {
-    const frazione = n === 1 ? 0.45 : 0.22 + 0.68 * (i / (n - 1));
-    const minD = r + (p.anelli ? r * 1.1 : 0) + 14 + i * 8;
-    const d = Math.max(RMAX * stato.scalaOrbite * frazione, minD);
+  p.lune.forEach(m => { m._x = undefined; });
+  const visibili = luneVisibili(p);
+  const principali = visibili.filter(m => m.principale);
+  const minori = visibili.filter(m => !m.principale);
+  const basePrincipali = r + (p.anelli ? r * 1.1 : 0) + 14;
+  const limitePrincipali = Math.max(basePrincipali + 20, RMAX * stato.scalaOrbite * 0.74);
+
+  principali.forEach((m, i) => {
+    const progressione = principali.length === 1 ? 0.45 : i / (principali.length - 1);
+    const d = basePrincipali + (limitePrincipali - basePrincipali) * progressione;
     disegnaSatellite(m, CX, CY, d, Math.max(m.raggio * 2.4 * stato.scalaPianeti, 2), t, true);
+  });
+
+  if (!minori.length) return;
+
+  const minD = basePrincipali + 8;
+  const maxD = Math.max(minD + 18, RMAX * stato.scalaOrbite * 0.96);
+  const distanzeNote = minori.map(m => m.distanza).filter(Boolean);
+  const maxDistanza = Math.max(...distanzeNote, 1);
+
+  if (stato.mostraOrbite) {
+    ctx.strokeStyle = "rgba(232, 237, 244, 0.045)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 7]);
+    for (const frazione of [0.2, 0.45, 0.7, 0.92]) {
+      ctx.beginPath();
+      ctx.arc(CX, CY, minD + (maxD - minD) * frazione, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  minori.forEach((m, i) => {
+    const progressione = m.distanza
+      ? Math.log1p(m.distanza) / Math.log1p(maxDistanza)
+      : 0.58 + 0.4 * ((i % 41) / 40);
+    const fascia = (i % 5) * 0.009;
+    const d = minD + (maxD - minD) * Math.min(progressione * 0.88 + fascia, 1);
+    disegnaSatellite(m, CX, CY, d, layoutMobile ? 1.05 : 1.3, t, true, false);
   });
 }
 
@@ -1552,6 +2666,9 @@ function ciclo(t) {
         p.scia.length = 0;
       }
     }
+    for (const p of PIANETI_NANI) {
+      p.angolo = p.fase + (stato.giorni / p.periodo) * Math.PI * 2;
+    }
     aggiornaCronometro();
   }
 
@@ -1568,9 +2685,15 @@ function ciclo(t) {
     disegnaVistaLune(t);
   } else {
     if (stato.mostraOrbite) PIANETI.forEach(disegnaOrbita);
+    if (stato.mostraNani && stato.mostraOrbite) PIANETI_NANI.forEach(disegnaOrbitaNano);
     if (stato.mostraScie) PIANETI.forEach(disegnaScia);
     disegnaSole(t);
     PIANETI.forEach(p => { disegnaPianeta(p, t); disegnaLune(p, t); });
+    if (stato.mostraNani) {
+      PIANETI_NANI.forEach(p => disegnaPianeta(p, t));
+    } else {
+      PIANETI_NANI.forEach(p => { p._x = undefined; });
+    }
   }
 
   requestAnimationFrame(ciclo);
@@ -1583,24 +2706,42 @@ function aggiornaCronometro() {
     T.giorno + " " + g.toLocaleString(T.locale);
   document.getElementById("contaAnni").textContent =
     (stato.giorni / 365.25).toLocaleString(T.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " " + T.anni;
+  const dataSimulata = new Date(DATA_BASE.getTime() + stato.giorni * GIORNO_MS);
+  document.getElementById("contaData").textContent = dataSimulata.toLocaleDateString(T.locale, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 /* ============================================================
    INTERAZIONE COL CANVAS
    ============================================================ */
 function corpoSotto(mx, my) {
-  // prima le lune: sono piccole e vicine ai pianeti
+  // prima le lune: scegli il punto più vicino, importante nei sistemi affollati
+  let lunaPiuVicina = null;
+  let distanzaLuna = Infinity;
   for (const p of PIANETI) {
     if (!p.lune) continue;
     for (const m of p.lune) {
       if (m._x === undefined) continue;
-      if (Math.hypot(mx - m._x, my - m._y) < Math.max(m._r + 5, 9)) return m;
+      const distanza = Math.hypot(mx - m._x, my - m._y);
+      const margine = Math.max(m._r + (m.principale ? 5 : 3), m.principale ? 9 : 5);
+      if (distanza < margine && distanza < distanzaLuna) {
+        lunaPiuVicina = m;
+        distanzaLuna = distanza;
+      }
     }
   }
+  if (lunaPiuVicina) return lunaPiuVicina;
   for (const p of PIANETI) {
     if (p._x === undefined) continue;
     const margine = Math.max(p._r + 7, 13) + (p.anelli ? p._r : 0);
     if (Math.hypot(mx - p._x, my - p._y) < margine) return p;
+  }
+  for (const p of PIANETI_NANI) {
+    if (p._x === undefined) continue;
+    if (Math.hypot(mx - p._x, my - p._y) < Math.max(p._r + 7, 12)) return p;
   }
   if (!PIANETA_FOCUS && Math.hypot(mx - CX, my - CY) < (SOLE._r || 28) + 8) return SOLE;
   return null;
@@ -1628,6 +2769,133 @@ canvas.addEventListener("click", e => {
 });
 
 /* ============================================================
+   RICERCA GLOBALE
+   ============================================================ */
+const campoRicerca = document.getElementById("campoRicerca");
+const risultatiRicerca = document.getElementById("risultatiRicerca");
+const contenitoreRicerca = document.getElementById("ricerca");
+const apriRicerca = document.getElementById("apriRicerca");
+let risultatiCorrenti = [];
+let indiceRisultato = -1;
+
+function chiudiRicerca() {
+  contenitoreRicerca.classList.remove("aperta");
+  risultatiRicerca.classList.remove("visibile");
+  campoRicerca.value = "";
+}
+
+apriRicerca.addEventListener("click", () => {
+  contenitoreRicerca.classList.add("aperta");
+  campoRicerca.focus();
+});
+
+function normalizzaRicerca(testo) {
+  return testo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function indiceRicerca() {
+  const voci = [
+    { corpo: SOLE, categoria: "stella" },
+    ...PIANETI.map(corpo => ({ corpo, categoria: "pianeta" })),
+    ...PIANETI_NANI.map(corpo => ({ corpo, categoria: "nano" })),
+  ];
+  for (const p of PIANETI) {
+    for (const corpo of p.lune || []) voci.push({ corpo, categoria: "luna", pianeta: p });
+  }
+  return voci;
+}
+
+const INDICE_RICERCA = indiceRicerca();
+
+function etichettaRisultato(voce) {
+  const categoria = TXT[lingua].categorie[voce.categoria];
+  return voce.pianeta ? `${categoria} · ${voce.pianeta.nome[lingua]}` : categoria;
+}
+
+function mostraRisultatiRicerca() {
+  const query = normalizzaRicerca(campoRicerca.value);
+  risultatiRicerca.replaceChildren();
+  indiceRisultato = -1;
+
+  if (!query) {
+    risultatiCorrenti = [];
+    risultatiRicerca.classList.remove("visibile");
+    return;
+  }
+
+  risultatiCorrenti = INDICE_RICERCA
+    .filter(voce => {
+      const nomi = `${voce.corpo.nome.it} ${voce.corpo.nome.en} ${voce.pianeta?.nome.it || ""} ${voce.pianeta?.nome.en || ""}`;
+      return normalizzaRicerca(nomi).includes(query);
+    })
+    .slice(0, 14);
+
+  if (!risultatiCorrenti.length) {
+    const vuoto = document.createElement("div");
+    vuoto.className = "nessun-risultato";
+    vuoto.textContent = TXT[lingua].nessunRisultato;
+    risultatiRicerca.appendChild(vuoto);
+  } else {
+    risultatiCorrenti.forEach((voce, i) => {
+      const bottone = document.createElement("button");
+      bottone.type = "button";
+      bottone.className = "risultato-ricerca";
+      const nome = document.createElement("b");
+      nome.textContent = voce.corpo.nome[lingua];
+      const tipo = document.createElement("small");
+      tipo.textContent = etichettaRisultato(voce);
+      bottone.append(nome, tipo);
+      bottone.addEventListener("click", () => apriRisultatoRicerca(voce));
+      bottone.dataset.indice = i;
+      risultatiRicerca.appendChild(bottone);
+    });
+  }
+  risultatiRicerca.classList.add("visibile");
+}
+
+function apriRisultatoRicerca(voce) {
+  chiudiRicerca();
+
+  if (voce.categoria === "luna") {
+    if (PIANETA_FOCUS === voce.pianeta) {
+      apriScheda(voce.corpo);
+      return;
+    }
+    location.href = `?focus=${voce.pianeta.slug}&target=${encodeURIComponent(voce.corpo.nome.en)}`;
+    return;
+  }
+
+  if (PIANETA_FOCUS) {
+    location.href = `./?target=${encodeURIComponent(voce.corpo.nome.en)}`;
+    return;
+  }
+
+  if (voce.categoria === "nano") {
+    stato.mostraNani = true;
+    document.getElementById("chkNani").checked = true;
+  }
+  apriScheda(voce.corpo);
+}
+
+campoRicerca.addEventListener("input", mostraRisultatiRicerca);
+campoRicerca.addEventListener("focus", mostraRisultatiRicerca);
+campoRicerca.addEventListener("keydown", e => {
+  if (!risultatiCorrenti.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    indiceRisultato = (indiceRisultato + (e.key === "ArrowDown" ? 1 : -1) + risultatiCorrenti.length) % risultatiCorrenti.length;
+    risultatiRicerca.querySelectorAll(".risultato-ricerca").forEach((b, i) => b.classList.toggle("attivo", i === indiceRisultato));
+  }
+  if (e.key === "Enter") {
+    e.preventDefault();
+    apriRisultatoRicerca(risultatiCorrenti[Math.max(indiceRisultato, 0)]);
+  }
+});
+document.addEventListener("pointerdown", e => {
+  if (!contenitoreRicerca.contains(e.target)) chiudiRicerca();
+});
+
+/* ============================================================
    SCHEDA INFORMATIVA
    ============================================================ */
 const scheda = document.getElementById("scheda");
@@ -1638,6 +2906,12 @@ function apriScheda(corpo, mantieniRidotta = false) {
   document.getElementById("schedaNome").textContent = corpo.nome[lingua];
   document.getElementById("schedaTipo").textContent = corpo.tipo[lingua];
   document.getElementById("schedaDescrizione").textContent = corpo.descrizione[lingua];
+
+  const dettagli = DETTAGLI_CORPI[corpo.nome.it]?.[lingua] || [];
+  const contenitoreDettagli = document.getElementById("schedaDettagli");
+  contenitoreDettagli.innerHTML = dettagli.length
+    ? `<h3>${TXT[lingua].approfondimenti}</h3><ul>${dettagli.map(d => `<li>${d}</li>`).join("")}</ul>`
+    : "";
 
   const curiosita = document.getElementById("schedaCuriosita");
   if (corpo.curiosita) {
@@ -1732,6 +3006,12 @@ collegaSlider("sOrbite", "vOrbite",
   v => v.toFixed(2).replace(/0$/, "") + "×",
   v => { stato.scalaOrbite = v; PIANETI.forEach(p => p.scia.length = 0); });
 
+const OPZIONI_LIMITE_LUNE = [10, 20, Infinity];
+collegaSlider("sLimiteLune", "vLimiteLune",
+  v => Number.isFinite(v) ? String(v) : TXT[lingua].tutte,
+  v => stato.limiteLune = v,
+  posizione => OPZIONI_LIMITE_LUNE[posizione]);
+
 const btnPausa = document.getElementById("btnPausa");
 btnPausa.addEventListener("click", () => {
   stato.pausa = !stato.pausa;
@@ -1742,6 +3022,7 @@ btnPausa.addEventListener("click", () => {
 document.getElementById("btnReset").addEventListener("click", () => {
   stato.giorni = 0;
   PIANETI.forEach(p => { p.angolo = p.fase; p.scia.length = 0; });
+  PIANETI_NANI.forEach(p => { p.angolo = p.fase; });
   aggiornaCronometro();
 });
 
@@ -1752,6 +3033,7 @@ document.getElementById("chkScie").addEventListener("change", e => {
   if (!e.target.checked) PIANETI.forEach(p => p.scia.length = 0);
 });
 document.getElementById("chkLune").addEventListener("change", e => stato.mostraLune = e.target.checked);
+document.getElementById("chkNani").addEventListener("change", e => stato.mostraNani = e.target.checked);
 
 /* ============================================================
    SOTTOFONDO MUSICALE (Web Audio)
@@ -1903,6 +3185,10 @@ function applicaLingua() {
   document.getElementById("lblChkNomi").textContent = T.nomi;
   document.getElementById("lblChkScie").textContent = T.scie;
   document.getElementById("lblChkLune").textContent = T.lune;
+  document.getElementById("lblChkNani").textContent = T.nani;
+  document.getElementById("lblLimiteLune").textContent = T.limiteLune;
+  document.getElementById("campoRicerca").placeholder = T.cerca;
+  document.getElementById("apriRicerca").setAttribute("aria-label", T.cerca);
   document.getElementById("btnReset").textContent = T.reset;
   document.getElementById("btnMusica").textContent = T.musica;
   document.getElementById("schedaChiudi").title = T.chiudi;
@@ -1913,6 +3199,7 @@ function applicaLingua() {
 
   aggiornaSliders.forEach(f => f());
   aggiornaCronometro();
+  if (campoRicerca.value) mostraRisultatiRicerca();
   if (layoutMobile) requestAnimationFrame(aggiornaGeometria);
 
   // ritraduce la scheda aperta mantenendone lo stato
@@ -1934,15 +3221,32 @@ document.querySelectorAll("#selettoreLingue button").forEach(b => {
 window.addEventListener("keydown", e => {
   if (e.code === "Space") { e.preventDefault(); btnPausa.click(); }
   if (e.key === "Escape") {
+    chiudiRicerca();
     scheda.classList.remove("visibile");
     stato.selezionato = null;
   }
 });
 
+function apriTargetIniziale() {
+  if (!TARGET_INIZIALE) return;
+  const target = TARGET_INIZIALE;
+  const corpi = PIANETA_FOCUS
+    ? [PIANETA_FOCUS, ...PIANETA_FOCUS.lune]
+    : [SOLE, ...PIANETI, ...PIANETI_NANI];
+  const corpo = corpi.find(c => c.nome.en === target || c.nome.it === target);
+  if (!corpo) return;
+  if (PIANETI_NANI.includes(corpo)) {
+    stato.mostraNani = true;
+    document.getElementById("chkNani").checked = true;
+  }
+  apriScheda(corpo);
+}
+
 /* via! */
 if (PIANETA_FOCUS) document.body.classList.add("focus");
 ridimensiona();
 applicaLingua();
+apriTargetIniziale();
 setTimeout(aggiornaGeometria, 1200);
 requestAnimationFrame(ciclo);
 </script>
