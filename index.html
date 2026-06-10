@@ -2757,7 +2757,11 @@ function luneVisibili(p) {
     if (a.principale !== b.principale) return a.principale ? -1 : 1;
     return (a.distanza || Infinity) - (b.distanza || Infinity);
   });
-  return ordinate.slice(0, stato.limiteLune);
+  // la priorità alla selezione decide solo QUALI lune mostrare: l'ordine di
+  // disegno (e quindi l'orbita assegnata) resta quello naturale del catalogo
+  const indice = new Map(p.lune.map((m, i) => [m, i]));
+  return ordinate.slice(0, stato.limiteLune)
+    .sort((a, b) => indice.get(a) - indice.get(b));
 }
 
 function disegnaVistaLune(t) {
