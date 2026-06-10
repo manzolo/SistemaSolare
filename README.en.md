@@ -20,6 +20,9 @@
 ## ✨ Features
 
 - 🪐 **8 planets + the Sun** with colors, relative sizes and orbital speeds proportional to the real astronomical periods
+- 🌙 **Toggleable moons layer**: the Moon always orbits Earth, and the *Moons* switch reveals the major moons of Mars, Jupiter, Saturn, Uranus and Neptune — all clickable
+- 🛰 **Dedicated moon systems**: each planet's info card generates a link (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) opening a simulation with the planet at the centre and its moons in orbit
+- 🎻 **Background music** in documentary style — a synthetic arrangement of Bach's *Air on the G String* generated on the fly with the Web Audio API — toggled with the ♪ button
 - 💡 **Realistic lighting**: each planet is lit on the side facing the Sun
 - 🪩 **Unique details**: Saturn's rings, Jupiter's bands, a pulsing Sun with halo, twinkling stars
 - 🖱️ **Info cards**: click a celestial body to open a collapsible box with data, description and a fun fact
@@ -36,8 +39,9 @@
 | **Planet size** | visual scale from 0.4× to 3× |
 | **Brightness** | intensity of Sun, glows and stars (20%–200%) |
 | **Orbit spread** | compact or widen the system |
-| **Toggles** | show/hide orbits, names and orbital trails |
-| **Pausa / Reset** | stop time or rewind the simulation to day 0 |
+| **Toggles** | show/hide orbits, names, orbital trails and the moons layer |
+| **Pause / Reset** | stop time or rewind the simulation to day 0 |
+| **♪ Music** | toggle the background music |
 
 ## 🚀 Getting started
 

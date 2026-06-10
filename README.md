@@ -20,6 +20,9 @@
 ## ✨ Caratteristiche
 
 - 🪐 **8 pianeti + Sole** con colori, dimensioni relative e velocità orbitali proporzionali ai veri periodi astronomici
+- 🌙 **Layer lune attivabile**: la Luna orbita sempre intorno alla Terra, e con l'interruttore *Lune* compaiono anche le lune principali di Marte, Giove, Saturno, Urano e Nettuno — tutte cliccabili
+- 🛰 **Sistemi di lune dedicati**: dalla scheda di un pianeta si genera un link (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) che apre una simulazione col pianeta al centro e le sue lune in orbita
+- 🎻 **Sottofondo musicale** in stile documentario — un arrangiamento sintetico dell'*Aria sulla quarta corda* di Bach generato al volo con la Web Audio API — attivabile/disattivabile col pulsante ♪
 - 💡 **Illuminazione realistica**: ogni pianeta è illuminato dal lato rivolto verso il Sole
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano
 - 🖱️ **Schede informative**: clicca su un corpo celeste per aprire un box richiudibile con dati, descrizione e una curiosità
@@ -36,8 +39,9 @@
 | **Grandezza pianeti** | scala visiva da 0,4× a 3× |
 | **Luminosità** | intensità di Sole, bagliori e stelle (20%–200%) |
 | **Ampiezza orbite** | compatta o allarga il sistema |
-| **Interruttori** | mostra/nascondi orbite, nomi e scie orbitali |
+| **Interruttori** | mostra/nascondi orbite, nomi, scie orbitali e il layer delle lune |
 | **Pausa / Reset** | ferma il tempo o riporta la simulazione al giorno 0 |
+| **♪ Musica** | attiva/disattiva il sottofondo musicale |
 
 ## 🚀 Avvio
 
