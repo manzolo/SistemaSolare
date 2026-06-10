@@ -212,12 +212,13 @@
     appearance: none;
     width: 100%;
     height: 2px;
+    margin: 6px 0;
     background: linear-gradient(to right, var(--amber) var(--pct, 50%), rgba(232,237,244,0.15) var(--pct, 50%));
     outline: none;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 14px; height: 14px;
+    width: 16px; height: 16px;
     background: var(--bg);
     border: 1.5px solid var(--amber);
     transform: rotate(45deg);
@@ -527,7 +528,7 @@
   <div class="comandi-corpo">
     <div class="controllo">
       <label><span id="lblVelocita">Velocità del tempo</span> <output id="vVelocita">20 g/s</output></label>
-      <input type="range" id="sVelocita" min="0" max="200" value="20" step="1">
+      <input type="range" id="sVelocita" min="0" max="1000" value="0" step="1">
     </div>
     <div class="controllo">
       <label><span id="lblScala">Grandezza pianeti</span> <output id="vScala">1.0×</output></label>
@@ -1119,6 +1120,7 @@ PIANETI.forEach((p, i) => {
 /* vista dedicata alle lune di un pianeta: ?focus=<slug> */
 const FOCUS = new URLSearchParams(location.search).get("focus");
 const PIANETA_FOCUS = PIANETI.find(p => p.slug === FOCUS && p.lune) || null;
+const VELOCITA_INIZIALE = PIANETA_FOCUS ? 1 : 20;
 
 /* ============================================================
    IMPOSTAZIONE CANVAS
@@ -1193,7 +1195,7 @@ function generaStelle() {
    ============================================================ */
 const stato = {
   giorni: 0,
-  velocita: 20,        // giorni simulati al secondo
+  velocita: VELOCITA_INIZIALE, // giorni simulati al secondo
   scalaPianeti: 1,
   luce: 1,
   scalaOrbite: 1,
@@ -1685,13 +1687,14 @@ document.getElementById("comandiTesta").addEventListener("click", () => {
 
 const aggiornaSliders = [];
 
-function collegaSlider(id, outputId, formato, applica) {
+function collegaSlider(id, outputId, formato, applica, trasforma = v => v) {
   const slider = document.getElementById(id);
   const uscita = document.getElementById(outputId);
   const aggiorna = () => {
-    const v = parseFloat(slider.value);
+    const posizione = parseFloat(slider.value);
     const min = parseFloat(slider.min), max = parseFloat(slider.max);
-    slider.style.setProperty("--pct", ((v - min) / (max - min)) * 100 + "%");
+    const v = trasforma(posizione);
+    slider.style.setProperty("--pct", ((posizione - min) / (max - min)) * 100 + "%");
     uscita.textContent = formato(v);
     applica(v);
   };
@@ -1700,9 +1703,22 @@ function collegaSlider(id, outputId, formato, applica) {
   aggiorna();
 }
 
+function velocitaDaPosizione(posizione) {
+  const percentuale = posizione / 1000;
+  if (percentuale <= 0.5) return Math.round(percentuale * 20);
+  return Math.round(10 + ((percentuale - 0.5) / 0.5) * 190);
+}
+
+function posizioneDaVelocita(velocita) {
+  if (velocita <= 10) return (velocita / 10) * 500;
+  return 500 + ((velocita - 10) / 190) * 500;
+}
+
+document.getElementById("sVelocita").value = posizioneDaVelocita(VELOCITA_INIZIALE);
 collegaSlider("sVelocita", "vVelocita",
   v => v === 0 ? TXT[lingua].fermo : v + " " + TXT[lingua].unitaVelocita,
-  v => stato.velocita = v);
+  v => stato.velocita = v,
+  velocitaDaPosizione);
 
 collegaSlider("sScala", "vScala",
   v => v.toFixed(1) + "×",
