@@ -36,8 +36,82 @@
     inset: 0;
     display: block;
     cursor: crosshair;
+    transform-origin: var(--transizione-x, 50%) var(--transizione-y, 50%);
   }
   canvas#cielo.su-pianeta { cursor: pointer; }
+
+  /* ---------- transizione tra sistema e pianeta ---------- */
+  .transizione-vista {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at var(--transizione-x, 50%) var(--transizione-y, 50%),
+        rgba(111, 227, 255, 0.16) 0,
+        rgba(8, 12, 22, 0.92) 8%,
+        #04060d 30%);
+    clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%));
+  }
+  body.transizione-uscita .transizione-vista {
+    animation: copri-vista 0.78s cubic-bezier(.76, 0, .24, 1) forwards;
+  }
+  body.transizione-ingresso .transizione-vista {
+    clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%));
+    animation: scopri-vista 0.9s cubic-bezier(.22, 1, .36, 1) forwards;
+  }
+  body.transizione-uscita header,
+  body.transizione-uscita .ricerca,
+  body.transizione-uscita .comandi,
+  body.transizione-uscita .scheda,
+  body.transizione-uscita .suggerimento {
+    transition: opacity 0.35s ease, transform 0.6s cubic-bezier(.76, 0, .24, 1);
+    opacity: 0;
+  }
+  body.transizione-avanti canvas {
+    transition: transform 0.78s cubic-bezier(.76, 0, .24, 1), opacity 0.55s ease;
+    transform: scale(2.5);
+    opacity: 0.15;
+  }
+  body.transizione-indietro canvas {
+    transition: transform 0.78s cubic-bezier(.76, 0, .24, 1), opacity 0.55s ease;
+    transform: scale(0.46);
+    opacity: 0.12;
+  }
+  body.ingresso-avanti canvas {
+    animation: ingresso-da-sistema 0.95s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  body.ingresso-indietro canvas {
+    animation: ingresso-da-pianeta 0.95s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  @keyframes copri-vista {
+    from { clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+    to { clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+  }
+  @keyframes scopri-vista {
+    from { clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+    to { clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+  }
+  @keyframes ingresso-da-sistema {
+    from { transform: scale(1.8); opacity: 0.1; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes ingresso-da-pianeta {
+    from { transform: scale(0.55); opacity: 0.1; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .transizione-vista,
+    body.transizione-uscita .transizione-vista,
+    body.transizione-ingresso .transizione-vista,
+    body.transizione-avanti canvas,
+    body.transizione-indietro canvas,
+    body.ingresso-avanti canvas,
+    body.ingresso-indietro canvas {
+      animation-duration: 0.2s;
+      transition-duration: 0.2s;
+    }
+  }
 
   /* ---------- vignetta + grana ---------- */
   .vignetta {
@@ -278,6 +352,7 @@
     color: var(--amber);
   }
   .freccia {
+    position: relative;
     width: 8px; height: 8px;
     border-right: 1px solid var(--dim);
     border-bottom: 1px solid var(--dim);
@@ -299,6 +374,46 @@
     padding-top: 0;
     padding-bottom: 0;
     border-top-color: transparent;
+  }
+  .comandi.icona {
+    width: 44px;
+    height: 44px;
+    border-color: rgba(255, 179, 71, 0.4);
+    transition: width 0.35s cubic-bezier(.22,1,.36,1), height 0.35s cubic-bezier(.22,1,.36,1);
+  }
+  .comandi.icona .comandi-testa {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+  .comandi.icona .comandi-testa span,
+  .comandi.icona .comandi-corpo { display: none; }
+  .comandi.icona .freccia {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--amber);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px rgba(255,179,71,0.35);
+  }
+  .comandi.icona .freccia::before,
+  .comandi.icona .freccia::after {
+    content: "";
+    position: absolute;
+    background: var(--amber);
+    opacity: 0.7;
+  }
+  .comandi.icona .freccia::before {
+    width: 8px;
+    height: 1px;
+    left: 2px;
+    top: 5px;
+  }
+  .comandi.icona .freccia::after {
+    width: 1px;
+    height: 8px;
+    left: 5px;
+    top: 2px;
   }
 
   .controllo { margin-bottom: 14px; }
@@ -600,6 +715,7 @@
 
   @media (max-width: 720px) {
     .comandi { left: 12px; right: 12px; bottom: 12px; width: auto; }
+    .comandi.icona { left: 12px; right: auto; width: 44px; }
     .scheda { left: 12px; right: 12px; width: auto; top: auto; bottom: 12px;
               transform: translateY(30px); }
     .scheda.visibile { transform: translateY(0); }
@@ -627,6 +743,7 @@
 <body>
 
 <canvas id="cielo"></canvas>
+<div class="transizione-vista" id="transizioneVista"></div>
 <div class="vignetta"></div>
 <div class="grana"></div>
 
@@ -715,8 +832,8 @@
     <p class="descrizione" id="schedaDescrizione"></p>
     <dl class="griglia-dati" id="schedaDati"></dl>
     <div class="curiosita" id="schedaCuriosita"></div>
-    <div class="dettagli" id="schedaDettagli"></div>
     <a class="vai-lune" id="schedaLune" href="#" style="display:none"></a>
+    <div class="dettagli" id="schedaDettagli"></div>
   </div>
 </aside>
 
@@ -2177,6 +2294,77 @@ const canvas = document.getElementById("cielo");
 const ctx = canvas.getContext("2d");
 let W = 0, H = 0, CX = 0, CY = 0, RMAX = 0, DPR = 1;
 let ORBIT_X = 0, ORBIT_Y = 0, ORBIT_MIN = 0, layoutMobile = false;
+const CHIAVE_TRANSIZIONE = "sistemasolare-transizione";
+
+function leggiTransizioneIngresso() {
+  try {
+    const dati = JSON.parse(sessionStorage.getItem(CHIAVE_TRANSIZIONE));
+    sessionStorage.removeItem(CHIAVE_TRANSIZIONE);
+    return dati;
+  } catch {
+    return null;
+  }
+}
+
+const TRANSIZIONE_INGRESSO = leggiTransizioneIngresso();
+if (TRANSIZIONE_INGRESSO) {
+  document.body.classList.add(
+    "transizione-ingresso",
+    TRANSIZIONE_INGRESSO.direzione === "avanti" ? "ingresso-avanti" : "ingresso-indietro"
+  );
+}
+
+function impostaOrigineTransizione(x, y) {
+  document.documentElement.style.setProperty("--transizione-x", `${x}px`);
+  document.documentElement.style.setProperty("--transizione-y", `${y}px`);
+}
+
+function navigaConTransizione(url, corpo, direzione) {
+  if (document.body.classList.contains("transizione-uscita")) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    location.href = url;
+    return;
+  }
+
+  const x = corpo?._x ?? CX;
+  const y = corpo?._y ?? CY;
+  impostaOrigineTransizione(x, y);
+  document.body.classList.remove("transizione-ingresso", "ingresso-avanti", "ingresso-indietro");
+  try {
+    sessionStorage.setItem(CHIAVE_TRANSIZIONE, JSON.stringify({
+      direzione,
+      slug: corpo?.slug || PIANETA_FOCUS?.slug || "",
+    }));
+  } catch {}
+
+  document.body.classList.add(
+    "transizione-uscita",
+    direzione === "avanti" ? "transizione-avanti" : "transizione-indietro"
+  );
+  setTimeout(() => { location.href = url; }, 720);
+}
+
+function completaTransizioneIngresso() {
+  if (!TRANSIZIONE_INGRESSO) return;
+
+  if (TRANSIZIONE_INGRESSO.direzione === "indietro") {
+    const pianeta = PIANETI.find(p => p.slug === TRANSIZIONE_INGRESSO.slug);
+    if (pianeta) {
+      const pos = posizione(pianeta);
+      impostaOrigineTransizione(pos.x, pos.y);
+    } else {
+      impostaOrigineTransizione(CX, CY);
+    }
+  } else {
+    impostaOrigineTransizione(CX, CY);
+  }
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.body.classList.remove("transizione-ingresso", "ingresso-avanti", "ingresso-indietro");
+    }, 950);
+  });
+}
 
 function aggiornaGeometria() {
   layoutMobile = W <= 720;
@@ -2765,7 +2953,17 @@ canvas.addEventListener("pointermove", e => {
 
 canvas.addEventListener("click", e => {
   const corpo = corpoSotto(e.clientX, e.clientY);
-  if (corpo) apriScheda(corpo);
+  if (corpo) {
+    apriScheda(corpo);
+    return;
+  }
+
+  scheda.classList.remove("visibile");
+  stato.selezionato = null;
+  stato.hover = null;
+  etichettaHover.classList.remove("visibile");
+  chiudiRicerca();
+  riduciConsoleAIcona();
 });
 
 /* ============================================================
@@ -2861,12 +3059,16 @@ function apriRisultatoRicerca(voce) {
       apriScheda(voce.corpo);
       return;
     }
-    location.href = `?focus=${voce.pianeta.slug}&target=${encodeURIComponent(voce.corpo.nome.en)}`;
+    navigaConTransizione(
+      `?focus=${voce.pianeta.slug}&target=${encodeURIComponent(voce.corpo.nome.en)}`,
+      voce.pianeta,
+      "avanti"
+    );
     return;
   }
 
   if (PIANETA_FOCUS) {
-    location.href = `./?target=${encodeURIComponent(voce.corpo.nome.en)}`;
+    navigaConTransizione(`?target=${encodeURIComponent(voce.corpo.nome.en)}`, PIANETA_FOCUS, "indietro");
     return;
   }
 
@@ -2950,13 +3152,43 @@ document.getElementById("schedaTesta").addEventListener("click", () => {
   scheda.classList.toggle("ridotta");
 });
 
+document.getElementById("schedaLune").addEventListener("click", e => {
+  if (!stato.selezionato?.lune) return;
+  e.preventDefault();
+  navigaConTransizione(e.currentTarget.href, stato.selezionato, "avanti");
+});
+
+document.getElementById("linkIndietro").addEventListener("click", e => {
+  if (!PIANETA_FOCUS) return;
+  e.preventDefault();
+  const url = `?target=${encodeURIComponent(PIANETA_FOCUS.nome.en)}`;
+  navigaConTransizione(url, PIANETA_FOCUS, "indietro");
+});
+
 /* ============================================================
    CONSOLE DI CONTROLLO
    ============================================================ */
-document.getElementById("comandiTesta").addEventListener("click", () => {
-  document.getElementById("pannelloComandi").classList.toggle("chiuso");
+const pannelloComandi = document.getElementById("pannelloComandi");
+
+function aggiornaGeometriaDopoConsole() {
   requestAnimationFrame(aggiornaGeometria);
   setTimeout(aggiornaGeometria, 480);
+}
+
+function riduciConsoleAIcona() {
+  pannelloComandi.classList.remove("chiuso");
+  pannelloComandi.classList.add("icona");
+  aggiornaGeometriaDopoConsole();
+}
+
+document.getElementById("comandiTesta").addEventListener("click", () => {
+  if (pannelloComandi.classList.contains("icona")) {
+    pannelloComandi.classList.remove("icona");
+    pannelloComandi.classList.remove("chiuso");
+  } else {
+    pannelloComandi.classList.toggle("chiuso");
+  }
+  aggiornaGeometriaDopoConsole();
 });
 
 const aggiornaSliders = [];
@@ -3247,6 +3479,7 @@ if (PIANETA_FOCUS) document.body.classList.add("focus");
 ridimensiona();
 applicaLingua();
 apriTargetIniziale();
+completaTransizioneIngresso();
 setTimeout(aggiornaGeometria, 1200);
 requestAnimationFrame(ciclo);
 </script>
