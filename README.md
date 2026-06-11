@@ -26,13 +26,13 @@
 - 🛰 **Sistemi di lune completi**: le viste dedicate (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) includono tutte le lune riconosciute dalla IAU nel catalogo JPL 2026, con schede cliccabili e dati orbitali
 - 📚 **Schede approfondite**: pianeti e lune principali includono più contesto scientifico, curiosità e dettagli; le lune minori riportano scoperta, distanza, periodo, classe e direzione orbitale
 - 🔍 **Ricerca globale**: trova Sole, pianeti, pianeti nani e lune e apre direttamente il corpo o il sistema corretto
-- 🧊 **Pianeti nani**: layer dedicato a Cerere, Plutone, Haumea, Makemake ed Eris
+- 🧊 **Pianeti nani**: Cerere, Plutone, Haumea, Makemake ed Eris percorrono orbite eccentriche e inclinate dedicate
 - 📅 **Configurazione odierna**: il giorno 0 usa la data di apertura e posizioni orbitali approssimate con elementi JPL
 - 🎚️ **Densità delle lune**: nelle viste dedicate puoi mostrare 10, 20 o tutte le lune
 - 🎻 **Sottofondo musicale** in stile documentario — un arrangiamento sintetico dell'*Aria sulla quarta corda* di Bach generato al volo con la Web Audio API — attivabile/disattivabile col pulsante ♪
 - 💡 **Illuminazione realistica**: ogni pianeta è illuminato dal lato rivolto verso il Sole
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano
-- ☄️ **Comete periodiche**: Halley, Encke e 67P percorrono orbite eccentriche con chioma e coda dinamiche
+- ☄️ **Comete periodiche**: Halley, Encke e 67P percorrono orbite eccentriche e inclinate, con chioma e coda dinamiche
 - 🪨 **Fascia principale degli asteroidi**: centinaia di corpi distribuiti tra Marte e Giove con leggere inclinazioni orbitali
 - 📷 **Immagini dalle missioni spaziali**: pianeti e comete principali includono fotografie NASA/ESA con missione, credito e fonte originale
 - 🖱️ **Schede informative**: clicca su un corpo celeste per aprire un box richiudibile con dati, descrizione e una curiosità

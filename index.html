@@ -1412,7 +1412,7 @@ const PIANETI_NANI = [
     tipo: { it: "Pianeta nano · fascia principale", en: "Dwarf planet · main belt" },
     colore: "#b8aaa0", coloreScuro: "#625750",
     raggio: 2.4, orbita: 0.39, periodo: 1680, slug: "cerere",
-    elementi: { epoch: 2461200.5, e: 0.0797, ma: 274, n: 0.214, peri: 153.5 },
+    elementi: { epoch: 2461200.5, e: 0.0797, ma: 274, n: 0.214, peri: 153.5, I: 10.59, nodo: 80.3 },
     descrizione: {
       it: "Cerere è il corpo più grande della fascia degli asteroidi tra Marte e Giove. La missione Dawn ha rivelato una superficie ricca di sali, ghiaccio d'acqua e tracce di attività geologica relativamente recente.",
       en: "Ceres is the largest body in the asteroid belt between Mars and Jupiter. The Dawn mission revealed a surface rich in salts, water ice and evidence of comparatively recent geological activity.",
@@ -1428,7 +1428,7 @@ const PIANETI_NANI = [
     tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
     colore: "#d7b397", coloreScuro: "#755344",
     raggio: 3.1, orbita: 0.91, periodo: 90560, slug: "plutone",
-    elementi: { epoch: 2457588.5, e: 0.252, ma: 38.7, n: 0.00396, peri: 224 },
+    elementi: { epoch: 2457588.5, e: 0.252, ma: 38.7, n: 0.00396, peri: 224, I: 17.16, nodo: 110.3 },
     descrizione: {
       it: "Plutone è un mondo complesso di ghiacci e roccia con montagne, dune, foschie atmosferiche e il vasto ghiacciaio di azoto Sputnik Planitia. Forma con Caronte un sistema quasi binario.",
       en: "Pluto is a complex world of ice and rock with mountains, dunes, atmospheric haze and the vast nitrogen glacier Sputnik Planitia. Together with Charon it forms an almost binary system.",
@@ -1444,7 +1444,7 @@ const PIANETI_NANI = [
     tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
     colore: "#d8e2e5", coloreScuro: "#71838b",
     raggio: 2.4, orbita: 0.94, periodo: 103000, slug: "haumea",
-    elementi: { epoch: 2461200.5, e: 0.194, ma: 223, n: 0.00349, peri: 3 },
+    elementi: { epoch: 2461200.5, e: 0.194, ma: 223, n: 0.00349, peri: 240, I: 28.2, nodo: 122 },
     descrizione: {
       it: "Haumea ruota così rapidamente da essere allungata come un ellissoide. È circondata da un anello e possiede due lune, Hiʻiaka e Namaka.",
       en: "Haumea spins so rapidly that it is stretched into an ellipsoid. It has a ring and two moons, Hiʻiaka and Namaka.",
@@ -1460,7 +1460,7 @@ const PIANETI_NANI = [
     tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
     colore: "#c8906f", coloreScuro: "#6e4433",
     raggio: 2.5, orbita: 0.97, periodo: 112000, slug: "makemake",
-    elementi: { epoch: 2461200.5, e: 0.159, ma: 170, n: 0.0032, peri: 16.3 },
+    elementi: { epoch: 2461200.5, e: 0.159, ma: 170, n: 0.0032, peri: 295, I: 29, nodo: 79.4 },
     descrizione: {
       it: "Makemake è un mondo molto freddo e rossastro della fascia di Kuiper. La sua superficie contiene metano, etano e probabilmente azoto congelati.",
       en: "Makemake is a very cold, reddish world in the Kuiper belt. Its surface contains frozen methane, ethane and probably nitrogen.",
@@ -1476,7 +1476,7 @@ const PIANETI_NANI = [
     tipo: { it: "Pianeta nano · disco diffuso", en: "Dwarf planet · scattered disc" },
     colore: "#e2e0dc", coloreScuro: "#7b7974",
     raggio: 2.7, orbita: 1, periodo: 205000, slug: "eris",
-    elementi: { epoch: 2461200.5, e: 0.438, ma: 212, n: 0.00176, peri: 187 },
+    elementi: { epoch: 2461200.5, e: 0.438, ma: 212, n: 0.00176, peri: 151, I: 44, nodo: 35.9 },
     descrizione: {
       it: "Eris è uno dei corpi più massicci oltre Nettuno e percorre un'orbita molto eccentrica e inclinata. La sua scoperta contribuì direttamente alla definizione moderna di pianeta nano.",
       en: "Eris is one of the most massive bodies beyond Neptune and follows a highly eccentric, inclined orbit. Its discovery directly contributed to the modern definition of a dwarf planet.",
@@ -1552,7 +1552,8 @@ const COMETE = [
     nome: { it: "Cometa di Halley", en: "Halley's Comet" },
     slug: "halley",
     tipo: { it: "Cometa periodica · 1P/Halley", en: "Periodic comet · 1P/Halley" },
-    colore: "#b8f2ff", periodo: 27509, perielio: 0.105, afelio: 0.91, peri: 1.08,
+    colore: "#b8f2ff", periodo: 27509, perielio: 0.105, afelio: 0.91,
+    argPerielio: 111.3, inclinazione: 162.3, nodoAscendente: 58.4,
     ultimoPerielio: "1986-02-09T00:00:00Z",
     descrizione: {
       it: "La più celebre cometa periodica, visibile dalla Terra circa ogni 75-76 anni. Il prossimo passaggio al perielio è previsto nel 2061.",
@@ -1568,7 +1569,8 @@ const COMETE = [
     nome: { it: "Cometa di Encke", en: "Encke's Comet" },
     slug: "encke",
     tipo: { it: "Cometa periodica · 2P/Encke", en: "Periodic comet · 2P/Encke" },
-    colore: "#8ee9d2", periodo: 1203, perielio: 0.09, afelio: 0.49, peri: 2.7,
+    colore: "#8ee9d2", periodo: 1203, perielio: 0.09, afelio: 0.49,
+    argPerielio: 186.5, inclinazione: 11.8, nodoAscendente: 334.6,
     ultimoPerielio: "2023-10-22T00:00:00Z",
     descrizione: {
       it: "La cometa periodica con il periodo orbitale più breve tra quelle ben note: ritorna vicino al Sole ogni 3,3 anni.",
@@ -1584,7 +1586,8 @@ const COMETE = [
     nome: { it: "67P/Churyumov-Gerasimenko", en: "67P/Churyumov-Gerasimenko" },
     slug: "67p",
     tipo: { it: "Cometa periodica · famiglia di Giove", en: "Periodic comet · Jupiter family" },
-    colore: "#d8ecff", periodo: 2352, perielio: 0.15, afelio: 0.65, peri: 4.15,
+    colore: "#d8ecff", periodo: 2352, perielio: 0.15, afelio: 0.65,
+    argPerielio: 12.8, inclinazione: 3.9, nodoAscendente: 50.2,
     ultimoPerielio: "2021-11-02T00:00:00Z",
     descrizione: {
       it: "La cometa studiata da vicino dalla missione Rosetta dell'ESA, che nel 2014 vi depositò il lander Philae.",
@@ -2572,9 +2575,9 @@ function angoloPianetaOggi(elementi, data) {
   return anomaliaVera(M, e) + peri * Math.PI / 180;
 }
 
-function angoloNanoOggi(elementi, data) {
+function anomaliaMediaNanoOggi(elementi, data) {
   const M = elementi.ma + elementi.n * (giornoGiuliano(data) - elementi.epoch);
-  return anomaliaVera(M, elementi.e) + elementi.peri * Math.PI / 180;
+  return normalizzaAngolo(M) * Math.PI / 180;
 }
 
 PIANETI.forEach((p, i) => {
@@ -2585,9 +2588,14 @@ PIANETI.forEach((p, i) => {
   p.nodoAscendente = (elementi.nodo + elementi.nodoRate * T) * Math.PI / 180;
 });
 PIANETI_NANI.forEach(p => {
-  p.fase = angoloNanoOggi(p.elementi, DATA_BASE);
+  p.fase = anomaliaMediaNanoOggi(p.elementi, DATA_BASE);
+  p.inclinazione = p.elementi.I * Math.PI / 180;
+  p.nodoAscendente = p.elementi.nodo * Math.PI / 180;
 });
 COMETE.forEach(c => {
+  c.argPerielio *= Math.PI / 180;
+  c.inclinazione *= Math.PI / 180;
+  c.nodoAscendente *= Math.PI / 180;
   c.fase = ((DATA_BASE - new Date(c.ultimoPerielio)) / GIORNO_MS / c.periodo) * Math.PI * 2;
   c.angolo = c.fase;
 });
@@ -2809,11 +2817,40 @@ function raggiOrbita(p) {
 
 function coordinateMondo(corpo) {
   if (!corpo || corpo === SOLE) return { x: 0, z: 0, altezza: 0 };
-  if (PIANETI.includes(corpo) || PIANETI_NANI.includes(corpo)) {
+  if (PIANETI_NANI.includes(corpo)) {
+    return coordinateOrbitaNano(corpo, corpo.angolo);
+  }
+  if (PIANETI.includes(corpo)) {
     const { rx, ry } = raggiOrbita(corpo);
     return coordinateOrbita(corpo, corpo.angolo, rx, ry);
   }
   return { x: 0, z: 0, altezza: 0 };
+}
+
+function trasformaPianoOrbitale(x, z, inclinazione, nodo, argPerielio = 0) {
+  const cosArg = Math.cos(argPerielio);
+  const sinArg = Math.sin(argPerielio);
+  const xArg = x * cosArg - z * sinArg;
+  const zArg = x * sinArg + z * cosArg;
+  const cosNodo = Math.cos(nodo);
+  const sinNodo = Math.sin(nodo);
+  const cosI = Math.cos(inclinazione);
+  const sinI = Math.sin(inclinazione);
+  return {
+    x: xArg * cosNodo - zArg * cosI * sinNodo,
+    z: xArg * sinNodo + zArg * cosI * cosNodo,
+    altezza: zArg * sinI,
+  };
+}
+
+function coordinateOrbitaNano(corpo, anomaliaMedia) {
+  const { rx, ry } = raggiOrbita(corpo);
+  const e = corpo.elementi.e;
+  const E = anomaliaEccentrica(anomaliaMedia, e);
+  const x = rx * (Math.cos(E) - e);
+  const z = ry * Math.sqrt(1 - e * e) * Math.sin(E);
+  const argPerielio = corpo.elementi.peri * Math.PI / 180 - corpo.nodoAscendente;
+  return trasformaPianoOrbitale(x, z, corpo.inclinazione, corpo.nodoAscendente, argPerielio);
 }
 
 function coordinateOrbita(corpo, angolo, rx, ry) {
@@ -2861,7 +2898,9 @@ function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaT
 
 function posizione(p) {
   const { rx, ry } = raggiOrbita(p);
-  const punto = coordinateOrbita(p, p.angolo, rx, ry);
+  const punto = PIANETI_NANI.includes(p)
+    ? coordinateOrbitaNano(p, p.angolo)
+    : coordinateOrbita(p, p.angolo, rx, ry);
   const proiettata = proiettaPunto3D(punto.x, punto.z, CX, CY, punto.altezza);
   return {
     ...proiettata,
@@ -2938,11 +2977,17 @@ function disegnaOrbita(p) {
 }
 
 function disegnaOrbitaNano(p) {
-  const { rx, ry } = raggiOrbita(p);
   ctx.strokeStyle = "rgba(111, 227, 255, 0.10)";
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 7]);
-  tracciaOrbita3D(rx, ry, CX, CY, true, p);
+  ctx.beginPath();
+  const segmenti = layoutMobile ? 100 : 180;
+  for (let i = 0; i <= segmenti; i++) {
+    const puntoMondo = coordinateOrbitaNano(p, i / segmenti * Math.PI * 2);
+    const punto = proiettaPunto3D(puntoMondo.x, puntoMondo.z, CX, CY, puntoMondo.altezza);
+    if (i === 0) ctx.moveTo(punto.x, punto.y);
+    else ctx.lineTo(punto.x, punto.y);
+  }
   ctx.stroke();
   ctx.setLineDash([]);
 }
@@ -2976,8 +3021,10 @@ function posizioneCometa(c) {
   const E = anomaliaEccentrica(c.angolo, e);
   const x0 = a * (Math.cos(E) - e);
   const z0 = b * Math.sin(E);
-  const cos = Math.cos(c.peri), sin = Math.sin(c.peri);
-  return proiettaPunto3D(x0 * cos - z0 * sin, x0 * sin + z0 * cos);
+  const punto = trasformaPianoOrbitale(
+    x0, z0, c.inclinazione, c.nodoAscendente, c.argPerielio
+  );
+  return proiettaPunto3D(punto.x, punto.z, CX, CY, punto.altezza);
 }
 
 function anomaliaEccentrica(M, e) {
@@ -2993,13 +3040,15 @@ function tracciaOrbitaCometa(c) {
   const a = (afelio + perielio) / 2;
   const e = (afelio - perielio) / (afelio + perielio);
   const b = a * Math.sqrt(1 - e * e);
-  const cos = Math.cos(c.peri), sin = Math.sin(c.peri);
   ctx.beginPath();
   for (let i = 0; i <= 140; i++) {
     const E = i / 140 * Math.PI * 2;
     const x0 = a * (Math.cos(E) - e);
     const z0 = b * Math.sin(E);
-    const punto = proiettaPunto3D(x0 * cos - z0 * sin, x0 * sin + z0 * cos);
+    const mondo = trasformaPianoOrbitale(
+      x0, z0, c.inclinazione, c.nodoAscendente, c.argPerielio
+    );
+    const punto = proiettaPunto3D(mondo.x, mondo.z, CX, CY, mondo.altezza);
     if (i === 0) ctx.moveTo(punto.x, punto.y);
     else ctx.lineTo(punto.x, punto.y);
   }

@@ -26,13 +26,13 @@
 - 🛰 **Complete moon systems**: dedicated views (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) include every IAU-recognised moon in the 2026 JPL catalogue, with clickable cards and orbital data
 - 📚 **Expanded information cards**: planets and major moons include richer scientific context and facts; minor moons show discovery, distance, period, class and orbital direction
 - 🔍 **Global search**: find the Sun, planets, dwarf planets and moons and open the relevant body or system directly
-- 🧊 **Dwarf planets**: a dedicated layer for Ceres, Pluto, Haumea, Makemake and Eris
+- 🧊 **Dwarf planets**: Ceres, Pluto, Haumea, Makemake and Eris follow dedicated eccentric and inclined orbits
 - 📅 **Today's configuration**: day zero uses the opening date and approximate orbital positions derived from JPL elements
 - 🎚️ **Moon density**: dedicated views can display 10, 20 or every moon
 - 🎻 **Background music** in documentary style — a synthetic arrangement of Bach's *Air on the G String* generated on the fly with the Web Audio API — toggled with the ♪ button
 - 💡 **Realistic lighting**: each planet is lit on the side facing the Sun
 - 🪩 **Unique details**: Saturn's rings, Jupiter's bands, a pulsing Sun with halo, twinkling stars
-- ☄️ **Periodic comets**: Halley, Encke and 67P follow eccentric orbits with dynamic comae and tails
+- ☄️ **Periodic comets**: Halley, Encke and 67P follow eccentric, inclined orbits with dynamic comae and tails
 - 🪨 **Main asteroid belt**: hundreds of bodies distributed between Mars and Jupiter with slight orbital inclinations
 - 📷 **Spacecraft imagery**: major planets and comets include NASA/ESA images with mission, credit, and original source
 - 🖱️ **Info cards**: click a celestial body to open a collapsible box with data, description and a fun fact
