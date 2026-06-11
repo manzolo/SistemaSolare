@@ -27,7 +27,7 @@
 - 📚 **Expanded information cards**: planets and major moons include richer scientific context and facts; minor moons show discovery, distance, period, class and orbital direction
 - 🔍 **Global search**: find the Sun, planets, dwarf planets and moons and open the relevant body or system directly
 - 🧊 **Dwarf planets**: Ceres, Pluto, Haumea, Makemake and Eris follow dedicated eccentric and inclined orbits
-- 📅 **Today's configuration**: day zero uses the opening date and approximate orbital positions derived from JPL elements
+- 📅 **Configurable date**: choose a day from 1800 to 2050, step quickly through days, months or years with the arrow keys, and run the simulation from that alignment
 - 🎚️ **Moon density**: dedicated views can display 10, 20 or every moon
 - 🎻 **Background music** in documentary style — a synthetic arrangement of Bach's *Air on the G String* generated on the fly with the Web Audio API — toggled with the ♪ button
 - 💡 **Realistic lighting**: each planet is lit on the side facing the Sun

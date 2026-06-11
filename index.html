@@ -432,6 +432,63 @@
   }
   .controllo label output { color: var(--cyan); letter-spacing: 0.05em; }
 
+  .selettore-data {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+  .selettore-data button {
+    min-width: 0;
+    height: 32px;
+    border: 1px solid var(--line);
+    background: rgba(4, 6, 13, 0.72);
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .campi-data {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1.7fr;
+    align-items: center;
+    height: 32px;
+    border: 1px solid var(--line);
+    background: rgba(4, 6, 13, 0.72);
+  }
+  .campi-data:focus-within { border-color: rgba(111, 227, 255, 0.65); }
+  .campi-data input {
+    min-width: 0;
+    width: 100%;
+    height: 30px;
+    padding: 0 3px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.08em;
+    text-align: center;
+    appearance: textfield;
+  }
+  .campi-data input::-webkit-inner-spin-button { display: none; }
+  .campi-data input:focus {
+    color: var(--cyan);
+    background: rgba(111, 227, 255, 0.06);
+  }
+  .campi-data span {
+    color: var(--dim);
+    font-size: 10px;
+  }
+  .selettore-data button {
+    padding: 0 10px;
+    color: var(--cyan);
+    cursor: pointer;
+  }
+  .selettore-data button:hover {
+    border-color: var(--cyan);
+    background: rgba(111, 227, 255, 0.08);
+  }
+
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
@@ -911,6 +968,19 @@
   </div>
   <div class="comandi-corpo">
     <div class="controllo">
+      <label><span id="lblDataAllineamento">Data dell'allineamento</span></label>
+      <div class="selettore-data">
+        <div class="campi-data" id="campiData">
+          <input type="text" id="dataGiorno" inputmode="numeric" maxlength="2" aria-label="Giorno">
+          <span>/</span>
+          <input type="text" id="dataMese" inputmode="numeric" maxlength="2" aria-label="Mese">
+          <span>/</span>
+          <input type="text" id="dataAnno" inputmode="numeric" maxlength="4" aria-label="Anno">
+        </div>
+        <button id="btnOggi" type="button">Oggi</button>
+      </div>
+    </div>
+    <div class="controllo">
       <label><span id="lblVelocita">Velocità del tempo</span> <output id="vVelocita">20 g/s</output></label>
       <input type="range" id="sVelocita" min="0" max="1000" value="0" step="1">
     </div>
@@ -928,7 +998,7 @@
     </div>
     <div class="controllo solo-focus">
       <label><span id="lblLimiteLune">Lune visibili</span> <output id="vLimiteLune">20</output></label>
-      <input type="range" id="sLimiteLune" min="0" max="2" value="1" step="1">
+      <input type="range" id="sLimiteLune" min="1" max="20" value="20" step="1">
     </div>
     <div class="bottoni">
       <button id="btnPausa">❚❚ Pausa</button>
@@ -1035,6 +1105,11 @@ const TXT = {
     anni: "anni terrestri",
     suggerimento: "— trascina per ruotare · rotella/pinch per zoom · doppio clic per reset —",
     console: "◈ Console di controllo",
+    dataAllineamento: "Data simulata",
+    oggi: "Oggi",
+    campoGiorno: "Giorno",
+    campoMese: "Mese",
+    campoAnno: "Anno",
     velocita: "Velocità del tempo",
     scala: "Grandezza pianeti",
     luce: "Luminosità",
@@ -1077,6 +1152,11 @@ const TXT = {
     anni: "Earth years",
     suggerimento: "— drag to rotate · wheel/pinch to zoom · double-click to reset —",
     console: "◈ Control console",
+    dataAllineamento: "Simulated date",
+    oggi: "Today",
+    campoGiorno: "Day",
+    campoMese: "Month",
+    campoAnno: "Year",
     velocita: "Time speed",
     scala: "Planet size",
     luce: "Brightness",
@@ -2557,8 +2637,9 @@ const ELEMENTI_JPL_1800_2050 = [
   { e: 0.00859048, eRate: 0.00005105, I: 1.77004347, IRate: 0.00035372, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464, nodo: 131.78422574, nodoRate: -0.00508664 },
 ];
 
-const DATA_BASE = new Date();
+let DATA_BASE = new Date();
 const GIORNO_MS = 86400000;
+const EPOCA_FASI_LUNE = 2451545; // J2000: riferimento comune per le fasi approssimate
 
 function giornoGiuliano(data) {
   return data.getTime() / GIORNO_MS + 2440587.5;
@@ -2591,25 +2672,36 @@ function anomaliaMediaNanoOggi(elementi, data) {
   return normalizzaAngolo(M) * Math.PI / 180;
 }
 
-PIANETI.forEach((p, i) => {
-  const elementi = ELEMENTI_JPL_1800_2050[i];
-  const T = (giornoGiuliano(DATA_BASE) - 2451545) / 36525;
-  p.fase = angoloPianetaOggi(elementi, DATA_BASE);
-  p.inclinazione = (elementi.I + elementi.IRate * T) * Math.PI / 180;
-  p.nodoAscendente = (elementi.nodo + elementi.nodoRate * T) * Math.PI / 180;
-});
-PIANETI_NANI.forEach(p => {
-  p.fase = anomaliaMediaNanoOggi(p.elementi, DATA_BASE);
-  p.inclinazione = p.elementi.I * Math.PI / 180;
-  p.nodoAscendente = p.elementi.nodo * Math.PI / 180;
-});
 COMETE.forEach(c => {
   c.argPerielio *= Math.PI / 180;
   c.inclinazione *= Math.PI / 180;
   c.nodoAscendente *= Math.PI / 180;
-  c.fase = ((DATA_BASE - new Date(c.ultimoPerielio)) / GIORNO_MS / c.periodo) * Math.PI * 2;
-  c.angolo = c.fase;
 });
+
+function aggiornaElementiPerData(data) {
+  PIANETI.forEach((p, i) => {
+    const elementi = ELEMENTI_JPL_1800_2050[i];
+    const T = (giornoGiuliano(data) - 2451545) / 36525;
+    p.fase = angoloPianetaOggi(elementi, data);
+    p.inclinazione = (elementi.I + elementi.IRate * T) * Math.PI / 180;
+    p.nodoAscendente = (elementi.nodo + elementi.nodoRate * T) * Math.PI / 180;
+    p.angolo = p.fase;
+    if (p.scia) p.scia.length = 0;
+  });
+  PIANETI_NANI.forEach(p => {
+    p.fase = anomaliaMediaNanoOggi(p.elementi, data);
+    p.inclinazione = p.elementi.I * Math.PI / 180;
+    p.nodoAscendente = p.elementi.nodo * Math.PI / 180;
+    p.angolo = p.fase;
+    if (p.scia) p.scia.length = 0;
+  });
+  COMETE.forEach(c => {
+    c.fase = ((data - new Date(c.ultimoPerielio)) / GIORNO_MS / c.periodo) * Math.PI * 2;
+    c.angolo = c.fase;
+  });
+}
+
+aggiornaElementiPerData(DATA_BASE);
 
 /* vista dedicata alle lune di un pianeta: ?focus=<slug> */
 const PARAMETRI_URL = new URLSearchParams(location.search);
@@ -2900,7 +2992,9 @@ function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaT
   const yProiettata = profonditaYaw * sinPitch - altezza * cosPitch * zoom;
   const profondita = profonditaYaw * cosPitch + altezza * sinPitch * zoom;
   const focale = Math.max(Math.min(W, H) * 1.25, 420);
-  const scala = Math.max(0.58, Math.min(1.55, focale / (focale + profondita)));
+  // Prospettiva limitata in modo continuo: evita spigoli sulle orbite
+  // quando, ad alto zoom, la profondità raggiungeva i vecchi limiti min/max.
+  const scala = 1 - 0.42 * Math.tanh(profondita / focale);
   return {
     x: centroX + xRuotata * scala + (applicaTarget ? stato.cameraPanX : 0),
     y: centroY + yProiettata * scala + (applicaTarget ? stato.cameraPanY : 0),
@@ -2923,8 +3017,12 @@ function posizione(p) {
   };
 }
 
+function segmentiOrbita(base, massimo) {
+  return Math.min(massimo, Math.ceil(base * Math.max(1, stato.cameraZoom)));
+}
+
 function tracciaOrbita3D(rx, ry, centroX = CX, centroY = CY, applicaTarget = true, corpo = null) {
-  const segmenti = layoutMobile ? 72 : 120;
+  const segmenti = segmentiOrbita(layoutMobile ? 72 : 120, layoutMobile ? 480 : 720);
   ctx.beginPath();
   for (let i = 0; i <= segmenti; i++) {
     const angolo = (i / segmenti) * Math.PI * 2;
@@ -2994,7 +3092,7 @@ function disegnaOrbitaNano(p) {
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 7]);
   ctx.beginPath();
-  const segmenti = layoutMobile ? 100 : 180;
+  const segmenti = segmentiOrbita(layoutMobile ? 100 : 180, layoutMobile ? 600 : 900);
   for (let i = 0; i <= segmenti; i++) {
     const puntoMondo = coordinateOrbitaNano(p, i / segmenti * Math.PI * 2);
     const punto = proiettaPunto3D(puntoMondo.x, puntoMondo.z, CX, CY, puntoMondo.altezza);
@@ -3003,6 +3101,39 @@ function disegnaOrbitaNano(p) {
   }
   ctx.stroke();
   ctx.setLineDash([]);
+}
+
+function disegnaOrbitaEvidenziata(corpo) {
+  if (!stato.mostraOrbite || !corpo || corpo === SOLE) return;
+  const pianeta = PIANETI.includes(corpo);
+  const nano = PIANETI_NANI.includes(corpo) && stato.mostraNani;
+  const cometa = COMETE.includes(corpo) && stato.mostraComete;
+  if (!pianeta && !nano && !cometa) return;
+
+  ctx.save();
+  ctx.strokeStyle = colorAlpha(corpo.colore, 0.85);
+  ctx.shadowColor = corpo.colore;
+  ctx.shadowBlur = 9;
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash(cometa ? [4, 5] : []);
+
+  if (pianeta) {
+    const { rx, ry } = raggiOrbita(corpo);
+    tracciaOrbita3D(rx, ry, CX, CY, true, corpo);
+  } else if (nano) {
+    ctx.beginPath();
+    const segmenti = segmentiOrbita(layoutMobile ? 100 : 180, layoutMobile ? 600 : 900);
+    for (let i = 0; i <= segmenti; i++) {
+      const mondo = coordinateOrbitaNano(corpo, i / segmenti * Math.PI * 2);
+      const punto = proiettaPunto3D(mondo.x, mondo.z, CX, CY, mondo.altezza);
+      if (i === 0) ctx.moveTo(punto.x, punto.y);
+      else ctx.lineTo(punto.x, punto.y);
+    }
+  } else {
+    tracciaPercorsoCometa(corpo);
+  }
+  ctx.stroke();
+  ctx.restore();
 }
 
 function disegnaFasciaAsteroidi() {
@@ -3047,15 +3178,16 @@ function anomaliaEccentrica(M, e) {
   return E;
 }
 
-function tracciaOrbitaCometa(c) {
+function tracciaPercorsoCometa(c) {
   const afelio = c.afelio * RMAX * stato.scalaOrbite;
   const perielio = c.perielio * RMAX * stato.scalaOrbite;
   const a = (afelio + perielio) / 2;
   const e = (afelio - perielio) / (afelio + perielio);
   const b = a * Math.sqrt(1 - e * e);
+  const segmenti = segmentiOrbita(layoutMobile ? 110 : 160, layoutMobile ? 660 : 960);
   ctx.beginPath();
-  for (let i = 0; i <= 140; i++) {
-    const E = i / 140 * Math.PI * 2;
+  for (let i = 0; i <= segmenti; i++) {
+    const E = i / segmenti * Math.PI * 2;
     const x0 = a * (Math.cos(E) - e);
     const z0 = b * Math.sin(E);
     const mondo = trasformaPianoOrbitale(
@@ -3065,6 +3197,10 @@ function tracciaOrbitaCometa(c) {
     if (i === 0) ctx.moveTo(punto.x, punto.y);
     else ctx.lineTo(punto.x, punto.y);
   }
+}
+
+function tracciaOrbitaCometa(c) {
+  tracciaPercorsoCometa(c);
   ctx.strokeStyle = colorAlpha(c.colore, 0.12);
   ctx.setLineDash([2, 8]);
   ctx.lineWidth = 1;
@@ -3400,7 +3536,9 @@ function disegnaPianeta(p, t) {
 }
 
 function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
-  const angolo = m.fase + (stato.giorni / m.periodo) * Math.PI * 2 * (m.retro ? -1 : 1);
+  const giorniDaEpoca = giornoGiuliano(DATA_BASE) - EPOCA_FASI_LUNE + stato.giorni;
+  const direzione = m.retro ? -1 : 1;
+  const angolo = m.fase + (giorniDaEpoca / m.periodo) * Math.PI * 2 * direzione;
   const punto = proiettaPunto3D(Math.cos(angolo) * d, Math.sin(angolo) * d, cx, cy, 0, false);
   const x = punto.x;
   const y = punto.y;
@@ -3409,11 +3547,17 @@ function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
 
   // orbita intorno al pianeta
   if (stato.mostraOrbite && mostraOrbita) {
-    ctx.strokeStyle = `rgba(232, 237, 244, ${focus ? 0.09 : 0.06})`;
-    ctx.lineWidth = 1;
+    const evidenziata = stato.hover === m;
+    ctx.strokeStyle = evidenziata
+      ? colorAlpha(m.colore, 0.82)
+      : `rgba(232, 237, 244, ${focus ? 0.09 : 0.06})`;
+    ctx.shadowColor = evidenziata ? m.colore : "transparent";
+    ctx.shadowBlur = evidenziata ? 7 : 0;
+    ctx.lineWidth = evidenziata ? 1.7 : 1;
     ctx.setLineDash([]);
     tracciaOrbita3D(d, d, cx, cy, false);
     ctx.stroke();
+    ctx.shadowBlur = 0;
   }
 
   // luce: dal Sole nella vista principale, fissa nella vista lune
@@ -3654,6 +3798,7 @@ function ciclo(t) {
     if (stato.mostraComete && stato.mostraOrbite) COMETE.forEach(tracciaOrbitaCometa);
     if (stato.mostraScie) PIANETI.forEach(disegnaScia);
     if (stato.mostraAsteroidi) disegnaFasciaAsteroidi();
+    disegnaOrbitaEvidenziata(stato.hover);
     disegnaSole(t);
     PIANETI.forEach(p => { disegnaPianeta(p, t); disegnaLune(p, t); });
     if (stato.mostraComete) COMETE.forEach(c => disegnaCometa(c, t));
@@ -3681,6 +3826,69 @@ function aggiornaCronometro() {
     month: "short",
     year: "numeric",
   });
+  if (!document.getElementById("campiData").contains(document.activeElement)) {
+    aggiornaCampiData(dataSimulata);
+  }
+}
+
+function dataSimulataCorrente() {
+  return new Date(DATA_BASE.getTime() + stato.giorni * GIORNO_MS);
+}
+
+function valoreCampoData(data) {
+  const anno = data.getFullYear();
+  const mese = String(data.getMonth() + 1).padStart(2, "0");
+  const giorno = String(data.getDate()).padStart(2, "0");
+  return `${anno}-${mese}-${giorno}`;
+}
+
+function aggiornaCampiData(data) {
+  document.getElementById("dataGiorno").value = String(data.getDate()).padStart(2, "0");
+  document.getElementById("dataMese").value = String(data.getMonth() + 1).padStart(2, "0");
+  document.getElementById("dataAnno").value = data.getFullYear();
+}
+
+function giorniNelMese(anno, mese) {
+  return new Date(anno, mese, 0).getDate();
+}
+
+function dataDaiCampi() {
+  const anno = Number(document.getElementById("dataAnno").value);
+  const mese = Number(document.getElementById("dataMese").value);
+  const giorno = Number(document.getElementById("dataGiorno").value);
+  if (anno < 1800 || anno > 2050 || mese < 1 || mese > 12 || giorno < 1) return null;
+  return new Date(anno, mese - 1, Math.min(giorno, giorniNelMese(anno, mese)), 12);
+}
+
+function ripristinaEpocaSelezionata() {
+  stato.giorni = 0;
+  aggiornaElementiPerData(DATA_BASE);
+  aggiornaCronometro();
+}
+
+function impostaDataAllineamento(data) {
+  const minima = new Date(1800, 0, 1, 12);
+  const massima = new Date(2050, 11, 31, 12);
+  DATA_BASE = new Date(Math.max(minima, Math.min(massima, data)));
+  aggiornaCampiData(DATA_BASE);
+  ripristinaEpocaSelezionata();
+}
+
+function spostaDataAllineamento(unita, delta) {
+  const nuova = dataSimulataCorrente();
+  const giorno = nuova.getDate();
+  if (unita === "giorni") {
+    nuova.setDate(giorno + delta);
+  } else if (unita === "mesi") {
+    nuova.setDate(1);
+    nuova.setMonth(nuova.getMonth() + delta);
+    nuova.setDate(Math.min(giorno, giorniNelMese(nuova.getFullYear(), nuova.getMonth() + 1)));
+  } else {
+    nuova.setDate(1);
+    nuova.setFullYear(nuova.getFullYear() + delta);
+    nuova.setDate(Math.min(giorno, giorniNelMese(nuova.getFullYear(), nuova.getMonth() + 1)));
+  }
+  impostaDataAllineamento(nuova);
 }
 
 /* ============================================================
@@ -3809,7 +4017,9 @@ canvas.addEventListener("pointermove", e => {
   const corpo = corpoSotto(e.clientX, e.clientY);
   stato.hover = (corpo && corpo !== SOLE) ? corpo : null;
   canvas.classList.toggle("su-pianeta", !!corpo);
-  if (corpo) {
+  // I corpi mostrano già il nome sul canvas durante l'hover.
+  // L'etichetta flottante resta utile soltanto per il Sole.
+  if (corpo === SOLE) {
     etichettaHover.textContent = corpo.nome[lingua];
     etichettaHover.style.left = e.clientX + "px";
     etichettaHover.style.top = e.clientY + "px";
@@ -4169,6 +4379,28 @@ document.getElementById("linkIndietro").addEventListener("click", e => {
    CONSOLE DI CONTROLLO
    ============================================================ */
 const pannelloComandi = document.getElementById("pannelloComandi");
+aggiornaCampiData(DATA_BASE);
+const CAMPI_DATA = [
+  ["dataGiorno", "giorni"],
+  ["dataMese", "mesi"],
+  ["dataAnno", "anni"],
+];
+CAMPI_DATA.forEach(([id, unita]) => {
+  const campo = document.getElementById(id);
+  campo.addEventListener("keydown", e => {
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    e.preventDefault();
+    spostaDataAllineamento(unita, e.key === "ArrowUp" ? 1 : -1);
+  });
+  campo.addEventListener("change", () => {
+    const data = dataDaiCampi();
+    if (data) impostaDataAllineamento(data);
+    else aggiornaCampiData(DATA_BASE);
+  });
+});
+document.getElementById("btnOggi").addEventListener("click", () => {
+  impostaDataAllineamento(new Date());
+});
 
 function aggiornaGeometriaDopoConsole() {
   requestAnimationFrame(aggiornaGeometria);
@@ -4238,11 +4470,27 @@ collegaSlider("sOrbite", "vOrbite",
   v => v.toFixed(2).replace(/0$/, "") + "×",
   v => { stato.scalaOrbite = v; PIANETI.forEach(p => p.scia.length = 0); });
 
-const OPZIONI_LIMITE_LUNE = [10, 20, Infinity];
+const sliderLimiteLune = document.getElementById("sLimiteLune");
+const totaleLuneFocus = PIANETA_FOCUS?.lune.length || 20;
+const SOGLIA_LUNE_LINEARE = Math.min(50, totaleLuneFocus);
+sliderLimiteLune.max = totaleLuneFocus <= SOGLIA_LUNE_LINEARE ? totaleLuneFocus : 100;
+sliderLimiteLune.value = Math.min(20, totaleLuneFocus);
+
+function limiteLuneDaSlider(posizione) {
+  if (totaleLuneFocus <= SOGLIA_LUNE_LINEARE || posizione <= SOGLIA_LUNE_LINEARE) {
+    return Math.round(posizione);
+  }
+  const progresso = (posizione - SOGLIA_LUNE_LINEARE) / (100 - SOGLIA_LUNE_LINEARE);
+  return Math.ceil(
+    SOGLIA_LUNE_LINEARE +
+    Math.pow(progresso, 1.7) * (totaleLuneFocus - SOGLIA_LUNE_LINEARE)
+  );
+}
+
 collegaSlider("sLimiteLune", "vLimiteLune",
-  v => Number.isFinite(v) ? String(v) : TXT[lingua].tutte,
-  v => stato.limiteLune = v,
-  posizione => OPZIONI_LIMITE_LUNE[posizione]);
+  v => v >= totaleLuneFocus ? TXT[lingua].tutte : String(Math.round(v)),
+  v => stato.limiteLune = Math.round(v),
+  limiteLuneDaSlider);
 
 const btnPausa = document.getElementById("btnPausa");
 btnPausa.addEventListener("click", () => {
@@ -4252,11 +4500,7 @@ btnPausa.addEventListener("click", () => {
 });
 
 document.getElementById("btnReset").addEventListener("click", () => {
-  stato.giorni = 0;
-  PIANETI.forEach(p => { p.angolo = p.fase; p.scia.length = 0; });
-  PIANETI_NANI.forEach(p => { p.angolo = p.fase; });
-  COMETE.forEach(c => { c.angolo = c.fase; });
-  aggiornaCronometro();
+  ripristinaEpocaSelezionata();
 });
 
 document.getElementById("chkOrbite").addEventListener("change", e => stato.mostraOrbite = e.target.checked);
@@ -4412,6 +4656,11 @@ function applicaLingua() {
   document.getElementById("lblTempo").textContent = T.tempo;
   document.getElementById("suggerimento").textContent = T.suggerimento;
   document.getElementById("lblConsole").textContent = T.console;
+  document.getElementById("lblDataAllineamento").textContent = T.dataAllineamento;
+  document.getElementById("btnOggi").textContent = T.oggi;
+  document.getElementById("dataGiorno").setAttribute("aria-label", T.campoGiorno);
+  document.getElementById("dataMese").setAttribute("aria-label", T.campoMese);
+  document.getElementById("dataAnno").setAttribute("aria-label", T.campoAnno);
   document.getElementById("lblVelocita").textContent = T.velocita;
   document.getElementById("lblScala").textContent = T.scala;
   document.getElementById("lblLuce").textContent = T.luce;
