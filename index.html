@@ -1547,6 +1547,17 @@ const FOTO_CORPI = {
   },
 };
 
+const CONFIG_TEXTURE_PIANETI = {
+  mercurio: { zoom: 1.16 },
+  venere: { zoom: 1.05 },
+  terra: { zoom: 1.24 },
+  marte: { zoom: 1.04 },
+  giove: { zoom: 1.2 },
+  urano: { zoom: 1.18 },
+  nettuno: { zoom: 1.14 },
+};
+const CACHE_TEXTURE_PIANETI = new Map();
+
 const COMETE = [
   {
     nome: { it: "Cometa di Halley", en: "Halley's Comet" },
@@ -2768,6 +2779,8 @@ const stato = {
   cameraYaw: -0.24,
   cameraPitch: 0.56,
   cameraZoom: 1,
+  cameraPanX: 0,
+  cameraPanY: 0,
   cameraTarget: null,
   selezionato: null,   // pianeta o SOLE
   hover: null,
@@ -2889,8 +2902,8 @@ function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaT
   const focale = Math.max(Math.min(W, H) * 1.25, 420);
   const scala = Math.max(0.58, Math.min(1.55, focale / (focale + profondita)));
   return {
-    x: centroX + xRuotata * scala,
-    y: centroY + yProiettata * scala,
+    x: centroX + xRuotata * scala + (applicaTarget ? stato.cameraPanX : 0),
+    y: centroY + yProiettata * scala + (applicaTarget ? stato.cameraPanY : 0),
     profondita,
     scala: scala * zoom,
   };
@@ -3122,6 +3135,198 @@ function colorAlpha(hex, a) {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
 
+function schiarisciColore(hex, quantita) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgb(${Math.round(r + (255 - r) * quantita)}, ${Math.round(g + (255 - g) * quantita)}, ${Math.round(b + (255 - b) * quantita)})`;
+}
+
+function ellissePianeta(pos, r, x, y, rx, ry, rotazione, colore, alpha = 1) {
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = colore;
+  ctx.beginPath();
+  ctx.ellipse(
+    pos.x + x * r,
+    pos.y + y * r,
+    Math.max(rx * r, 0.35),
+    Math.max(ry * r, 0.35),
+    rotazione,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+}
+
+function fasciaAtmosferica(pos, r, y, altezza, onda, colore, alpha) {
+  const sinistra = pos.x - r * 1.12;
+  const destra = pos.x + r * 1.12;
+  const centroY = pos.y + y * r;
+  const meta = altezza * r / 2;
+  const curva = onda * r;
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = colore;
+  ctx.beginPath();
+  ctx.moveTo(sinistra, centroY - meta);
+  ctx.bezierCurveTo(
+    pos.x - r * .58, centroY - meta - curva,
+    pos.x - r * .18, centroY - meta + curva,
+    pos.x + r * .18, centroY - meta
+  );
+  ctx.bezierCurveTo(
+    pos.x + r * .48, centroY - meta - curva * .7,
+    pos.x + r * .78, centroY - meta + curva * .9,
+    destra, centroY - meta - curva * .15
+  );
+  ctx.lineTo(destra, centroY + meta);
+  ctx.bezierCurveTo(
+    pos.x + r * .7, centroY + meta + curva * .65,
+    pos.x + r * .35, centroY + meta - curva,
+    pos.x, centroY + meta
+  );
+  ctx.bezierCurveTo(
+    pos.x - r * .32, centroY + meta + curva * .75,
+    pos.x - r * .72, centroY + meta - curva * .55,
+    sinistra, centroY + meta + curva * .2
+  );
+  ctx.closePath();
+  ctx.fill();
+}
+
+function textureFotograficaPianeta(p) {
+  const config = CONFIG_TEXTURE_PIANETI[p.slug];
+  const foto = FOTO_CORPI[p.slug];
+  if (!config || !foto) return null;
+  if (!CACHE_TEXTURE_PIANETI.has(p.slug)) {
+    const record = { immagine: new Image(), pronta: false, fallita: false };
+    record.immagine.addEventListener("load", () => { record.pronta = true; });
+    record.immagine.addEventListener("error", () => { record.fallita = true; });
+    record.immagine.src = foto.src;
+    CACHE_TEXTURE_PIANETI.set(p.slug, record);
+  }
+  return { ...CACHE_TEXTURE_PIANETI.get(p.slug), config };
+}
+
+function disegnaTextureFotografica(p, pos, r) {
+  if (r < 18) return false;
+  const inPrimoPiano =
+    p === stato.cameraTarget ||
+    p === stato.selezionato ||
+    p === stato.hover ||
+    p === PIANETA_FOCUS;
+  if (!CACHE_TEXTURE_PIANETI.has(p.slug) && !inPrimoPiano) return false;
+  const texture = textureFotograficaPianeta(p);
+  if (!texture?.pronta || texture.fallita) return false;
+  const img = texture.immagine;
+  const lato = Math.min(img.naturalWidth, img.naturalHeight) / texture.config.zoom;
+  const sx = (img.naturalWidth - lato) / 2;
+  const sy = (img.naturalHeight - lato) / 2;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r * .985, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.globalAlpha = .94;
+  ctx.drawImage(img, sx, sy, lato, lato, pos.x - r, pos.y - r, r * 2, r * 2);
+  ctx.restore();
+  return true;
+}
+
+function disegnaSuperficiePianeta(p, pos, r) {
+  if (r < 2.6) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r * 0.98, 0, Math.PI * 2);
+  ctx.clip();
+
+  switch (p.slug) {
+    case "mercurio":
+      for (const [x, y, rr] of [[-.34,-.25,.15],[.18,-.38,.1],[.38,.06,.16],[-.1,.28,.12],[-.42,.3,.07]]) {
+        ellissePianeta(pos, r, x, y, rr, rr * .82, 0, "#6f675f", .42);
+        ellissePianeta(pos, r, x - .025, y - .025, rr * .62, rr * .5, 0, "#c8b9a8", .25);
+      }
+      break;
+    case "venere":
+      ctx.strokeStyle = "rgba(255, 239, 183, 0.34)";
+      ctx.lineWidth = Math.max(.7, r * .11);
+      for (const y of [-.48, -.18, .12, .42]) {
+        ctx.beginPath();
+        ctx.bezierCurveTo(
+          pos.x - r, pos.y + (y - .08) * r,
+          pos.x - r * .25, pos.y + (y + .13) * r,
+          pos.x + r * .35, pos.y + (y - .12) * r
+        );
+        ctx.stroke();
+      }
+      break;
+    case "terra":
+      ellissePianeta(pos, r, -.27, -.15, .34, .2, -.35, "#78964b", .95);
+      ellissePianeta(pos, r, -.18, .13, .17, .32, -.2, "#6d8d45", .95);
+      ellissePianeta(pos, r, .33, -.02, .28, .18, .28, "#91a858", .95);
+      ellissePianeta(pos, r, .46, .25, .13, .09, .15, "#8fa652", .9);
+      ellissePianeta(pos, r, .05, .45, .42, .08, 0, "#e7f5f4", .72);
+      ctx.strokeStyle = "rgba(245, 252, 255, 0.72)";
+      ctx.lineWidth = Math.max(.65, r * .055);
+      for (const y of [-.33, .04, .31]) {
+        ctx.beginPath();
+        ctx.arc(pos.x + y * r * .4, pos.y + y * r, r * .62, Math.PI * 1.08, Math.PI * 1.72);
+        ctx.stroke();
+      }
+      break;
+    case "marte":
+      ellissePianeta(pos, r, -.28, -.08, .38, .2, .35, "#6e2f20", .5);
+      ellissePianeta(pos, r, .3, .22, .3, .17, -.2, "#8b3f27", .48);
+      ellissePianeta(pos, r, .05, -.78, .38, .13, 0, "#f2ded0", .72);
+      break;
+    case "giove": {
+      ctx.filter = `blur(${Math.max(.25, r * .012)}px)`;
+      fasciaAtmosferica(pos, r, -.62, .2, .035, "#d5aa7d", .52);
+      fasciaAtmosferica(pos, r, -.36, .13, .065, "#a8795f", .34);
+      fasciaAtmosferica(pos, r, -.12, .24, .04, "#ead3ad", .46);
+      fasciaAtmosferica(pos, r, .12, .12, .075, "#b27f61", .35);
+      fasciaAtmosferica(pos, r, .38, .22, .045, "#e2bf91", .52);
+      fasciaAtmosferica(pos, r, .66, .14, .055, "#936653", .28);
+      ctx.filter = "none";
+      ellissePianeta(pos, r, .38, .29, .27, .135, -.08, "#b64e35", .8);
+      ellissePianeta(pos, r, .38, .29, .18, .075, -.08, "#e59168", .55);
+      ellissePianeta(pos, r, -.43, -.43, .13, .07, .12, "#c98d69", .42);
+      break;
+    }
+    case "saturno":
+      ctx.filter = `blur(${Math.max(.2, r * .016)}px)`;
+      fasciaAtmosferica(pos, r, -.48, .18, .025, "#f1d89e", .28);
+      fasciaAtmosferica(pos, r, -.15, .14, .035, "#9f794e", .2);
+      fasciaAtmosferica(pos, r, .18, .2, .025, "#f6dda6", .27);
+      fasciaAtmosferica(pos, r, .48, .12, .03, "#8d6c47", .18);
+      ctx.filter = "none";
+      break;
+    case "urano":
+      ctx.strokeStyle = "rgba(226, 255, 255, 0.28)";
+      ctx.lineWidth = Math.max(.6, r * .07);
+      for (const y of [-.35, -.05, .25]) {
+        ctx.beginPath();
+        ctx.moveTo(pos.x - r, pos.y + y * r);
+        ctx.lineTo(pos.x + r, pos.y + (y + .08) * r);
+        ctx.stroke();
+      }
+      break;
+    case "nettuno":
+      fasciaAtmosferica(pos, r, -.45, .12, .035, "#72b4f5", .22);
+      fasciaAtmosferica(pos, r, -.05, .08, .045, "#92c9ff", .18);
+      fasciaAtmosferica(pos, r, .35, .1, .035, "#4d8ee6", .2);
+      ellissePianeta(pos, r, .28, .12, .24, .13, -.15, "#173b91", .65);
+      ellissePianeta(pos, r, -.22, -.38, .25, .06, 0, "#d5efff", .55);
+      break;
+    default:
+      for (const [x, y, rr] of [[-.32,-.2,.16],[.25,-.28,.11],[.18,.3,.14],[-.38,.26,.09]]) {
+        ellissePianeta(pos, r, x, y, rr, rr * .7, 0, p.coloreScuro, .28);
+      }
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
 function disegnaPianeta(p, t) {
   const pos = posizione(p);
   const r = p.raggio * stato.scalaPianeti * pos.scala;
@@ -3144,7 +3349,7 @@ function disegnaPianeta(p, t) {
     pos.x + lx * r * 0.45, pos.y + ly * r * 0.45, r * 0.1,
     pos.x, pos.y, r * 1.05
   );
-  g.addColorStop(0, "#ffffff");
+  g.addColorStop(0, schiarisciColore(p.colore, .58));
   g.addColorStop(0.25, p.colore);
   g.addColorStop(0.8, p.coloreScuro);
   g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
@@ -3154,23 +3359,21 @@ function disegnaPianeta(p, t) {
   ctx.fill();
   ctx.shadowBlur = 0;
 
-  // bande di Giove
-  if (p.bande) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.globalAlpha = 0.25;
-    ctx.strokeStyle = p.coloreScuro;
-    ctx.lineWidth = r * 0.16;
-    for (let i = -2; i <= 2; i++) {
-      ctx.beginPath();
-      ctx.moveTo(pos.x - r, pos.y + i * r * 0.34);
-      ctx.lineTo(pos.x + r, pos.y + i * r * 0.34);
-      ctx.stroke();
-    }
-    ctx.restore();
+  if (!disegnaTextureFotografica(p, pos, r)) {
+    disegnaSuperficiePianeta(p, pos, r);
   }
+
+  // Ombra morbida sul bordo, sopra i dettagli della superficie.
+  const ombra = ctx.createRadialGradient(
+    pos.x + lx * r * .42, pos.y + ly * r * .42, r * .2,
+    pos.x, pos.y, r
+  );
+  ombra.addColorStop(.55, "rgba(4, 6, 13, 0)");
+  ombra.addColorStop(1, "rgba(4, 6, 13, 0.38)");
+  ctx.fillStyle = ombra;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+  ctx.fill();
 
   // anelli di Saturno (metà anteriore)
   if (p.anelli) disegnaAnelli(p, pos, r, false);
@@ -3307,7 +3510,7 @@ function disegnaVistaLune(t) {
     CX + lx * r * 0.45, CY + ly * r * 0.45, r * 0.1,
     CX, CY, r * 1.05
   );
-  g.addColorStop(0, "#ffffff");
+  g.addColorStop(0, schiarisciColore(p.colore, .58));
   g.addColorStop(0.25, p.colore);
   g.addColorStop(0.8, p.coloreScuro);
   g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
@@ -3317,22 +3520,20 @@ function disegnaVistaLune(t) {
   ctx.fill();
   ctx.shadowBlur = 0;
 
-  if (p.bande) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(CX, CY, r, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.globalAlpha = 0.25;
-    ctx.strokeStyle = p.coloreScuro;
-    ctx.lineWidth = r * 0.16;
-    for (let i = -2; i <= 2; i++) {
-      ctx.beginPath();
-      ctx.moveTo(CX - r, CY + i * r * 0.34);
-      ctx.lineTo(CX + r, CY + i * r * 0.34);
-      ctx.stroke();
-    }
-    ctx.restore();
+  if (!disegnaTextureFotografica(p, { x: CX, y: CY }, r)) {
+    disegnaSuperficiePianeta(p, { x: CX, y: CY }, r);
   }
+
+  const ombra = ctx.createRadialGradient(
+    CX + lx * r * .42, CY + ly * r * .42, r * .2,
+    CX, CY, r
+  );
+  ombra.addColorStop(.55, "rgba(4, 6, 13, 0)");
+  ombra.addColorStop(1, "rgba(4, 6, 13, 0.38)");
+  ctx.fillStyle = ombra;
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.fill();
 
   if (p.anelli) disegnaAnelli(p, { x: CX, y: CY }, r, false);
 
@@ -3532,6 +3733,37 @@ const puntatoriAttivi = new Map();
 let distanzaPinch = 0;
 canvas.classList.add("ruotabile");
 
+function applicaZoomAncora(nuovoZoom, x, y) {
+  const zoomPrecedente = stato.cameraZoom;
+  const zoomLimitato = Math.max(0.55, Math.min(8, nuovoZoom));
+  if (zoomLimitato === zoomPrecedente) return;
+  const corpoAncora = corpoSotto(x, y);
+  if (PIANETI.includes(corpoAncora) || PIANETI_NANI.includes(corpoAncora)) {
+    stato.hover = corpoAncora;
+  }
+  const posizionePrecedente = corpoAncora?._x === undefined
+    ? null
+    : { x: corpoAncora._x, y: corpoAncora._y };
+  const rapporto = zoomLimitato / zoomPrecedente;
+  stato.cameraPanX = x - CX - (x - CX - stato.cameraPanX) * rapporto;
+  stato.cameraPanY = y - CY - (y - CY - stato.cameraPanY) * rapporto;
+  stato.cameraZoom = zoomLimitato;
+
+  let posizioneNuova = null;
+  if (!PIANETA_FOCUS && (PIANETI.includes(corpoAncora) || PIANETI_NANI.includes(corpoAncora))) {
+    posizioneNuova = posizione(corpoAncora);
+  } else if (COMETE.includes(corpoAncora)) {
+    posizioneNuova = posizioneCometa(corpoAncora);
+  } else if (corpoAncora === SOLE) {
+    posizioneNuova = proiettaPunto3D(0, 0);
+  }
+  if (posizionePrecedente && posizioneNuova) {
+    stato.cameraPanX += posizionePrecedente.x - posizioneNuova.x;
+    stato.cameraPanY += posizionePrecedente.y - posizioneNuova.y;
+  }
+  PIANETI.forEach(p => { p.scia.length = 0; });
+}
+
 canvas.addEventListener("pointermove", e => {
   if (puntatoriAttivi.has(e.pointerId)) {
     puntatoriAttivi.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -3540,7 +3772,11 @@ canvas.addEventListener("pointermove", e => {
     const [a, b] = [...puntatoriAttivi.values()];
     const distanza = Math.hypot(a.x - b.x, a.y - b.y);
     if (distanzaPinch > 0) {
-      stato.cameraZoom = Math.max(0.55, Math.min(8, stato.cameraZoom * (distanza / distanzaPinch)));
+      applicaZoomAncora(
+        stato.cameraZoom * (distanza / distanzaPinch),
+        (a.x + b.x) / 2,
+        (a.y + b.y) / 2
+      );
     }
     distanzaPinch = distanza;
     trascinamentoCamera.ruotato = true;
@@ -3617,13 +3853,15 @@ canvas.addEventListener("pointercancel", terminaRotazioneCamera);
 canvas.addEventListener("wheel", e => {
   e.preventDefault();
   const fattore = Math.exp(-e.deltaY * 0.0012);
-  stato.cameraZoom = Math.max(0.55, Math.min(8, stato.cameraZoom * fattore));
+  applicaZoomAncora(stato.cameraZoom * fattore, e.clientX, e.clientY);
 }, { passive: false });
 canvas.addEventListener("dblclick", e => {
   e.preventDefault();
   stato.cameraYaw = -0.24;
   stato.cameraPitch = 0.56;
   stato.cameraZoom = 1;
+  stato.cameraPanX = 0;
+  stato.cameraPanY = 0;
   stato.cameraTarget = null;
   aggiornaPulsanteCamera();
 });
@@ -3901,9 +4139,13 @@ document.getElementById("centraVista").addEventListener("click", e => {
   if (stato.cameraTarget === corpo) {
     stato.cameraTarget = null;
     stato.cameraZoom = 1;
+    stato.cameraPanX = 0;
+    stato.cameraPanY = 0;
   } else {
     stato.cameraTarget = corpo;
     stato.cameraZoom = Math.max(stato.cameraZoom, 3.2);
+    stato.cameraPanX = 0;
+    stato.cameraPanY = 0;
     PIANETI.forEach(p => { p.scia.length = 0; });
   }
   aggiornaPulsanteCamera();
