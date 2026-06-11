@@ -27,8 +27,8 @@
 - 📚 **Schede approfondite**: pianeti e lune principali includono più contesto scientifico, curiosità e dettagli; le lune minori riportano scoperta, distanza, periodo, classe e direzione orbitale
 - 🔍 **Ricerca globale**: trova Sole, pianeti, pianeti nani e lune e apre direttamente il corpo o il sistema corretto
 - 🧊 **Pianeti nani**: Cerere, Plutone, Haumea, Makemake ed Eris percorrono orbite eccentriche e inclinate dedicate
-- 📅 **Data configurabile**: scegli un giorno tra il 1800 e il 2050, scorri rapidamente giorno, mese o anno con le frecce e avvia la simulazione da quell'allineamento
-- 🎚️ **Densità delle lune**: nelle viste dedicate puoi mostrare 10, 20 o tutte le lune
+- 📅 **Data configurabile**: scegli un giorno tra l'anno 1 e il 3000, scorri rapidamente giorno, mese o anno con le frecce e avvia la simulazione da quell'allineamento; fuori dal 1800–2050 compare un avviso di precisione ridotta
+- 🎚️ **Densità delle lune**: nelle viste dedicate scegli gradualmente quante lune mostrare, con controllo preciso fino a 50 e progressivo fino al catalogo completo
 - 🎻 **Sottofondo musicale** in stile documentario — un arrangiamento sintetico dell'*Aria sulla quarta corda* di Bach generato al volo con la Web Audio API — attivabile/disattivabile col pulsante ♪
 - 💡 **Illuminazione realistica**: ogni pianeta è illuminato dal lato rivolto verso il Sole
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano

@@ -55,6 +55,9 @@ institution.
 
 - Approximate planetary positions and Keplerian elements:
   [NASA/JPL Solar System Dynamics, Approximate Positions of the Planets](https://ssd.jpl.nasa.gov/planets/approx_pos.html)
+  The simulator uses the higher-accuracy 1800–2050 coefficients within that
+  interval and the extended JPL model outside it, up to year 3000. Extended
+  dates are explicitly marked in the interface as less accurate.
 - Planetary satellite and small-body orbital data:
   [NASA/JPL Solar System Dynamics](https://ssd.jpl.nasa.gov/)
 - Ephemeris reference:

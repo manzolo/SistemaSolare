@@ -488,6 +488,19 @@
     border-color: var(--cyan);
     background: rgba(111, 227, 255, 0.08);
   }
+  .avviso-precisione {
+    display: none;
+    margin-top: 7px;
+    padding: 6px 8px;
+    border-left: 2px solid var(--amber);
+    background: rgba(255, 179, 71, 0.08);
+    color: var(--amber);
+    font-size: 8px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .avviso-precisione.visibile { display: block; }
 
   input[type="range"] {
     -webkit-appearance: none;
@@ -975,10 +988,11 @@
           <span>/</span>
           <input type="text" id="dataMese" inputmode="numeric" maxlength="2" aria-label="Mese">
           <span>/</span>
-          <input type="text" id="dataAnno" inputmode="numeric" maxlength="4" aria-label="Anno">
+          <input type="text" id="dataAnno" inputmode="numeric" maxlength="5" aria-label="Anno">
         </div>
         <button id="btnOggi" type="button">Oggi</button>
       </div>
+      <div class="avviso-precisione" id="avvisoPrecisione"></div>
     </div>
     <div class="controllo">
       <label><span id="lblVelocita">Velocità del tempo</span> <output id="vVelocita">20 g/s</output></label>
@@ -1110,6 +1124,7 @@ const TXT = {
     campoGiorno: "Giorno",
     campoMese: "Mese",
     campoAnno: "Anno",
+    precisioneRidotta: "Fuori dal 1800–2050: modello JPL esteso, allineamento più approssimativo",
     velocita: "Velocità del tempo",
     scala: "Grandezza pianeti",
     luce: "Luminosità",
@@ -1157,6 +1172,7 @@ const TXT = {
     campoGiorno: "Day",
     campoMese: "Month",
     campoAnno: "Year",
+    precisioneRidotta: "Outside 1800–2050: extended JPL model, alignment is more approximate",
     velocita: "Time speed",
     scala: "Planet size",
     luce: "Brightness",
@@ -2637,6 +2653,17 @@ const ELEMENTI_JPL_1800_2050 = [
   { e: 0.00859048, eRate: 0.00005105, I: 1.77004347, IRate: 0.00035372, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464, nodo: 131.78422574, nodoRate: -0.00508664 },
 ];
 
+const ELEMENTI_JPL_ESTESI = [
+  ELEMENTI_JPL_1800_2050[0],
+  ELEMENTI_JPL_1800_2050[1],
+  ELEMENTI_JPL_1800_2050[2],
+  ELEMENTI_JPL_1800_2050[3],
+  { e: 0.04853590, eRate: 0.00018026, I: 1.29861416, IRate: -0.00322699, L: 34.33479152, LRate: 3034.90371757, peri: 14.27495244, periRate: 0.18199196, nodo: 100.29282654, nodoRate: 0.13024619, b: -0.00012452, c: 0.06064060, s: -0.35635438, f: 38.35125 },
+  { e: 0.05550825, eRate: -0.00032044, I: 2.49424102, IRate: 0.00451969, L: 50.07571329, LRate: 1222.11494724, peri: 92.86136063, periRate: 0.54179478, nodo: 113.63998702, nodoRate: -0.25015002, b: 0.00025899, c: -0.13434469, s: 0.87320147, f: 38.35125 },
+  { e: 0.04685740, eRate: -0.00001550, I: 0.77298127, IRate: -0.00180155, L: 314.20276625, LRate: 428.49512595, peri: 172.43404441, periRate: 0.09266985, nodo: 73.96250215, nodoRate: 0.05739699, b: 0.00058331, c: -0.97731848, s: 0.17689245, f: 7.67025 },
+  { e: 0.00895439, eRate: 0.00000818, I: 1.77005520, IRate: 0.00022400, L: 304.22289287, LRate: 218.46515314, peri: 46.68158724, periRate: 0.01009938, nodo: 131.78635853, nodoRate: -0.00606302, b: -0.00041348, c: 0.68346318, s: -0.10162547, f: 7.67025 },
+];
+
 let DATA_BASE = new Date();
 const GIORNO_MS = 86400000;
 const EPOCA_FASI_LUNE = 2451545; // J2000: riferimento comune per le fasi approssimate
@@ -2663,7 +2690,12 @@ function angoloPianetaOggi(elementi, data) {
   const T = (giornoGiuliano(data) - 2451545) / 36525;
   const e = elementi.e + elementi.eRate * T;
   const peri = elementi.peri + elementi.periRate * T;
-  const M = elementi.L + elementi.LRate * T - peri;
+  const argomento = (elementi.f || 0) * T * Math.PI / 180;
+  const correzione =
+    (elementi.b || 0) * T * T +
+    (elementi.c || 0) * Math.cos(argomento) +
+    (elementi.s || 0) * Math.sin(argomento);
+  const M = elementi.L + elementi.LRate * T - peri + correzione;
   return anomaliaVera(M, e) + peri * Math.PI / 180;
 }
 
@@ -2679,8 +2711,12 @@ COMETE.forEach(c => {
 });
 
 function aggiornaElementiPerData(data) {
+  const anno = data.getFullYear();
+  const elementiPianeti = anno >= 1800 && anno <= 2050
+    ? ELEMENTI_JPL_1800_2050
+    : ELEMENTI_JPL_ESTESI;
   PIANETI.forEach((p, i) => {
-    const elementi = ELEMENTI_JPL_1800_2050[i];
+    const elementi = elementiPianeti[i];
     const T = (giornoGiuliano(data) - 2451545) / 36525;
     p.fase = angoloPianetaOggi(elementi, data);
     p.inclinazione = (elementi.I + elementi.IRate * T) * Math.PI / 180;
@@ -3848,16 +3884,23 @@ function aggiornaCampiData(data) {
   document.getElementById("dataAnno").value = data.getFullYear();
 }
 
+function creaDataCalendario(anno, mese, giorno) {
+  const data = new Date(0);
+  data.setHours(12, 0, 0, 0);
+  data.setFullYear(anno, mese - 1, giorno);
+  return data;
+}
+
 function giorniNelMese(anno, mese) {
-  return new Date(anno, mese, 0).getDate();
+  return creaDataCalendario(anno, mese + 1, 0).getDate();
 }
 
 function dataDaiCampi() {
   const anno = Number(document.getElementById("dataAnno").value);
   const mese = Number(document.getElementById("dataMese").value);
   const giorno = Number(document.getElementById("dataGiorno").value);
-  if (anno < 1800 || anno > 2050 || mese < 1 || mese > 12 || giorno < 1) return null;
-  return new Date(anno, mese - 1, Math.min(giorno, giorniNelMese(anno, mese)), 12);
+  if (anno < 1 || anno > 3000 || mese < 1 || mese > 12 || giorno < 1) return null;
+  return creaDataCalendario(anno, mese, Math.min(giorno, giorniNelMese(anno, mese)));
 }
 
 function ripristinaEpocaSelezionata() {
@@ -3867,11 +3910,19 @@ function ripristinaEpocaSelezionata() {
 }
 
 function impostaDataAllineamento(data) {
-  const minima = new Date(1800, 0, 1, 12);
-  const massima = new Date(2050, 11, 31, 12);
+  const minima = creaDataCalendario(1, 1, 1);
+  const massima = creaDataCalendario(3000, 12, 31);
   DATA_BASE = new Date(Math.max(minima, Math.min(massima, data)));
   aggiornaCampiData(DATA_BASE);
+  aggiornaAvvisoPrecisione();
   ripristinaEpocaSelezionata();
+}
+
+function aggiornaAvvisoPrecisione() {
+  const fuoriIntervallo = DATA_BASE.getFullYear() < 1800 || DATA_BASE.getFullYear() > 2050;
+  const avviso = document.getElementById("avvisoPrecisione");
+  avviso.textContent = TXT[lingua].precisioneRidotta;
+  avviso.classList.toggle("visibile", fuoriIntervallo);
 }
 
 function spostaDataAllineamento(unita, delta) {
@@ -4661,6 +4712,7 @@ function applicaLingua() {
   document.getElementById("dataGiorno").setAttribute("aria-label", T.campoGiorno);
   document.getElementById("dataMese").setAttribute("aria-label", T.campoMese);
   document.getElementById("dataAnno").setAttribute("aria-label", T.campoAnno);
+  aggiornaAvvisoPrecisione();
   document.getElementById("lblVelocita").textContent = T.velocita;
   document.getElementById("lblScala").textContent = T.scala;
   document.getElementById("lblLuce").textContent = T.luce;
