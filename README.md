@@ -31,6 +31,9 @@
 - 🎻 **Sottofondo musicale** in stile documentario — un arrangiamento sintetico dell'*Aria sulla quarta corda* di Bach generato al volo con la Web Audio API — attivabile/disattivabile col pulsante ♪
 - 💡 **Illuminazione realistica**: ogni pianeta è illuminato dal lato rivolto verso il Sole
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano
+- ☄️ **Comete periodiche**: Halley, Encke e 67P percorrono orbite eccentriche con chioma e coda dinamiche
+- 🪨 **Fascia principale degli asteroidi**: centinaia di corpi distribuiti tra Marte e Giove con leggere inclinazioni orbitali
+- 📷 **Immagini dalle missioni spaziali**: ogni scheda planetaria include una fotografia NASA con la relativa missione
 - 🖱️ **Schede informative**: clicca su un corpo celeste per aprire un box richiudibile con dati, descrizione e una curiosità
 - 🎛️ **Console di controllo** con slider in tempo reale
 - 🌍 **Interfaccia bilingue**: italiano e inglese, selezionabili con le bandierine 🇮🇹/🇬🇧 in alto a destra (la scelta viene ricordata)
@@ -74,7 +77,13 @@ Questo progetto nasce per giocare e sperimentare con l'intelligenza artificiale,
 
 ## 📄 Licenza
 
-Distribuito con licenza [MIT](LICENSE): usalo, modificalo, condividilo.
+Il codice originale è distribuito con licenza [MIT](LICENSE). Immagini, dati,
+font, nomi di missioni e altri materiali di terzi mantengono le rispettive
+condizioni d'uso: consulta [fonti, crediti e note legali](NOTICE.md).
+
+Questo è un progetto educativo indipendente, non affiliato, approvato o
+sponsorizzato da NASA, JPL, Caltech, ESA o IAU. Le simulazioni sono
+approssimative e non sostituiscono effemeridi o cataloghi scientifici ufficiali.
 
 ---
 

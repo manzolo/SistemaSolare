@@ -31,6 +31,9 @@
 - 🎻 **Background music** in documentary style — a synthetic arrangement of Bach's *Air on the G String* generated on the fly with the Web Audio API — toggled with the ♪ button
 - 💡 **Realistic lighting**: each planet is lit on the side facing the Sun
 - 🪩 **Unique details**: Saturn's rings, Jupiter's bands, a pulsing Sun with halo, twinkling stars
+- ☄️ **Periodic comets**: Halley, Encke and 67P follow eccentric orbits with dynamic comae and tails
+- 🪨 **Main asteroid belt**: hundreds of bodies distributed between Mars and Jupiter with slight orbital inclinations
+- 📷 **Spacecraft imagery**: every planet card includes a NASA image credited to its mission
 - 🖱️ **Info cards**: click a celestial body to open a collapsible box with data, description and a fun fact
 - 🎛️ **Control console** with real-time sliders
 - 🌍 **Bilingual interface**: Italian and English, switchable via the 🇮🇹/🇬🇧 flags in the top-right corner (your choice is remembered)
@@ -74,7 +77,13 @@ This project was created to play and experiment with artificial intelligence whi
 
 ## 📄 License
 
-Released under the [MIT](LICENSE) license: use it, tweak it, share it.
+Original code is released under the [MIT](LICENSE) license. Images, data, fonts,
+mission names, and other third-party material remain subject to their respective
+terms: see the [sources, credits, and legal notices](NOTICE.md).
+
+This is an independent educational project and is not affiliated with, endorsed
+by, or sponsored by NASA, JPL, Caltech, ESA, or IAU. Simulations are
+approximations and do not replace official scientific ephemerides or catalogues.
 
 ---
 
