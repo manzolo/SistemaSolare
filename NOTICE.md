@@ -43,6 +43,14 @@ Each image is displayed with its credit line and a link to the original record.
 No image credit implies endorsement of this project by the credited
 institution.
 
+## Comet images
+
+| Body | Record and source | Credit line |
+|---|---|---|
+| 1P/Halley | [PIA17485](https://images.nasa.gov/details-PIA17485) | NASA/ESA/Giotto Project |
+| 2P/Encke | [PIA17693](https://images.nasa.gov/details-PIA17693) | NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington/Southwest Research Institute |
+| 67P/Churyumov-Gerasimenko | [PIA21068](https://photojournal.jpl.nasa.gov/catalog/PIA21068) | ESA/Rosetta/MPS for OSIRIS Team MPS/UPD/LAM/IAA/SSO/INTA/UPM/DASP/IDA |
+
 ## Astronomical data and factual references
 
 - Approximate planetary positions and Keplerian elements:

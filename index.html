@@ -981,7 +981,7 @@
       <h3>Progetto indipendente</h3>
       <p>Questo è un progetto educativo indipendente. Non è affiliato, approvato o sponsorizzato da NASA, JPL, Caltech, ESA, IAU o dalle missioni citate. Nomi e marchi appartengono ai rispettivi titolari.</p>
       <h3>Immagini</h3>
-      <p>Le fotografie planetarie provengono da NASA Science, NASA Image and Video Library e NASA/JPL Photojournal. Il credito specifico e il collegamento alla scheda originale sono visibili dentro ogni scheda planetaria.</p>
+      <p>Le fotografie di pianeti e comete provengono da NASA Science, NASA Image and Video Library, NASA/JPL Photojournal ed ESA. Il credito specifico e il collegamento alla scheda originale sono visibili dentro ogni scheda.</p>
       <p><a href="https://www.nasa.gov/nasa-brand-center/images-and-media/" target="_blank" rel="noopener noreferrer">Linee guida NASA per immagini e media</a> · <a href="https://www.jpl.nasa.gov/jpl-image-use-policy/" target="_blank" rel="noopener noreferrer">JPL Image Use Policy</a></p>
       <h3>Dati astronomici</h3>
       <ul>
@@ -1001,7 +1001,7 @@
       <h3>Independent project</h3>
       <p>This is an independent educational project. It is not affiliated with, endorsed by, or sponsored by NASA, JPL, Caltech, ESA, IAU, or any mission mentioned. Names and trademarks belong to their respective owners.</p>
       <h3>Images</h3>
-      <p>Planet images come from NASA Science, the NASA Image and Video Library, and the NASA/JPL Photojournal. Each planet card displays its specific credit and a link to the original record.</p>
+      <p>Planet and comet images come from NASA Science, the NASA Image and Video Library, the NASA/JPL Photojournal, and ESA. Each card displays its specific credit and a link to the original record.</p>
       <p><a href="https://www.nasa.gov/nasa-brand-center/images-and-media/" target="_blank" rel="noopener noreferrer">NASA image and media guidelines</a> · <a href="https://www.jpl.nasa.gov/jpl-image-use-policy/" target="_blank" rel="noopener noreferrer">JPL Image Use Policy</a></p>
       <h3>Astronomical data</h3>
       <ul>
@@ -1489,7 +1489,7 @@ const PIANETI_NANI = [
   },
 ];
 
-const FOTO_PIANETI = {
+const FOTO_CORPI = {
   mercurio: {
     src: "https://science.nasa.gov/wp-content/uploads/2023/11/mercury-messenger-globe-pia15162.jpg",
     fonte: "NASA/JHUAPL/Carnegie · PIA15162",
@@ -1530,11 +1530,27 @@ const FOTO_PIANETI = {
     fonte: "NASA/JPL-Caltech · PIA01492",
     pagina: "https://science.nasa.gov/photojournal/neptune-full-disk-view/",
   },
+  halley: {
+    src: "https://images-assets.nasa.gov/image/PIA17485/PIA17485~orig.jpg",
+    fonte: "NASA/ESA/Giotto Project · PIA17485",
+    pagina: "https://images.nasa.gov/details-PIA17485",
+  },
+  encke: {
+    src: "https://images-assets.nasa.gov/image/PIA17693/PIA17693~orig.jpg",
+    fonte: "NASA/JHUAPL/Carnegie/SWRI · PIA17693",
+    pagina: "https://images.nasa.gov/details-PIA17693",
+  },
+  "67p": {
+    src: "https://images-assets.nasa.gov/image/PIA21068/PIA21068~orig.jpg",
+    fonte: "ESA/Rosetta/MPS for OSIRIS Team · PIA21068",
+    pagina: "https://photojournal.jpl.nasa.gov/catalog/PIA21068",
+  },
 };
 
 const COMETE = [
   {
     nome: { it: "Cometa di Halley", en: "Halley's Comet" },
+    slug: "halley",
     tipo: { it: "Cometa periodica · 1P/Halley", en: "Periodic comet · 1P/Halley" },
     colore: "#b8f2ff", periodo: 27509, perielio: 0.105, afelio: 0.91, peri: 1.08,
     ultimoPerielio: "1986-02-09T00:00:00Z",
@@ -1550,6 +1566,7 @@ const COMETE = [
   },
   {
     nome: { it: "Cometa di Encke", en: "Encke's Comet" },
+    slug: "encke",
     tipo: { it: "Cometa periodica · 2P/Encke", en: "Periodic comet · 2P/Encke" },
     colore: "#8ee9d2", periodo: 1203, perielio: 0.09, afelio: 0.49, peri: 2.7,
     ultimoPerielio: "2023-10-22T00:00:00Z",
@@ -1565,6 +1582,7 @@ const COMETE = [
   },
   {
     nome: { it: "67P/Churyumov-Gerasimenko", en: "67P/Churyumov-Gerasimenko" },
+    slug: "67p",
     tipo: { it: "Cometa periodica · famiglia di Giove", en: "Periodic comet · Jupiter family" },
     colore: "#d8ecff", periodo: 2352, perielio: 0.15, afelio: 0.65, peri: 4.15,
     ultimoPerielio: "2021-11-02T00:00:00Z",
@@ -2515,14 +2533,14 @@ PIANETI.forEach((p, i) => {
 });
 
 const ELEMENTI_JPL_1800_2050 = [
-  { e: 0.20563593, eRate: 0.00001906, L: 252.25032350, LRate: 149472.67411175, peri: 77.45779628, periRate: 0.16047689 },
-  { e: 0.00677672, eRate: -0.00004107, L: 181.97909950, LRate: 58517.81538729, peri: 131.60246718, periRate: 0.00268329 },
-  { e: 0.01671123, eRate: -0.00004392, L: 100.46457166, LRate: 35999.37244981, peri: 102.93768193, periRate: 0.32327364 },
-  { e: 0.09339410, eRate: 0.00007882, L: -4.55343205, LRate: 19140.30268499, peri: -23.94362959, periRate: 0.44441088 },
-  { e: 0.04838624, eRate: -0.00013253, L: 34.39644051, LRate: 3034.74612775, peri: 14.72847983, periRate: 0.21252668 },
-  { e: 0.05386179, eRate: -0.00050991, L: 49.95424423, LRate: 1222.49362201, peri: 92.59887831, periRate: -0.41897216 },
-  { e: 0.04725744, eRate: -0.00004397, L: 313.23810451, LRate: 428.48202785, peri: 170.95427630, periRate: 0.40805281 },
-  { e: 0.00859048, eRate: 0.00005105, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464 },
+  { e: 0.20563593, eRate: 0.00001906, I: 7.00497902, IRate: -0.00594749, L: 252.25032350, LRate: 149472.67411175, peri: 77.45779628, periRate: 0.16047689, nodo: 48.33076593, nodoRate: -0.12534081 },
+  { e: 0.00677672, eRate: -0.00004107, I: 3.39467605, IRate: -0.00078890, L: 181.97909950, LRate: 58517.81538729, peri: 131.60246718, periRate: 0.00268329, nodo: 76.67984255, nodoRate: -0.27769418 },
+  { e: 0.01671123, eRate: -0.00004392, I: -0.00001531, IRate: -0.01294668, L: 100.46457166, LRate: 35999.37244981, peri: 102.93768193, periRate: 0.32327364, nodo: 0, nodoRate: 0 },
+  { e: 0.09339410, eRate: 0.00007882, I: 1.84969142, IRate: -0.00813131, L: -4.55343205, LRate: 19140.30268499, peri: -23.94362959, periRate: 0.44441088, nodo: 49.55953891, nodoRate: -0.29257343 },
+  { e: 0.04838624, eRate: -0.00013253, I: 1.30439695, IRate: -0.00183714, L: 34.39644051, LRate: 3034.74612775, peri: 14.72847983, periRate: 0.21252668, nodo: 100.47390909, nodoRate: 0.20469106 },
+  { e: 0.05386179, eRate: -0.00050991, I: 2.48599187, IRate: 0.00193609, L: 49.95424423, LRate: 1222.49362201, peri: 92.59887831, periRate: -0.41897216, nodo: 113.66242448, nodoRate: -0.28867794 },
+  { e: 0.04725744, eRate: -0.00004397, I: 0.77263783, IRate: -0.00242939, L: 313.23810451, LRate: 428.48202785, peri: 170.95427630, periRate: 0.40805281, nodo: 74.01692503, nodoRate: 0.04240589 },
+  { e: 0.00859048, eRate: 0.00005105, I: 1.77004347, IRate: 0.00035372, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464, nodo: 131.78422574, nodoRate: -0.00508664 },
 ];
 
 const DATA_BASE = new Date();
@@ -2560,7 +2578,11 @@ function angoloNanoOggi(elementi, data) {
 }
 
 PIANETI.forEach((p, i) => {
-  p.fase = angoloPianetaOggi(ELEMENTI_JPL_1800_2050[i], DATA_BASE);
+  const elementi = ELEMENTI_JPL_1800_2050[i];
+  const T = (giornoGiuliano(DATA_BASE) - 2451545) / 36525;
+  p.fase = angoloPianetaOggi(elementi, DATA_BASE);
+  p.inclinazione = (elementi.I + elementi.IRate * T) * Math.PI / 180;
+  p.nodoAscendente = (elementi.nodo + elementi.nodoRate * T) * Math.PI / 180;
 });
 PIANETI_NANI.forEach(p => {
   p.fase = angoloNanoOggi(p.elementi, DATA_BASE);
@@ -2786,12 +2808,29 @@ function raggiOrbita(p) {
 }
 
 function coordinateMondo(corpo) {
-  if (!corpo || corpo === SOLE) return { x: 0, z: 0 };
+  if (!corpo || corpo === SOLE) return { x: 0, z: 0, altezza: 0 };
   if (PIANETI.includes(corpo) || PIANETI_NANI.includes(corpo)) {
     const { rx, ry } = raggiOrbita(corpo);
-    return { x: Math.cos(corpo.angolo) * rx, z: Math.sin(corpo.angolo) * ry };
+    return coordinateOrbita(corpo, corpo.angolo, rx, ry);
   }
-  return { x: 0, z: 0 };
+  return { x: 0, z: 0, altezza: 0 };
+}
+
+function coordinateOrbita(corpo, angolo, rx, ry) {
+  const inclinazione = corpo?.inclinazione || 0;
+  const nodo = corpo?.nodoAscendente || 0;
+  const theta = angolo - nodo;
+  const xPiano = Math.cos(theta) * rx;
+  const zPiano = Math.sin(theta) * ry;
+  const cosNodo = Math.cos(nodo);
+  const sinNodo = Math.sin(nodo);
+  const cosI = Math.cos(inclinazione);
+  const sinI = Math.sin(inclinazione);
+  return {
+    x: xPiano * cosNodo - zPiano * cosI * sinNodo,
+    z: xPiano * sinNodo + zPiano * cosI * cosNodo,
+    altezza: zPiano * sinI,
+  };
 }
 
 function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaTarget = true) {
@@ -2799,6 +2838,7 @@ function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaT
     const target = coordinateMondo(stato.cameraTarget);
     x -= target.x;
     z -= target.z;
+    altezza -= target.altezza;
   }
   const cosYaw = Math.cos(stato.cameraYaw);
   const sinYaw = Math.sin(stato.cameraYaw);
@@ -2821,9 +2861,8 @@ function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaT
 
 function posizione(p) {
   const { rx, ry } = raggiOrbita(p);
-  const dx = Math.cos(p.angolo) * rx;
-  const dz = Math.sin(p.angolo) * ry;
-  const proiettata = proiettaPunto3D(dx, dz);
+  const punto = coordinateOrbita(p, p.angolo, rx, ry);
+  const proiettata = proiettaPunto3D(punto.x, punto.z, CX, CY, punto.altezza);
   return {
     ...proiettata,
     r: Math.hypot(proiettata.x - CX, proiettata.y - CY),
@@ -2832,12 +2871,13 @@ function posizione(p) {
   };
 }
 
-function tracciaOrbita3D(rx, ry, centroX = CX, centroY = CY, applicaTarget = true) {
+function tracciaOrbita3D(rx, ry, centroX = CX, centroY = CY, applicaTarget = true, corpo = null) {
   const segmenti = layoutMobile ? 72 : 120;
   ctx.beginPath();
   for (let i = 0; i <= segmenti; i++) {
     const angolo = (i / segmenti) * Math.PI * 2;
-    const punto = proiettaPunto3D(Math.cos(angolo) * rx, Math.sin(angolo) * ry, centroX, centroY, 0, applicaTarget);
+    const orbitale = coordinateOrbita(corpo, angolo, rx, ry);
+    const punto = proiettaPunto3D(orbitale.x, orbitale.z, centroX, centroY, orbitale.altezza, applicaTarget);
     if (i === 0) ctx.moveTo(punto.x, punto.y);
     else ctx.lineTo(punto.x, punto.y);
   }
@@ -2893,7 +2933,7 @@ function disegnaOrbita(p) {
   ctx.strokeStyle = "rgba(232, 237, 244, 0.09)";
   ctx.lineWidth = 1;
   ctx.setLineDash([]);
-  tracciaOrbita3D(rx, ry);
+  tracciaOrbita3D(rx, ry, CX, CY, true, p);
   ctx.stroke();
 }
 
@@ -2902,7 +2942,7 @@ function disegnaOrbitaNano(p) {
   ctx.strokeStyle = "rgba(111, 227, 255, 0.10)";
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 7]);
-  tracciaOrbita3D(rx, ry);
+  tracciaOrbita3D(rx, ry, CX, CY, true, p);
   ctx.stroke();
   ctx.setLineDash([]);
 }
@@ -3698,7 +3738,7 @@ let richiestaFotoScheda = 0;
 
 function aggiornaFotoScheda(corpo) {
   const richiesta = ++richiestaFotoScheda;
-  const foto = FOTO_PIANETI[corpo.slug];
+  const foto = FOTO_CORPI[corpo.slug];
   const contenitore = document.getElementById("schedaFoto");
   const immagine = document.getElementById("schedaFotoImg");
   const fonte = document.getElementById("schedaFotoFonte");
@@ -3761,7 +3801,16 @@ function apriScheda(corpo, mantieniRidotta = false) {
   aggiornaPulsanteCamera();
 
   const griglia = document.getElementById("schedaDati");
-  griglia.innerHTML = corpo.dati[lingua].map(([nome, valore, unita]) =>
+  const datiScheda = [...corpo.dati[lingua]];
+  if (PIANETI.includes(corpo)) {
+    const inclinazione = Math.abs(corpo.inclinazione * 180 / Math.PI);
+    datiScheda.push([
+      lingua === "it" ? "Inclinazione orbitale" : "Orbital inclination",
+      inclinazione.toLocaleString(TXT[lingua].locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      "°",
+    ]);
+  }
+  griglia.innerHTML = datiScheda.map(([nome, valore, unita]) =>
     `<div class="dato"><dt>${nome}</dt><dd>${valore} <small>${unita}</small></dd></div>`
   ).join("");
 

@@ -20,6 +20,7 @@
 ## ✨ Caratteristiche
 
 - 🧭 **Vista 3D interattiva**: trascina con mouse o touch per ruotare e inclinare il piano orbitale; doppio clic per ripristinare la visuale
+- 📐 **Inclinazioni orbitali reali**: ogni pianeta segue il proprio piano rispetto all'eclittica terrestre, orientato tramite il nodo ascendente JPL
 - 🪐 **8 pianeti + Sole** con colori, dimensioni relative e velocità orbitali proporzionali ai veri periodi astronomici
 - 🌙 **Layer lune attivabile**: la Luna orbita sempre intorno alla Terra, e con l'interruttore *Lune* compaiono anche le lune principali di Marte, Giove, Saturno, Urano e Nettuno — tutte cliccabili
 - 🛰 **Sistemi di lune completi**: le viste dedicate (es. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) includono tutte le lune riconosciute dalla IAU nel catalogo JPL 2026, con schede cliccabili e dati orbitali
@@ -33,7 +34,7 @@
 - 🪩 **Dettagli unici**: gli anelli di Saturno, le bande di Giove, il Sole pulsante con alone, stelle che tremolano
 - ☄️ **Comete periodiche**: Halley, Encke e 67P percorrono orbite eccentriche con chioma e coda dinamiche
 - 🪨 **Fascia principale degli asteroidi**: centinaia di corpi distribuiti tra Marte e Giove con leggere inclinazioni orbitali
-- 📷 **Immagini dalle missioni spaziali**: ogni scheda planetaria include una fotografia NASA con la relativa missione
+- 📷 **Immagini dalle missioni spaziali**: pianeti e comete principali includono fotografie NASA/ESA con missione, credito e fonte originale
 - 🖱️ **Schede informative**: clicca su un corpo celeste per aprire un box richiudibile con dati, descrizione e una curiosità
 - 🎛️ **Console di controllo** con slider in tempo reale
 - 🌍 **Interfaccia bilingue**: italiano e inglese, selezionabili con le bandierine 🇮🇹/🇬🇧 in alto a destra (la scelta viene ricordata)

@@ -20,6 +20,7 @@
 ## ✨ Features
 
 - 🧭 **Interactive 3D view**: drag with mouse or touch to rotate and tilt the orbital plane; double-click to reset the view
+- 📐 **Real orbital inclinations**: each planet follows its own plane relative to Earth's ecliptic, oriented using JPL ascending-node data
 - 🪐 **8 planets + the Sun** with colors, relative sizes and orbital speeds proportional to the real astronomical periods
 - 🌙 **Toggleable moons layer**: the Moon always orbits Earth, and the *Moons* switch reveals the major moons of Mars, Jupiter, Saturn, Uranus and Neptune — all clickable
 - 🛰 **Complete moon systems**: dedicated views (e.g. [`?focus=giove`](https://manzolo.github.io/SistemaSolare/?focus=giove), [`?focus=saturno`](https://manzolo.github.io/SistemaSolare/?focus=saturno)) include every IAU-recognised moon in the 2026 JPL catalogue, with clickable cards and orbital data
@@ -33,7 +34,7 @@
 - 🪩 **Unique details**: Saturn's rings, Jupiter's bands, a pulsing Sun with halo, twinkling stars
 - ☄️ **Periodic comets**: Halley, Encke and 67P follow eccentric orbits with dynamic comae and tails
 - 🪨 **Main asteroid belt**: hundreds of bodies distributed between Mars and Jupiter with slight orbital inclinations
-- 📷 **Spacecraft imagery**: every planet card includes a NASA image credited to its mission
+- 📷 **Spacecraft imagery**: major planets and comets include NASA/ESA images with mission, credit, and original source
 - 🖱️ **Info cards**: click a celestial body to open a collapsible box with data, description and a fun fact
 - 🎛️ **Control console** with real-time sliders
 - 🌍 **Bilingual interface**: Italian and English, switchable via the 🇮🇹/🇬🇧 flags in the top-right corner (your choice is remembered)
