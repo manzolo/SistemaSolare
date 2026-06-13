@@ -735,6 +735,58 @@
     backdrop-filter: blur(10px);
   }
   .apri-fonti:hover { color: var(--cyan); border-color: rgba(111, 227, 255, 0.5); }
+  .vista-controlli {
+    position: fixed;
+    right: 24px;
+    bottom: 64px;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .vista-controlli button {
+    width: 38px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(111, 227, 255, 0.35);
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--cyan);
+    font: 18px/1 var(--mono);
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition: color 0.2s, border-color 0.2s;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .vista-controlli button:hover { border-color: var(--cyan); color: #fff; }
+  .vista-controlli button:active { border-color: var(--cyan); color: #fff; }
+  .vista-controlli button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+  .dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 38px);
+    grid-template-rows: repeat(3, 34px);
+    grid-template-areas:
+      ".  su  ."
+      "sx .  dx"
+      ".  giu .";
+    gap: 4px;
+  }
+  .dpad .dpad-su { grid-area: su; }
+  .dpad .dpad-sx { grid-area: sx; }
+  .dpad .dpad-dx { grid-area: dx; }
+  .dpad .dpad-giu { grid-area: giu; }
+  .zoom-controlli {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
   .fonti-dialogo {
     width: min(680px, calc(100vw - 32px));
     max-height: min(76vh, 720px);
@@ -933,6 +985,7 @@
     .ricerca.aperta { width: calc(100% - 32px); }
     body.focus .ricerca { top: 124px; }
     .apri-fonti { right: 12px; bottom: 68px; }
+    .vista-controlli { right: 12px; bottom: auto; top: 50%; transform: translateY(-50%); }
   }
 </style>
 </head>
@@ -1054,6 +1107,18 @@
   </div>
 </aside>
 
+<div class="vista-controlli" id="vistaControlli">
+  <div class="dpad">
+    <button id="btnSu" class="dpad-su" type="button" aria-label="Inclina in alto">↑</button>
+    <button id="btnSinistra" class="dpad-sx" type="button" aria-label="Ruota a sinistra">←</button>
+    <button id="btnDestra" class="dpad-dx" type="button" aria-label="Ruota a destra">→</button>
+    <button id="btnGiu" class="dpad-giu" type="button" aria-label="Inclina in basso">↓</button>
+  </div>
+  <div class="zoom-controlli">
+    <button id="btnZoomIn" type="button" aria-label="Avvicina">+</button>
+    <button id="btnZoomOut" type="button" aria-label="Allontana">−</button>
+  </div>
+</div>
 <button class="apri-fonti" id="apriFonti" type="button">Fonti · licenze</button>
 <dialog class="fonti-dialogo" id="fontiDialogo">
   <div class="fonti-testa">
@@ -1143,6 +1208,12 @@ const TXT = {
     limiteLune: "Lune visibili",
     tutte: "tutte",
     cerca: "Cerca pianeti e lune",
+    zoomAvanti: "Avvicina la vista",
+    zoomIndietro: "Allontana la vista",
+    inclinaSu: "Inclina la vista in alto",
+    inclinaGiu: "Inclina la vista in basso",
+    ruotaSinistra: "Ruota la vista a sinistra",
+    ruotaDestra: "Ruota la vista a destra",
     nessunRisultato: "Nessun corpo celeste trovato",
     categorie: { stella: "Stella", pianeta: "Pianeta", nano: "Pianeta nano", luna: "Luna", cometa: "Cometa periodica" },
     fermo: "fermo",
@@ -1191,6 +1262,12 @@ const TXT = {
     limiteLune: "Visible moons",
     tutte: "all",
     cerca: "Search planets and moons",
+    zoomAvanti: "Zoom in",
+    zoomIndietro: "Zoom out",
+    inclinaSu: "Tilt view up",
+    inclinaGiu: "Tilt view down",
+    ruotaSinistra: "Rotate view left",
+    ruotaDestra: "Rotate view right",
     nessunRisultato: "No celestial body found",
     categorie: { stella: "Star", pianeta: "Planet", nano: "Dwarf planet", luna: "Moon", cometa: "Periodic comet" },
     fermo: "frozen",
@@ -4116,6 +4193,88 @@ canvas.addEventListener("wheel", e => {
   const fattore = Math.exp(-e.deltaY * 0.0012);
   applicaZoomAncora(stato.cameraZoom * fattore, e.clientX, e.clientY);
 }, { passive: false });
+// Controlli vista: alternativa accessibile a rotella e trascinamento.
+const PASSO_ZOOM = 1.25;        // fattore per singolo clic/tap
+const VEL_ZOOM = 1.8;           // crescita esponenziale dello zoom al secondo, tenendo premuto
+const PASSO_ROTAZIONE = 0.18;   // radianti per singolo clic/tap
+const VEL_ROTAZIONE = 1.4;      // radianti al secondo, tenendo premuto
+
+function zoomDaPulsante(fattore) {
+  applicaZoomAncora(stato.cameraZoom * fattore, CX, CY);
+}
+function ruotaVista(dYaw, dPitch) {
+  stato.cameraYaw += dYaw;
+  stato.cameraPitch = Math.max(-1.2, Math.min(1.2, stato.cameraPitch + dPitch));
+  stato.hover = null;
+  PIANETI.forEach(p => { p.scia.length = 0; });
+  PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+}
+
+// Rende un pulsante "premibile": tap singolo da mouse/tastiera + movimento continuo
+// mentre lo si tiene premuto. azioneSingola() scatta al tap; azioneContinua(dt) a ogni frame.
+function controlloPremibile(el, azioneSingola, azioneContinua) {
+  let raf = null, ultimo = 0, inizio = 0, daPuntatore = false;
+  const RITARDO = 180; // ms prima che parta il movimento continuo (così un tap = un passo)
+  function frame(t) {
+    if (!ultimo) ultimo = t;
+    const dt = Math.min((t - ultimo) / 1000, 0.05);
+    ultimo = t;
+    if (t - inizio >= RITARDO) azioneContinua(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  function ferma() {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+  }
+  el.addEventListener("pointerdown", e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    daPuntatore = true;
+    azioneSingola();
+    inizio = performance.now();
+    ultimo = 0;
+    ferma();
+    raf = requestAnimationFrame(frame);
+    try { el.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  el.addEventListener("pointerup", ferma);
+  el.addEventListener("pointercancel", ferma);
+  el.addEventListener("lostpointercapture", ferma);
+  el.addEventListener("click", () => {
+    // I puntatori sono già gestiti da pointerdown; qui resta la sola attivazione da tastiera.
+    if (daPuntatore) { daPuntatore = false; return; }
+    azioneSingola();
+  });
+}
+
+controlloPremibile(
+  document.getElementById("btnZoomIn"),
+  () => zoomDaPulsante(PASSO_ZOOM),
+  dt => zoomDaPulsante(Math.exp(VEL_ZOOM * dt))
+);
+controlloPremibile(
+  document.getElementById("btnZoomOut"),
+  () => zoomDaPulsante(1 / PASSO_ZOOM),
+  dt => zoomDaPulsante(Math.exp(-VEL_ZOOM * dt))
+);
+controlloPremibile(
+  document.getElementById("btnSu"),
+  () => ruotaVista(0, -PASSO_ROTAZIONE),
+  dt => ruotaVista(0, -VEL_ROTAZIONE * dt)
+);
+controlloPremibile(
+  document.getElementById("btnGiu"),
+  () => ruotaVista(0, PASSO_ROTAZIONE),
+  dt => ruotaVista(0, VEL_ROTAZIONE * dt)
+);
+controlloPremibile(
+  document.getElementById("btnSinistra"),
+  () => ruotaVista(-PASSO_ROTAZIONE, 0),
+  dt => ruotaVista(-VEL_ROTAZIONE * dt, 0)
+);
+controlloPremibile(
+  document.getElementById("btnDestra"),
+  () => ruotaVista(PASSO_ROTAZIONE, 0),
+  dt => ruotaVista(VEL_ROTAZIONE * dt, 0)
+);
 canvas.addEventListener("dblclick", e => {
   e.preventDefault();
   stato.cameraYaw = -0.24;
@@ -4727,6 +4886,18 @@ function applicaLingua() {
   document.getElementById("lblLimiteLune").textContent = T.limiteLune;
   document.getElementById("campoRicerca").placeholder = T.cerca;
   document.getElementById("apriRicerca").setAttribute("aria-label", T.cerca);
+  document.getElementById("btnZoomIn").setAttribute("aria-label", T.zoomAvanti);
+  document.getElementById("btnZoomIn").title = T.zoomAvanti;
+  document.getElementById("btnZoomOut").setAttribute("aria-label", T.zoomIndietro);
+  document.getElementById("btnZoomOut").title = T.zoomIndietro;
+  document.getElementById("btnSu").setAttribute("aria-label", T.inclinaSu);
+  document.getElementById("btnSu").title = T.inclinaSu;
+  document.getElementById("btnGiu").setAttribute("aria-label", T.inclinaGiu);
+  document.getElementById("btnGiu").title = T.inclinaGiu;
+  document.getElementById("btnSinistra").setAttribute("aria-label", T.ruotaSinistra);
+  document.getElementById("btnSinistra").title = T.ruotaSinistra;
+  document.getElementById("btnDestra").setAttribute("aria-label", T.ruotaDestra);
+  document.getElementById("btnDestra").title = T.ruotaDestra;
   document.getElementById("btnReset").textContent = T.reset;
   document.getElementById("btnMusica").textContent = T.musica;
   document.getElementById("schedaChiudi").title = T.chiudi;
