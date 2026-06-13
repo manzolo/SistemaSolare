@@ -985,7 +985,9 @@
     .ricerca.aperta { width: calc(100% - 32px); }
     body.focus .ricerca { top: 124px; }
     .apri-fonti { right: 12px; bottom: 68px; }
-    .vista-controlli { right: 12px; bottom: auto; top: 50%; transform: translateY(-50%); }
+    /* Su mobile la console occupa tutta la larghezza in basso: ancoro i controlli
+       in alto a destra (sotto la lente) così non coprono il tasto di chiusura. */
+    .vista-controlli { right: 12px; bottom: auto; top: 156px; transform: none; gap: 6px; }
   }
 </style>
 </head>
