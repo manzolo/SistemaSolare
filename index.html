@@ -985,9 +985,17 @@
     .ricerca.aperta { width: calc(100% - 32px); }
     body.focus .ricerca { top: 124px; }
     .apri-fonti { right: 12px; bottom: 68px; }
-    /* Su mobile la console occupa tutta la larghezza in basso: ancoro i controlli
-       in alto a destra (sotto la lente) così non coprono il tasto di chiusura. */
-    .vista-controlli { right: 12px; bottom: auto; top: 156px; transform: none; gap: 6px; }
+    /* Su mobile la console occupa tutta la larghezza in basso: i controlli vista
+       restano nascosti finché la console non è ridotta a icona, poi compaiono
+       in alto a destra (sotto la lente) dove non si sovrappongono a nulla. */
+    .vista-controlli {
+      right: 12px; bottom: auto; top: 156px; transform: none; gap: 6px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .comandi.icona ~ .vista-controlli {
+      opacity: 1; visibility: visible; pointer-events: auto;
+    }
   }
 </style>
 </head>
