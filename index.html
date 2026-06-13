@@ -365,7 +365,8 @@
   .comandi.chiuso .freccia { transform: rotate(-135deg); }
   .comandi-corpo {
     max-height: 420px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: max-height 0.45s cubic-bezier(.22,1,.36,1), opacity 0.3s;
     opacity: 1;
     border-top: 1px solid var(--line);
@@ -965,6 +966,9 @@
   @media (max-width: 720px) {
     .comandi { left: 12px; right: 12px; bottom: 12px; width: auto; }
     .comandi.icona { left: 12px; right: auto; width: 44px; }
+    /* La console (specie in vista pianeta) può superare l'altezza dello schermo:
+       limito il corpo all'area visibile e lo rendo scorrevole. */
+    .comandi-corpo { max-height: calc(100vh - 92px); max-height: calc(100dvh - 92px); }
     .scheda { left: 12px; right: 12px; width: auto; top: auto; bottom: 12px;
               transform: translateY(30px); }
     .scheda.visibile { transform: translateY(0); }
@@ -998,6 +1002,11 @@
     .comandi.chiuso ~ .vista-controlli,
     .comandi.icona ~ .vista-controlli {
       opacity: 1; visibility: visible; pointer-events: auto;
+    }
+    /* Quando è aperta la scheda di un corpo (ancorata in basso a tutta larghezza),
+       nascondo la pulsantiera così non copre mai la × di chiusura della scheda. */
+    .scheda.visibile ~ .vista-controlli {
+      opacity: 0; visibility: hidden; pointer-events: none;
     }
   }
 </style>
