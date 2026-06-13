@@ -786,6 +786,12 @@
   .dpad .dpad-dx { grid-area: dx; }
   .dpad .dpad-giu { grid-area: giu; }
   .dpad .dpad-centro { grid-area: centro; font-size: 15px; }
+  .vista-controlli .modo-controlli { font-size: 16px; }
+  .vista-controlli .modo-controlli[aria-pressed="true"] {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111, 227, 255, 0.35);
+  }
   .zoom-controlli {
     display: flex;
     flex-direction: column;
@@ -1132,6 +1138,7 @@
 </aside>
 
 <div class="vista-controlli" id="vistaControlli">
+  <button id="btnModo" class="modo-controlli" type="button" aria-pressed="false" aria-label="Modalità: ruota/inclina">⟳</button>
   <div class="dpad">
     <button id="btnSu" class="dpad-su" type="button" aria-label="Inclina in alto">↑</button>
     <button id="btnSinistra" class="dpad-sx" type="button" aria-label="Ruota a sinistra">←</button>
@@ -1207,7 +1214,7 @@ const TXT = {
     tempo: "Tempo simulato",
     giorno: "giorno",
     anni: "anni terrestri",
-    suggerimento: "— trascina per ruotare · rotella/pinch per zoom · doppio clic per reset —",
+    suggerimento: "— trascina per spostare · rotella/pinch per zoom · doppio clic per reset —",
     console: "◈ Console di controllo",
     dataAllineamento: "Data simulata",
     oggi: "Oggi",
@@ -1241,6 +1248,16 @@ const TXT = {
     ruotaSinistra: "Ruota la vista a sinistra",
     ruotaDestra: "Ruota la vista a destra",
     vistaAlto: "Vista dall'alto",
+    modoRuota: "Modalità frecce: ruota/inclina — tocca per spostare",
+    modoSposta: "Modalità frecce: sposta — tocca per ruotare",
+    frecceRuota: {
+      btnSu: "Inclina la vista in alto", btnGiu: "Inclina la vista in basso",
+      btnSinistra: "Ruota la vista a sinistra", btnDestra: "Ruota la vista a destra",
+    },
+    frecceSposta: {
+      btnSu: "Sposta la vista in alto", btnGiu: "Sposta la vista in basso",
+      btnSinistra: "Sposta la vista a sinistra", btnDestra: "Sposta la vista a destra",
+    },
     nessunRisultato: "Nessun corpo celeste trovato",
     categorie: { stella: "Stella", pianeta: "Pianeta", nano: "Pianeta nano", luna: "Luna", cometa: "Cometa periodica" },
     fermo: "fermo",
@@ -1263,7 +1280,7 @@ const TXT = {
     tempo: "Simulated time",
     giorno: "day",
     anni: "Earth years",
-    suggerimento: "— drag to rotate · wheel/pinch to zoom · double-click to reset —",
+    suggerimento: "— drag to pan · wheel/pinch to zoom · double-click to reset —",
     console: "◈ Control console",
     dataAllineamento: "Simulated date",
     oggi: "Today",
@@ -1297,6 +1314,16 @@ const TXT = {
     ruotaSinistra: "Rotate view left",
     ruotaDestra: "Rotate view right",
     vistaAlto: "Top-down view",
+    modoRuota: "Arrow mode: rotate/tilt — tap to switch to move",
+    modoSposta: "Arrow mode: move — tap to switch to rotate",
+    frecceRuota: {
+      btnSu: "Tilt view up", btnGiu: "Tilt view down",
+      btnSinistra: "Rotate view left", btnDestra: "Rotate view right",
+    },
+    frecceSposta: {
+      btnSu: "Move view up", btnGiu: "Move view down",
+      btnSinistra: "Move view left", btnDestra: "Move view right",
+    },
     nessunRisultato: "No celestial body found",
     categorie: { stella: "Star", pianeta: "Planet", nano: "Dwarf planet", luna: "Moon", cometa: "Periodic comet" },
     fermo: "frozen",
@@ -4163,10 +4190,8 @@ canvas.addEventListener("pointermove", e => {
       etichettaHover.classList.remove("visibile");
     }
     if (trascinamentoCamera.ruotato) {
-      stato.cameraYaw += dx * 0.008;
-      stato.cameraPitch = Math.max(-1.2, Math.min(1.2, stato.cameraPitch + dy * 0.008));
-      PIANETI.forEach(p => { p.scia.length = 0; });
-      PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+      // Il trascinamento sposta la vista (pan): la scena segue il dito/cursore.
+      spostaVista(dx, dy);
       trascinamentoCamera.x = e.clientX;
       trascinamentoCamera.y = e.clientY;
       stato.hover = null;
@@ -4231,6 +4256,10 @@ const PASSO_ZOOM = 1.25;        // fattore per singolo clic/tap
 const VEL_ZOOM = 1.8;           // crescita esponenziale dello zoom al secondo, tenendo premuto
 const PASSO_ROTAZIONE = 0.18;   // radianti per singolo clic/tap
 const VEL_ROTAZIONE = 1.4;      // radianti al secondo, tenendo premuto
+const PASSO_PAN = 60;           // pixel per singolo clic/tap (spostamento)
+const VEL_PAN = 480;            // pixel al secondo, tenendo premuto
+
+let modoSposta = false;         // false = ruota/inclina · true = sposta (pan)
 
 function zoomDaPulsante(fattore) {
   applicaZoomAncora(stato.cameraZoom * fattore, CX, CY);
@@ -4238,6 +4267,14 @@ function zoomDaPulsante(fattore) {
 function ruotaVista(dYaw, dPitch) {
   stato.cameraYaw += dYaw;
   stato.cameraPitch = Math.max(-1.2, Math.min(1.2, stato.cameraPitch + dPitch));
+  stato.hover = null;
+  PIANETI.forEach(p => { p.scia.length = 0; });
+  PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+}
+function spostaVista(dx, dy) {
+  // Pan: la scena segue la direzione indicata (coerente col trascinamento).
+  stato.cameraPanX += dx;
+  stato.cameraPanY += dy;
   stato.hover = null;
   PIANETI.forEach(p => { p.scia.length = 0; });
   PIANETI_NANI.forEach(p => { p.scia.length = 0; });
@@ -4288,26 +4325,43 @@ controlloPremibile(
   () => zoomDaPulsante(1 / PASSO_ZOOM),
   dt => zoomDaPulsante(Math.exp(-VEL_ZOOM * dt))
 );
-controlloPremibile(
-  document.getElementById("btnSu"),
-  () => ruotaVista(0, -PASSO_ROTAZIONE),
-  dt => ruotaVista(0, -VEL_ROTAZIONE * dt)
-);
-controlloPremibile(
-  document.getElementById("btnGiu"),
-  () => ruotaVista(0, PASSO_ROTAZIONE),
-  dt => ruotaVista(0, VEL_ROTAZIONE * dt)
-);
-controlloPremibile(
-  document.getElementById("btnSinistra"),
-  () => ruotaVista(-PASSO_ROTAZIONE, 0),
-  dt => ruotaVista(-VEL_ROTAZIONE * dt, 0)
-);
-controlloPremibile(
-  document.getElementById("btnDestra"),
-  () => ruotaVista(PASSO_ROTAZIONE, 0),
-  dt => ruotaVista(VEL_ROTAZIONE * dt, 0)
-);
+// Le frecce agiscono secondo la modalità attiva: ruota/inclina oppure sposta (pan).
+// segnoX/segnoY ∈ {-1,0,1}: in rotazione X=yaw e Y=pitch; nello spostamento = pan.
+function registraFreccia(id, segnoX, segnoY) {
+  controlloPremibile(
+    document.getElementById(id),
+    () => modoSposta
+      ? spostaVista(segnoX * PASSO_PAN, segnoY * PASSO_PAN)
+      : ruotaVista(segnoX * PASSO_ROTAZIONE, segnoY * PASSO_ROTAZIONE),
+    dt => modoSposta
+      ? spostaVista(segnoX * VEL_PAN * dt, segnoY * VEL_PAN * dt)
+      : ruotaVista(segnoX * VEL_ROTAZIONE * dt, segnoY * VEL_ROTAZIONE * dt)
+  );
+}
+registraFreccia("btnSu", 0, -1);
+registraFreccia("btnGiu", 0, 1);
+registraFreccia("btnSinistra", -1, 0);
+registraFreccia("btnDestra", 1, 0);
+
+// Toggle di modalità delle frecce: ruota/inclina ⟳ ↔ sposta ✥.
+const btnModo = document.getElementById("btnModo");
+function aggiornaModoControlli() {
+  const T = TXT[lingua];
+  btnModo.textContent = modoSposta ? "✥" : "⟳";
+  btnModo.setAttribute("aria-pressed", String(modoSposta));
+  btnModo.setAttribute("aria-label", modoSposta ? T.modoSposta : T.modoRuota);
+  btnModo.title = btnModo.getAttribute("aria-label");
+  const e = modoSposta ? T.frecceSposta : T.frecceRuota;
+  for (const [id, testo] of Object.entries(e)) {
+    const b = document.getElementById(id);
+    b.setAttribute("aria-label", testo);
+    b.title = testo;
+  }
+}
+btnModo.addEventListener("click", () => {
+  modoSposta = !modoSposta;
+  aggiornaModoControlli();
+});
 // Vista dall'alto: porta la camera quasi a volo d'uccello, dove le orbite
 // appaiono come anelli annidati che non si incrociano.
 document.getElementById("btnAlto").addEventListener("click", () => {
@@ -4940,16 +4994,9 @@ function applicaLingua() {
   document.getElementById("btnZoomIn").title = T.zoomAvanti;
   document.getElementById("btnZoomOut").setAttribute("aria-label", T.zoomIndietro);
   document.getElementById("btnZoomOut").title = T.zoomIndietro;
-  document.getElementById("btnSu").setAttribute("aria-label", T.inclinaSu);
-  document.getElementById("btnSu").title = T.inclinaSu;
-  document.getElementById("btnGiu").setAttribute("aria-label", T.inclinaGiu);
-  document.getElementById("btnGiu").title = T.inclinaGiu;
-  document.getElementById("btnSinistra").setAttribute("aria-label", T.ruotaSinistra);
-  document.getElementById("btnSinistra").title = T.ruotaSinistra;
-  document.getElementById("btnDestra").setAttribute("aria-label", T.ruotaDestra);
-  document.getElementById("btnDestra").title = T.ruotaDestra;
   document.getElementById("btnAlto").setAttribute("aria-label", T.vistaAlto);
   document.getElementById("btnAlto").title = T.vistaAlto;
+  aggiornaModoControlli(); // etichette delle frecce + toggle, secondo modalità e lingua
   document.getElementById("btnReset").textContent = T.reset;
   document.getElementById("btnMusica").textContent = T.musica;
   document.getElementById("schedaChiudi").title = T.chiudi;
