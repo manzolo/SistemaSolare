@@ -297,9 +297,10 @@
   }
   .lingue button {
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    padding: 5px 10px;
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0;
+    padding: 4px 8px;
     background: transparent;
     color: var(--dim);
     border: 1px solid var(--line);
@@ -990,7 +991,7 @@
     .lato-destro { min-width: 0; gap: 7px; }
     .cronometro { font-size: 9px; letter-spacing: 0.12em; line-height: 1.55; }
     .lingue { gap: 4px; }
-    .lingue button { padding: 5px 7px; font-size: 9px; letter-spacing: 0.08em; }
+    .lingue button { padding: 4px 7px; font-size: 14px; letter-spacing: 0; }
     .ricerca {
       top: 112px;
       right: 16px;
@@ -1038,8 +1039,8 @@
       <span id="contaData"></span>
     </div>
     <div class="lingue" id="selettoreLingue">
-      <button data-lingua="it" class="attiva">🇮🇹 Italiano</button>
-      <button data-lingua="en">🇬🇧 English</button>
+      <button data-lingua="it" class="attiva" aria-label="Italiano" title="Italiano">🇮🇹</button>
+      <button data-lingua="en" aria-label="English" title="English">🇬🇧</button>
     </div>
   </div>
 </header>
@@ -1138,11 +1139,10 @@
 </aside>
 
 <div class="vista-controlli" id="vistaControlli">
-  <button id="btnModo" class="modo-controlli" type="button" aria-pressed="false" aria-label="Modalità: ruota/inclina">⟳</button>
   <div class="dpad">
     <button id="btnSu" class="dpad-su" type="button" aria-label="Inclina in alto">↑</button>
     <button id="btnSinistra" class="dpad-sx" type="button" aria-label="Ruota a sinistra">←</button>
-    <button id="btnAlto" class="dpad-centro" type="button" aria-label="Vista dall'alto">⊙</button>
+    <button id="btnModo" class="dpad-centro modo-controlli" type="button" aria-pressed="false" aria-label="Modalità: ruota/inclina">⟳</button>
     <button id="btnDestra" class="dpad-dx" type="button" aria-label="Ruota a destra">→</button>
     <button id="btnGiu" class="dpad-giu" type="button" aria-label="Inclina in basso">↓</button>
   </div>
@@ -4362,19 +4362,6 @@ btnModo.addEventListener("click", () => {
   modoSposta = !modoSposta;
   aggiornaModoControlli();
 });
-// Vista dall'alto: porta la camera quasi a volo d'uccello, dove le orbite
-// appaiono come anelli annidati che non si incrociano.
-document.getElementById("btnAlto").addEventListener("click", () => {
-  stato.cameraYaw = 0;
-  stato.cameraPitch = 1.2; // limite massimo di inclinazione: vista quasi zenitale
-  stato.cameraZoom = 1;
-  stato.cameraPanX = 0;
-  stato.cameraPanY = 0;
-  stato.cameraTarget = null;
-  PIANETI.forEach(p => { p.scia.length = 0; });
-  PIANETI_NANI.forEach(p => { p.scia.length = 0; });
-  aggiornaPulsanteCamera();
-});
 canvas.addEventListener("dblclick", e => {
   e.preventDefault();
   stato.cameraYaw = -0.24;
@@ -4994,8 +4981,6 @@ function applicaLingua() {
   document.getElementById("btnZoomIn").title = T.zoomAvanti;
   document.getElementById("btnZoomOut").setAttribute("aria-label", T.zoomIndietro);
   document.getElementById("btnZoomOut").title = T.zoomIndietro;
-  document.getElementById("btnAlto").setAttribute("aria-label", T.vistaAlto);
-  document.getElementById("btnAlto").title = T.vistaAlto;
   aggiornaModoControlli(); // etichette delle frecce + toggle, secondo modalità e lingua
   document.getElementById("btnReset").textContent = T.reset;
   document.getElementById("btnMusica").textContent = T.musica;
