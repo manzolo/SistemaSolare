@@ -1214,7 +1214,7 @@ const TXT = {
     tempo: "Tempo simulato",
     giorno: "giorno",
     anni: "anni terrestri",
-    suggerimento: "— trascina per spostare · rotella/pinch per zoom · doppio clic per reset —",
+    suggerimento: "— trascina per spostare · Ctrl+trascina per ruotare · rotella/pinch per zoom · doppio clic per reset —",
     console: "◈ Console di controllo",
     dataAllineamento: "Data simulata",
     oggi: "Oggi",
@@ -1280,7 +1280,7 @@ const TXT = {
     tempo: "Simulated time",
     giorno: "day",
     anni: "Earth years",
-    suggerimento: "— drag to pan · wheel/pinch to zoom · double-click to reset —",
+    suggerimento: "— drag to pan · Ctrl+drag to rotate · wheel/pinch to zoom · double-click to reset —",
     console: "◈ Control console",
     dataAllineamento: "Simulated date",
     oggi: "Today",
@@ -4190,8 +4190,13 @@ canvas.addEventListener("pointermove", e => {
       etichettaHover.classList.remove("visibile");
     }
     if (trascinamentoCamera.ruotato) {
-      // Il trascinamento sposta la vista (pan): la scena segue il dito/cursore.
-      spostaVista(dx, dy);
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl/Cmd + trascinamento = ruota/inclina l'asse 3D.
+        ruotaVista(dx * 0.008, dy * 0.008);
+      } else {
+        // Trascinamento normale = pan: la scena segue il dito/cursore.
+        spostaVista(dx, dy);
+      }
       trascinamentoCamera.x = e.clientX;
       trascinamentoCamera.y = e.clientY;
       stato.hover = null;
