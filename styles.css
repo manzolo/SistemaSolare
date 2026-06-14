@@ -1,0 +1,1019 @@
+  :root {
+    --bg: #04060d;
+    --ink: #e8edf4;
+    --dim: #8a94a6;
+    --amber: #ffb347;
+    --amber-soft: rgba(255, 179, 71, 0.14);
+    --cyan: #6fe3ff;
+    --line: rgba(232, 237, 244, 0.10);
+    --panel: rgba(8, 12, 22, 0.82);
+    --display: 'Michroma', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+  }
+
+  canvas#cielo {
+    position: fixed;
+    inset: 0;
+    display: block;
+    cursor: crosshair;
+    transform-origin: var(--transizione-x, 50%) var(--transizione-y, 50%);
+    touch-action: none;
+  }
+  canvas#cielo.su-pianeta { cursor: pointer; }
+  canvas#cielo.ruotabile { cursor: grab; }
+  canvas#cielo.ruotando { cursor: grabbing; }
+
+  /* ---------- transizione tra sistema e pianeta ---------- */
+  .transizione-vista {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at var(--transizione-x, 50%) var(--transizione-y, 50%),
+        rgba(111, 227, 255, 0.16) 0,
+        rgba(8, 12, 22, 0.92) 8%,
+        #04060d 30%);
+    clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%));
+  }
+  body.transizione-uscita .transizione-vista {
+    animation: copri-vista 0.78s cubic-bezier(.76, 0, .24, 1) forwards;
+  }
+  body.transizione-ingresso .transizione-vista {
+    clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%));
+    animation: scopri-vista 0.9s cubic-bezier(.22, 1, .36, 1) forwards;
+  }
+  body.transizione-uscita header,
+  body.transizione-uscita .ricerca,
+  body.transizione-uscita .comandi,
+  body.transizione-uscita .scheda,
+  body.transizione-uscita .suggerimento {
+    transition: opacity 0.35s ease, transform 0.6s cubic-bezier(.76, 0, .24, 1);
+    opacity: 0;
+  }
+  body.transizione-avanti canvas {
+    transition: transform 0.78s cubic-bezier(.76, 0, .24, 1), opacity 0.55s ease;
+    transform: scale(2.5);
+    opacity: 0.15;
+  }
+  body.transizione-indietro canvas {
+    transition: transform 0.78s cubic-bezier(.76, 0, .24, 1), opacity 0.55s ease;
+    transform: scale(0.46);
+    opacity: 0.12;
+  }
+  body.ingresso-avanti canvas {
+    animation: ingresso-da-sistema 0.95s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  body.ingresso-indietro canvas {
+    animation: ingresso-da-pianeta 0.95s cubic-bezier(.22, 1, .36, 1) both;
+  }
+  @keyframes copri-vista {
+    from { clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+    to { clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+  }
+  @keyframes scopri-vista {
+    from { clip-path: circle(150vmax at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+    to { clip-path: circle(0 at var(--transizione-x, 50%) var(--transizione-y, 50%)); }
+  }
+  @keyframes ingresso-da-sistema {
+    from { transform: scale(1.8); opacity: 0.1; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes ingresso-da-pianeta {
+    from { transform: scale(0.55); opacity: 0.1; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .transizione-vista,
+    body.transizione-uscita .transizione-vista,
+    body.transizione-ingresso .transizione-vista,
+    body.transizione-avanti canvas,
+    body.transizione-indietro canvas,
+    body.ingresso-avanti canvas,
+    body.ingresso-indietro canvas {
+      animation-duration: 0.2s;
+      transition-duration: 0.2s;
+    }
+  }
+
+  /* ---------- vignetta + grana ---------- */
+  .vignetta {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(2,3,8,0.55) 100%);
+    z-index: 2;
+  }
+  .grana {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    z-index: 3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- intestazione ---------- */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 22px 28px 0;
+    z-index: 10;
+    pointer-events: none;
+    animation: discesa 1.1s cubic-bezier(.22,1,.36,1) both;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-size: clamp(13px, 1.6vw, 19px);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-shadow: 0 0 24px rgba(111, 227, 255, 0.35);
+  }
+  header h1 .sole-titolo { color: var(--amber); }
+  .lato-destro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .cronometro {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .cronometro b { color: var(--amber); font-weight: 500; }
+  .indietro {
+    display: none;
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    pointer-events: auto;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  .indietro:hover { color: #fff; text-shadow: 0 0 12px rgba(111,227,255,0.8); }
+  body.focus .indietro { display: inline-block; }
+  body.focus .solo-principale { display: none; }
+  .solo-focus { display: none; }
+  body.focus .solo-focus { display: block; }
+
+  /* ---------- ricerca globale ---------- */
+  .ricerca {
+    position: fixed;
+    top: 142px;
+    left: auto;
+    right: 24px;
+    width: 38px;
+    z-index: 12;
+    pointer-events: auto;
+  }
+  .ricerca.aperta { width: min(320px, 34vw); }
+  .apri-ricerca {
+    position: relative;
+    display: block;
+    width: 38px;
+    height: 34px;
+    margin-left: auto;
+    border: 1px solid rgba(111, 227, 255, 0.35);
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--cyan);
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+  }
+  .apri-ricerca:hover { border-color: var(--cyan); color: #fff; }
+  .apri-ricerca::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 11px;
+    top: 8px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+  .apri-ricerca::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 1px;
+    left: 21px;
+    top: 20px;
+    background: currentColor;
+    transform: rotate(45deg);
+    transform-origin: left center;
+  }
+  .ricerca.aperta .apri-ricerca { display: none; }
+  .pannello-ricerca { display: none; }
+  .ricerca.aperta .pannello-ricerca { display: block; }
+  .pannello-ricerca input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-top-color: rgba(111, 227, 255, 0.45);
+    outline: none;
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+  }
+  .ricerca input:focus { border-color: rgba(111, 227, 255, 0.65); }
+  .risultati-ricerca {
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: rgba(8, 12, 22, 0.96);
+    backdrop-filter: blur(14px);
+  }
+  .risultati-ricerca.visibile { display: block; }
+  .risultato-ricerca {
+    display: block;
+    width: 100%;
+    padding: 9px 11px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--mono);
+  }
+  .risultato-ricerca:hover,
+  .risultato-ricerca.attivo { background: rgba(111, 227, 255, 0.08); }
+  .risultato-ricerca b {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .risultato-ricerca small {
+    color: var(--dim);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+  .nessun-risultato {
+    padding: 11px;
+    color: var(--dim);
+    font-size: 9px;
+    text-align: center;
+  }
+
+  /* ---------- selettore lingua ---------- */
+  .lingue {
+    display: flex;
+    gap: 6px;
+    pointer-events: auto;
+  }
+  .lingue button {
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1;
+    letter-spacing: 0;
+    padding: 4px 8px;
+    background: transparent;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .lingue button:hover {
+    color: var(--cyan);
+    border-color: rgba(111, 227, 255, 0.5);
+  }
+  .lingue button.attiva {
+    color: var(--amber);
+    border-color: rgba(255, 179, 71, 0.55);
+    background: var(--amber-soft);
+    box-shadow: 0 0 14px rgba(255, 179, 71, 0.18);
+  }
+
+  @keyframes discesa {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes salita {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- pannello comandi ---------- */
+  .comandi {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    width: 300px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-top: 1px solid rgba(255, 179, 71, 0.45);
+    backdrop-filter: blur(14px);
+    z-index: 10;
+    animation: salita 1.1s 0.25s cubic-bezier(.22,1,.36,1) both;
+  }
+  .comandi-testa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .comandi-testa span {
+    font-family: var(--display);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .freccia {
+    position: relative;
+    width: 8px; height: 8px;
+    border-right: 1px solid var(--dim);
+    border-bottom: 1px solid var(--dim);
+    transform: rotate(45deg);
+    transition: transform 0.35s;
+  }
+  .comandi.chiuso .freccia { transform: rotate(-135deg); }
+  .comandi-corpo {
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: max-height 0.45s cubic-bezier(.22,1,.36,1), opacity 0.3s;
+    opacity: 1;
+    border-top: 1px solid var(--line);
+    padding: 14px 16px 16px;
+  }
+  .comandi.chiuso .comandi-corpo {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-color: transparent;
+  }
+  .comandi.icona {
+    width: 44px;
+    height: 44px;
+    border-color: rgba(255, 179, 71, 0.4);
+    transition: width 0.35s cubic-bezier(.22,1,.36,1), height 0.35s cubic-bezier(.22,1,.36,1);
+  }
+  .comandi.icona .comandi-testa {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+  .comandi.icona .comandi-testa span,
+  .comandi.icona .comandi-corpo { display: none; }
+  .comandi.icona .freccia {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--amber);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px rgba(255,179,71,0.35);
+  }
+  .comandi.icona .freccia::before,
+  .comandi.icona .freccia::after {
+    content: "";
+    position: absolute;
+    background: var(--amber);
+    opacity: 0.7;
+  }
+  .comandi.icona .freccia::before {
+    width: 8px;
+    height: 1px;
+    left: 2px;
+    top: 5px;
+  }
+  .comandi.icona .freccia::after {
+    width: 1px;
+    height: 8px;
+    left: 5px;
+    top: 2px;
+  }
+
+  .controllo { margin-bottom: 14px; }
+  .controllo:last-of-type { margin-bottom: 10px; }
+  .controllo label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 7px;
+  }
+  .controllo label output { color: var(--cyan); letter-spacing: 0.05em; }
+
+  .selettore-data {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+  .selettore-data button {
+    min-width: 0;
+    height: 32px;
+    border: 1px solid var(--line);
+    background: rgba(4, 6, 13, 0.72);
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .campi-data {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1.7fr;
+    align-items: center;
+    height: 32px;
+    border: 1px solid var(--line);
+    background: rgba(4, 6, 13, 0.72);
+  }
+  .campi-data:focus-within { border-color: rgba(111, 227, 255, 0.65); }
+  .campi-data input {
+    min-width: 0;
+    width: 100%;
+    height: 30px;
+    padding: 0 3px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--ink);
+    font: 10px var(--mono);
+    letter-spacing: 0.08em;
+    text-align: center;
+    appearance: textfield;
+  }
+  .campi-data input::-webkit-inner-spin-button { display: none; }
+  .campi-data input:focus {
+    color: var(--cyan);
+    background: rgba(111, 227, 255, 0.06);
+  }
+  .campi-data span {
+    color: var(--dim);
+    font-size: 10px;
+  }
+  .selettore-data button {
+    padding: 0 10px;
+    color: var(--cyan);
+    cursor: pointer;
+  }
+  .selettore-data button:hover {
+    border-color: var(--cyan);
+    background: rgba(111, 227, 255, 0.08);
+  }
+  .avviso-precisione {
+    display: none;
+    margin-top: 7px;
+    padding: 6px 8px;
+    border-left: 2px solid var(--amber);
+    background: rgba(255, 179, 71, 0.08);
+    color: var(--amber);
+    font-size: 8px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .avviso-precisione.visibile { display: block; }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    margin: 6px 0;
+    background: linear-gradient(to right, var(--amber) var(--pct, 50%), rgba(232,237,244,0.15) var(--pct, 50%));
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--amber);
+    transform: rotate(45deg);
+    cursor: grab;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--amber);
+    box-shadow: 0 0 14px rgba(255,179,71,0.7);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 12px; height: 12px;
+    background: var(--bg);
+    border: 1.5px solid var(--amber);
+    border-radius: 0;
+    transform: rotate(45deg);
+    cursor: grab;
+  }
+
+  .bottoni {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .bottoni button {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 0;
+    background: transparent;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .bottoni button:hover {
+    color: var(--amber);
+    border-color: rgba(255,179,71,0.5);
+    background: var(--amber-soft);
+  }
+  .bottoni button.attivo { color: var(--amber); border-color: rgba(255,179,71,0.5); }
+
+  .interruttori {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+  .interruttori label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    cursor: pointer;
+    user-select: none;
+  }
+  .interruttori input { display: none; }
+  .spia {
+    width: 9px; height: 9px;
+    border: 1px solid var(--dim);
+    transform: rotate(45deg);
+    transition: all 0.2s;
+  }
+  .interruttori input:checked + .spia {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111,227,255,0.8);
+  }
+
+  /* ---------- scheda pianeta ---------- */
+  .scheda {
+    position: fixed;
+    right: 24px;
+    top: 190px; /* sotto la lente di ricerca (142px + 34px + margine) */
+    width: 330px;
+    transform: translateX(30px);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    z-index: 11;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s, transform 0.5s cubic-bezier(.22,1,.36,1);
+  }
+  .scheda.visibile {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .scheda::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--colore-pianeta, var(--amber));
+    box-shadow: 0 0 18px var(--colore-pianeta, var(--amber));
+  }
+  .scheda-testa {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 16px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .pallino {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--colore-pianeta, var(--amber));
+    box-shadow: 0 0 16px var(--colore-pianeta, var(--amber));
+    flex-shrink: 0;
+  }
+  .scheda-testa h2 {
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .scheda-testa .freccia { margin-right: 4px; }
+  .scheda.ridotta .scheda-testa .freccia { transform: rotate(-135deg); }
+  .chiudi {
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-size: 16px;
+    font-family: var(--mono);
+    cursor: pointer;
+    padding: 2px 6px;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .chiudi:hover { color: var(--amber); transform: rotate(90deg); }
+
+  .scheda-corpo {
+    /* la scheda parte da 190px: non deve superare il bordo inferiore */
+    max-height: min(60vh, calc(100vh - 264px));
+    overflow: hidden auto;
+    transition: max-height 0.5s cubic-bezier(.22,1,.36,1), opacity 0.3s;
+    border-top: 1px solid var(--line);
+  }
+  .scheda.ridotta .scheda-corpo {
+    max-height: 0;
+    opacity: 0;
+    border-top-color: transparent;
+  }
+  .sottotitolo {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    padding: 14px 16px 0;
+  }
+  .descrizione {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink);
+    padding: 10px 16px 14px;
+    opacity: 0.85;
+  }
+  .foto-corpo {
+    position: relative;
+    display: none;
+    height: 150px;
+    margin-top: 14px;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--colore-pianeta) 28%, transparent), transparent 48%),
+      #02040a;
+  }
+  .foto-corpo.visibile { display: block; }
+  .foto-corpo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.08);
+  }
+  .foto-corpo figcaption {
+    position: absolute;
+    right: 8px;
+    bottom: 7px;
+    padding: 3px 6px;
+    background: rgba(2, 4, 10, 0.74);
+    color: rgba(232, 237, 244, 0.72);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .foto-corpo figcaption a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .foto-corpo figcaption a:hover { color: var(--cyan); }
+
+  /* ---------- fonti e licenze ---------- */
+  .apri-fonti {
+    position: fixed;
+    right: 24px;
+    bottom: 20px;
+    z-index: 12;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    background: rgba(8, 12, 22, 0.82);
+    color: var(--dim);
+    font: 9px var(--mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+  }
+  .apri-fonti:hover { color: var(--cyan); border-color: rgba(111, 227, 255, 0.5); }
+  .vista-controlli {
+    position: fixed;
+    right: 24px;
+    bottom: 64px;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  /* Interruttore "Accessibilità": nasconde del tutto gli strumenti vista. */
+  body.strumenti-spenti .vista-controlli { display: none; }
+  .vista-controlli button {
+    width: 38px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(111, 227, 255, 0.35);
+    background: rgba(8, 12, 22, 0.88);
+    color: var(--cyan);
+    font: 18px/1 var(--mono);
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition: color 0.2s, border-color 0.2s;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .vista-controlli button:hover { border-color: var(--cyan); color: #fff; }
+  .vista-controlli button:active { border-color: var(--cyan); color: #fff; }
+  .vista-controlli button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+  .dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 38px);
+    grid-template-rows: repeat(3, 34px);
+    grid-template-areas:
+      ".  su     ."
+      "sx centro dx"
+      ".  giu    .";
+    gap: 4px;
+  }
+  .dpad .dpad-su { grid-area: su; }
+  .dpad .dpad-sx { grid-area: sx; }
+  .dpad .dpad-dx { grid-area: dx; }
+  .dpad .dpad-giu { grid-area: giu; }
+  .dpad .dpad-centro { grid-area: centro; font-size: 15px; }
+  .vista-controlli .modo-controlli { font-size: 16px; }
+  .vista-controlli .modo-controlli[aria-pressed="true"] {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111, 227, 255, 0.35);
+  }
+  .zoom-controlli {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fonti-dialogo {
+    width: min(680px, calc(100vw - 32px));
+    max-height: min(76vh, 720px);
+    margin: auto;
+    padding: 0;
+    border: 1px solid rgba(111, 227, 255, 0.35);
+    background: #080c16;
+    color: var(--ink);
+    font-family: var(--mono);
+  }
+  .fonti-dialogo::backdrop { background: rgba(2, 4, 10, 0.82); backdrop-filter: blur(5px); }
+  .fonti-testa {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: #080c16;
+  }
+  .fonti-testa h2 {
+    flex: 1;
+    color: var(--cyan);
+    font: 11px var(--display);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .fonti-corpo {
+    max-height: calc(min(76vh, 720px) - 52px);
+    padding: 16px 18px 20px;
+    overflow: auto;
+    font-size: 11px;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+  .fonti-corpo h3 {
+    margin: 18px 0 7px;
+    color: var(--amber);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .fonti-corpo h3:first-child { margin-top: 0; }
+  .fonti-corpo p + p { margin-top: 8px; }
+  .fonti-corpo ul { padding-left: 18px; }
+  .fonti-corpo li + li { margin-top: 5px; }
+  .fonti-corpo a { color: var(--cyan); }
+  .fonti-corpo strong { color: var(--ink); font-weight: 500; }
+  .dettagli {
+    padding: 14px 16px 16px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+  .dettagli:empty { display: none; }
+  .dettagli h3 {
+    margin: 2px 0 8px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .dettagli ul { padding-left: 16px; }
+  .dettagli li + li { margin-top: 5px; }
+  .griglia-dati {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+  }
+  .dato {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .dato:nth-child(odd) { border-right: 1px solid var(--line); }
+  .dato dt {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 5px;
+  }
+  .dato dd {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .dato dd small { color: var(--dim); font-size: 10px; font-weight: 300; }
+  .curiosita {
+    padding: 13px 16px 16px;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--amber);
+    background: var(--amber-soft);
+  }
+  .curiosita::before {
+    content: "◆ Curiosità — ";
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  html[lang="en"] .curiosita::before { content: "◆ Fun fact — "; }
+  .vai-lune {
+    display: block;
+    padding: 12px 16px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    border-top: 1px solid var(--line);
+    transition: background 0.25s, color 0.25s;
+  }
+  .vai-lune:hover { background: rgba(111, 227, 255, 0.08); color: #fff; }
+  .centra-vista {
+    display: none;
+    width: 100%;
+    padding: 12px 16px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: transparent;
+    color: var(--amber);
+    font: 10px var(--mono);
+    letter-spacing: 0.2em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .centra-vista:hover { background: var(--amber-soft); color: #fff; }
+
+  /* ---------- suggerimento ---------- */
+  .suggerimento {
+    position: fixed;
+    bottom: 68px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Riservo ~380px per lato: a sinistra la console (300px + margine),
+       a destra il d-pad/zoom (~114px + margine), così il testo centrato
+       non finisce mai sopra né dietro i pannelli laterali. */
+    width: min(560px, calc(100vw - 760px));
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--dim);
+    z-index: 4;
+    pointer-events: none;
+    animation: salita 1.1s 0.6s cubic-bezier(.22,1,.36,1) both, pulsa 3.2s 2s ease-in-out infinite;
+  }
+  @keyframes pulsa {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ---------- etichetta al passaggio ---------- */
+  .etichetta-hover {
+    position: fixed;
+    font-family: var(--display);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-shadow: 0 0 12px rgba(111,227,255,0.8);
+    pointer-events: none;
+    z-index: 6;
+    transform: translate(14px, -24px);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .etichetta-hover.visibile { opacity: 1; }
+
+  /* Fascia "mezzo desktop": la console (sinistra) e il d-pad (destra) occupano
+     entrambe la zona bassa; lo spazio centrale non basta per il suggerimento
+     senza che si sovrapponga, quindi lo nascondo finché non c'è respiro. */
+  @media (max-width: 1024px) and (min-width: 721px) {
+    .suggerimento { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    .comandi { left: 12px; right: 12px; bottom: 12px; width: auto; }
+    .comandi.icona { left: 12px; right: auto; width: 44px; }
+    /* La console (specie in vista pianeta) può superare l'altezza dello schermo:
+       limito il corpo all'area visibile e lo rendo scorrevole. */
+    .comandi-corpo { max-height: calc(100vh - 92px); max-height: calc(100dvh - 92px); }
+    .scheda { left: 12px; right: 12px; width: auto; top: auto; bottom: 12px;
+              transform: translateY(30px); }
+    .scheda.visibile { transform: translateY(0); }
+    .suggerimento { display: none; }
+    header { gap: 12px; padding: 14px 16px 0; }
+    header h1 {
+      max-width: 145px;
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      line-height: 1.45;
+    }
+    .lato-destro { min-width: 0; gap: 7px; }
+    .cronometro { font-size: 9px; letter-spacing: 0.12em; line-height: 1.55; }
+    .lingue { gap: 4px; }
+    .lingue button { padding: 4px 7px; font-size: 14px; letter-spacing: 0; }
+    .ricerca {
+      top: 112px;
+      right: 16px;
+    }
+    .ricerca.aperta { width: calc(100% - 32px); }
+    body.focus .ricerca { top: 124px; }
+    .apri-fonti { right: 12px; bottom: 68px; }
+    /* Su mobile la console occupa tutta la larghezza in basso: i controlli vista
+       restano nascosti finché la console non è ridotta a icona, poi compaiono
+       in alto a destra (sotto la lente) dove non si sovrappongono a nulla. */
+    .vista-controlli {
+      right: 12px; bottom: auto; top: 156px; transform: none; gap: 6px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .comandi.chiuso ~ .vista-controlli,
+    .comandi.icona ~ .vista-controlli {
+      opacity: 1; visibility: visible; pointer-events: auto;
+    }
+    /* Quando è aperta la scheda di un corpo (ancorata in basso a tutta larghezza),
+       nascondo la pulsantiera così non copre mai la × di chiusura della scheda. */
+    .scheda.visibile ~ .vista-controlli {
+      opacity: 0; visibility: hidden; pointer-events: none;
+    }
+  }
