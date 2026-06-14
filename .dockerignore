@@ -1,0 +1,9 @@
+.git
+.github
+.agents
+.codex
+Makefile
+Dockerfile
+.dockerignore
+*.md
+LICENSE
