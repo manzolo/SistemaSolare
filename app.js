@@ -2612,16 +2612,21 @@ function luneVisibili(p) {
 function disegnaVistaLune(t) {
   const p = PIANETA_FOCUS;
   const r = (12 + p.raggio * 1.6) * stato.scalaPianeti;
-  p._x = CX; p._y = CY; p._r = r;
+  // Il pan (modalità "sposta" del d-pad / trascinamento) sposta l'intero
+  // sistema pianeta+lune: qui il centro segue cameraPanX/Y, mentre i punti
+  // proiettati usano applicaTarget=false per non applicare il pan due volte.
+  const cx = CX + stato.cameraPanX;
+  const cy = CY + stato.cameraPanY;
+  p._x = cx; p._y = cy; p._r = r;
   const lx = -0.6, ly = -0.6;
 
-  if (p.anelli) disegnaAnelli(p, { x: CX, y: CY }, r, true);
+  if (p.anelli) disegnaAnelli(p, { x: cx, y: cy }, r, true);
 
   ctx.shadowColor = colorAlpha(p.colore, 0.85);
   ctx.shadowBlur = r * 1.2 * stato.luce;
   const g = ctx.createRadialGradient(
-    CX + lx * r * 0.45, CY + ly * r * 0.45, r * 0.1,
-    CX, CY, r * 1.05
+    cx + lx * r * 0.45, cy + ly * r * 0.45, r * 0.1,
+    cx, cy, r * 1.05
   );
   g.addColorStop(0, schiarisciColore(p.colore, .58));
   g.addColorStop(0.25, p.colore);
@@ -2629,26 +2634,26 @@ function disegnaVistaLune(t) {
   g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
   ctx.fillStyle = g;
   ctx.beginPath();
-  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
   ctx.shadowBlur = 0;
 
-  if (!disegnaTextureFotografica(p, { x: CX, y: CY }, r)) {
-    disegnaSuperficiePianeta(p, { x: CX, y: CY }, r);
+  if (!disegnaTextureFotografica(p, { x: cx, y: cy }, r)) {
+    disegnaSuperficiePianeta(p, { x: cx, y: cy }, r);
   }
 
   const ombra = ctx.createRadialGradient(
-    CX + lx * r * .42, CY + ly * r * .42, r * .2,
-    CX, CY, r
+    cx + lx * r * .42, cy + ly * r * .42, r * .2,
+    cx, cy, r
   );
   ombra.addColorStop(.55, "rgba(4, 6, 13, 0)");
   ombra.addColorStop(1, "rgba(4, 6, 13, 0.38)");
   ctx.fillStyle = ombra;
   ctx.beginPath();
-  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.fill();
 
-  if (p.anelli) disegnaAnelli(p, { x: CX, y: CY }, r, false);
+  if (p.anelli) disegnaAnelli(p, { x: cx, y: cy }, r, false);
 
   if (stato.selezionato === p) {
     ctx.strokeStyle = colorAlpha(p.colore, 0.9);
@@ -2656,7 +2661,7 @@ function disegnaVistaLune(t) {
     ctx.setLineDash([4, 5]);
     ctx.lineDashOffset = -t * 0.02;
     ctx.beginPath();
-    ctx.arc(CX, CY, r + 9 + (p.anelli ? r * 0.9 : 0), 0, Math.PI * 2);
+    ctx.arc(cx, cy, r + 9 + (p.anelli ? r * 0.9 : 0), 0, Math.PI * 2);
     ctx.stroke();
     ctx.setLineDash([]);
   }
@@ -2671,7 +2676,7 @@ function disegnaVistaLune(t) {
   principali.forEach((m, i) => {
     const progressione = principali.length === 1 ? 0.45 : i / (principali.length - 1);
     const d = basePrincipali + (limitePrincipali - basePrincipali) * progressione;
-    disegnaSatellite(m, CX, CY, d, Math.max(m.raggio * 2.4 * stato.scalaPianeti, 2), t, true);
+    disegnaSatellite(m, cx, cy, d, Math.max(m.raggio * 2.4 * stato.scalaPianeti, 2), t, true);
   });
 
   if (!minori.length) return;
@@ -2687,7 +2692,7 @@ function disegnaVistaLune(t) {
     ctx.setLineDash([2, 7]);
     for (const frazione of [0.2, 0.45, 0.7, 0.92]) {
       const d = minD + (maxD - minD) * frazione;
-      tracciaOrbita3D(d, d);
+      tracciaOrbita3D(d, d, cx, cy, false);
       ctx.stroke();
     }
     ctx.setLineDash([]);
@@ -2699,7 +2704,7 @@ function disegnaVistaLune(t) {
       : 0.58 + 0.4 * ((i % 41) / 40);
     const fascia = (i % 5) * 0.009;
     const d = minD + (maxD - minD) * Math.min(progressione * 0.88 + fascia, 1);
-    disegnaSatellite(m, CX, CY, d, layoutMobile ? 1.05 : 1.3, t, true, false);
+    disegnaSatellite(m, cx, cy, d, layoutMobile ? 1.05 : 1.3, t, true, false);
   });
 }
 
