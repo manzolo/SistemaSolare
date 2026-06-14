@@ -1,0 +1,3853 @@
+"use strict";
+
+/* ============================================================
+   TESTI DELL'INTERFACCIA / UI STRINGS
+   ============================================================ */
+const TXT = {
+  it: {
+    titolo: 'Osservatorio <span class="sole-titolo">·</span> Sistema Solare',
+    titoloPagina: "Osservatorio · Sistema Solare",
+    tempo: "Tempo simulato",
+    giorno: "giorno",
+    anni: "anni terrestri",
+    suggerimento: "— trascina per spostare · Ctrl+trascina per ruotare · rotella/pinch per zoom · doppio clic per reset —",
+    console: "◈ Console di controllo",
+    dataAllineamento: "Data simulata",
+    oggi: "Oggi",
+    campoGiorno: "Giorno",
+    campoMese: "Mese",
+    campoAnno: "Anno",
+    precisioneRidotta: "Fuori dal 1800–2050: modello JPL esteso, allineamento più approssimativo",
+    velocita: "Velocità del tempo",
+    scala: "Grandezza pianeti",
+    luce: "Luminosità",
+    ampiezzaOrbite: "Ampiezza orbite",
+    pausa: "❚❚ Pausa",
+    riprendi: "▶ Riprendi",
+    reset: "↺ Reset",
+    chiudi: "Chiudi",
+    orbite: "Orbite",
+    nomi: "Nomi",
+    accessibilita: "Accessibilità",
+    scie: "Scie",
+    lune: "Lune",
+    nani: "Pianeti nani",
+    asteroidi: "Asteroidi",
+    comete: "Comete",
+    limiteLune: "Lune visibili",
+    tutte: "tutte",
+    cerca: "Cerca pianeti e lune",
+    zoomAvanti: "Avvicina la vista",
+    zoomIndietro: "Allontana la vista",
+    inclinaSu: "Inclina la vista in alto",
+    inclinaGiu: "Inclina la vista in basso",
+    ruotaSinistra: "Ruota la vista a sinistra",
+    ruotaDestra: "Ruota la vista a destra",
+    vistaAlto: "Vista dall'alto",
+    modoRuota: "Modalità frecce: ruota/inclina — tocca per spostare",
+    modoSposta: "Modalità frecce: sposta — tocca per ruotare",
+    frecceRuota: {
+      btnSu: "Inclina la vista in alto", btnGiu: "Inclina la vista in basso",
+      btnSinistra: "Ruota la vista a sinistra", btnDestra: "Ruota la vista a destra",
+    },
+    frecceSposta: {
+      btnSu: "Sposta la vista in alto", btnGiu: "Sposta la vista in basso",
+      btnSinistra: "Sposta la vista a sinistra", btnDestra: "Sposta la vista a destra",
+    },
+    nessunRisultato: "Nessun corpo celeste trovato",
+    categorie: { stella: "Stella", pianeta: "Pianeta", nano: "Pianeta nano", luna: "Luna", cometa: "Cometa periodica" },
+    fermo: "fermo",
+    unitaVelocita: "g/s",
+    locale: "it-IT",
+    indietro: "← Sistema Solare",
+    musica: "♪ Musica",
+    approfondimenti: "Approfondimenti",
+    titoloFocus: nome => `Sistema <span class="sole-titolo">·</span> ${nome}`,
+    titoloPaginaFocus: nome => `Sistema di ${nome}`,
+    vaiLune: n => n === 1 ? "Esplora la sua luna →" : `Esplora tutte le ${n} lune →`,
+    fonti: "Fonti · licenze",
+    titoloFonti: "Fonti, crediti e licenze",
+    centraVista: nome => `◎ Centra la vista su ${nome}`,
+    liberaVista: "◎ Torna alla vista del Sole",
+  },
+  en: {
+    titolo: 'Observatory <span class="sole-titolo">·</span> Solar System',
+    titoloPagina: "Observatory · Solar System",
+    tempo: "Simulated time",
+    giorno: "day",
+    anni: "Earth years",
+    suggerimento: "— drag to pan · Ctrl+drag to rotate · wheel/pinch to zoom · double-click to reset —",
+    console: "◈ Control console",
+    dataAllineamento: "Simulated date",
+    oggi: "Today",
+    campoGiorno: "Day",
+    campoMese: "Month",
+    campoAnno: "Year",
+    precisioneRidotta: "Outside 1800–2050: extended JPL model, alignment is more approximate",
+    velocita: "Time speed",
+    scala: "Planet size",
+    luce: "Brightness",
+    ampiezzaOrbite: "Orbit spread",
+    pausa: "❚❚ Pause",
+    riprendi: "▶ Resume",
+    reset: "↺ Reset",
+    chiudi: "Close",
+    orbite: "Orbits",
+    nomi: "Names",
+    accessibilita: "Accessibility",
+    scie: "Trails",
+    lune: "Moons",
+    nani: "Dwarf planets",
+    asteroidi: "Asteroids",
+    comete: "Comets",
+    limiteLune: "Visible moons",
+    tutte: "all",
+    cerca: "Search planets and moons",
+    zoomAvanti: "Zoom in",
+    zoomIndietro: "Zoom out",
+    inclinaSu: "Tilt view up",
+    inclinaGiu: "Tilt view down",
+    ruotaSinistra: "Rotate view left",
+    ruotaDestra: "Rotate view right",
+    vistaAlto: "Top-down view",
+    modoRuota: "Arrow mode: rotate/tilt — tap to switch to move",
+    modoSposta: "Arrow mode: move — tap to switch to rotate",
+    frecceRuota: {
+      btnSu: "Tilt view up", btnGiu: "Tilt view down",
+      btnSinistra: "Rotate view left", btnDestra: "Rotate view right",
+    },
+    frecceSposta: {
+      btnSu: "Move view up", btnGiu: "Move view down",
+      btnSinistra: "Move view left", btnDestra: "Move view right",
+    },
+    nessunRisultato: "No celestial body found",
+    categorie: { stella: "Star", pianeta: "Planet", nano: "Dwarf planet", luna: "Moon", cometa: "Periodic comet" },
+    fermo: "frozen",
+    unitaVelocita: "d/s",
+    locale: "en-US",
+    indietro: "← Solar System",
+    musica: "♪ Music",
+    approfondimenti: "More details",
+    titoloFocus: nome => `${nome} <span class="sole-titolo">·</span> System`,
+    titoloPaginaFocus: nome => `${nome} System`,
+    vaiLune: n => n === 1 ? "Explore its moon →" : `Explore all ${n} moons →`,
+    fonti: "Sources · licenses",
+    titoloFonti: "Sources, credits and licenses",
+    centraVista: nome => `◎ Centre view on ${nome}`,
+    liberaVista: "◎ Return to Sun view",
+  },
+};
+
+let lingua = localStorage.getItem("sistemasolare-lingua") || "it";
+if (!TXT[lingua]) lingua = "it";
+
+/* ============================================================
+   DATI ASTRONOMICI / ASTRONOMICAL DATA
+   ============================================================ */
+const SOLE = {
+  nome: { it: "Sole", en: "Sun" },
+  tipo: { it: "Stella · nana gialla (G2V)", en: "Star · yellow dwarf (G2V)" },
+  colore: "#ffcf6b",
+  descrizione: {
+    it: "La stella al centro del nostro sistema, una sfera di plasma incandescente che contiene il 99,86% di tutta la massa del sistema solare. La sua energia, prodotta per fusione nucleare, rende possibile la vita sulla Terra.",
+    en: "The star at the centre of our system, a sphere of incandescent plasma holding 99.86% of the solar system's entire mass. Its energy, produced by nuclear fusion, makes life on Earth possible.",
+  },
+  dati: {
+    it: [
+      ["Diametro", "1.392.700", "km"],
+      ["Temperatura sup.", "5.505", "°C"],
+      ["Età", "4,6", "mld di anni"],
+      ["Rotazione", "≈ 25", "giorni"],
+    ],
+    en: [
+      ["Diameter", "1,392,700", "km"],
+      ["Surface temp.", "5,505", "°C"],
+      ["Age", "4.6", "bn years"],
+      ["Rotation", "≈ 25", "days"],
+    ],
+  },
+  curiosita: {
+    it: "Dentro il Sole entrerebbero circa 1,3 milioni di pianeti come la Terra.",
+    en: "About 1.3 million Earth-sized planets would fit inside the Sun.",
+  },
+};
+
+const PIANETI = [
+  {
+    nome: { it: "Mercurio", en: "Mercury" },
+    tipo: { it: "Pianeta roccioso", en: "Rocky planet" },
+    colore: "#c2a98f", coloreScuro: "#6e5b48",
+    raggio: 3.4, orbita: 0.135, periodo: 88, fase: 0.8,
+    descrizione: {
+      it: "Il pianeta più vicino al Sole e il più piccolo del sistema. Privo di atmosfera, la sua superficie craterizzata ricorda quella della Luna.",
+      en: "The closest planet to the Sun and the smallest in the system. With no atmosphere, its cratered surface resembles the Moon's.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "4.879", "km"],
+        ["Distanza dal Sole", "57,9", "mln km"],
+        ["Anno", "88", "giorni"],
+        ["Giorno", "59", "giorni terr."],
+        ["Lune", "0", ""],
+        ["Temperatura", "−173 / +427", "°C"],
+      ],
+      en: [
+        ["Diameter", "4,879", "km"],
+        ["Distance from Sun", "57.9", "M km"],
+        ["Year", "88", "days"],
+        ["Day", "59", "Earth days"],
+        ["Moons", "0", ""],
+        ["Temperature", "−173 / +427", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Su Mercurio un anno dura meno di due dei suoi giorni: il pianeta ruota su sé stesso lentissimamente.",
+      en: "On Mercury a year lasts less than two of its days: the planet spins extremely slowly.",
+    },
+  },
+  {
+    nome: { it: "Venere", en: "Venus" },
+    tipo: { it: "Pianeta roccioso", en: "Rocky planet" },
+    colore: "#e8c46c", coloreScuro: "#a07a30",
+    raggio: 5.6, orbita: 0.195, periodo: 225, fase: 2.1,
+    descrizione: {
+      it: "Avvolto da dense nubi di acido solforico, Venere è il pianeta più caldo del sistema per via di un effetto serra estremo. È l'oggetto più luminoso del cielo dopo Sole e Luna.",
+      en: "Shrouded in dense clouds of sulphuric acid, Venus is the hottest planet in the system due to an extreme greenhouse effect. It is the brightest object in the sky after the Sun and the Moon.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "12.104", "km"],
+        ["Distanza dal Sole", "108,2", "mln km"],
+        ["Anno", "225", "giorni"],
+        ["Giorno", "243", "giorni terr."],
+        ["Lune", "0", ""],
+        ["Temperatura", "≈ 464", "°C"],
+      ],
+      en: [
+        ["Diameter", "12,104", "km"],
+        ["Distance from Sun", "108.2", "M km"],
+        ["Year", "225", "days"],
+        ["Day", "243", "Earth days"],
+        ["Moons", "0", ""],
+        ["Temperature", "≈ 464", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Venere ruota al contrario rispetto agli altri pianeti: lì il Sole sorge a ovest e tramonta a est.",
+      en: "Venus rotates backwards compared to the other planets: there, the Sun rises in the west and sets in the east.",
+    },
+  },
+  {
+    nome: { it: "Terra", en: "Earth" },
+    tipo: { it: "Pianeta roccioso", en: "Rocky planet" },
+    colore: "#5fa8e8", coloreScuro: "#1f4d8a",
+    raggio: 5.9, orbita: 0.26, periodo: 365.25, fase: 4.4,
+    descrizione: {
+      it: "Il nostro pianeta, l'unico luogo conosciuto nell'universo che ospita la vita. Il 71% della superficie è coperto da oceani d'acqua liquida.",
+      en: "Our planet, the only known place in the universe that hosts life. 71% of its surface is covered by oceans of liquid water.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "12.742", "km"],
+        ["Distanza dal Sole", "149,6", "mln km"],
+        ["Anno", "365,25", "giorni"],
+        ["Giorno", "23,9", "ore"],
+        ["Lune", "1", "(la Luna)"],
+        ["Temperatura media", "+15", "°C"],
+      ],
+      en: [
+        ["Diameter", "12,742", "km"],
+        ["Distance from Sun", "149.6", "M km"],
+        ["Year", "365.25", "days"],
+        ["Day", "23.9", "hours"],
+        ["Moons", "1", "(the Moon)"],
+        ["Avg. temperature", "+15", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "La Terra viaggia intorno al Sole a circa 107.000 km/h — e tu con lei, in questo momento.",
+      en: "Earth travels around the Sun at roughly 107,000 km/h — and so do you, right now.",
+    },
+  },
+  {
+    nome: { it: "Marte", en: "Mars" },
+    tipo: { it: "Pianeta roccioso", en: "Rocky planet" },
+    colore: "#d97a55", coloreScuro: "#8a3c24",
+    raggio: 4.4, orbita: 0.325, periodo: 687, fase: 1.3,
+    descrizione: {
+      it: "Il pianeta rosso, colorato dall'ossido di ferro che ricopre la sua superficie. Ospita il vulcano più alto del sistema solare, l'Olympus Mons, e antichi letti di fiumi ormai asciutti.",
+      en: "The red planet, coloured by the iron oxide coating its surface. It hosts the tallest volcano in the solar system, Olympus Mons, and ancient riverbeds long since dry.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "6.779", "km"],
+        ["Distanza dal Sole", "227,9", "mln km"],
+        ["Anno", "687", "giorni"],
+        ["Giorno", "24,6", "ore"],
+        ["Lune", "2", "Phobos, Deimos"],
+        ["Temperatura media", "−63", "°C"],
+      ],
+      en: [
+        ["Diameter", "6,779", "km"],
+        ["Distance from Sun", "227.9", "M km"],
+        ["Year", "687", "days"],
+        ["Day", "24.6", "hours"],
+        ["Moons", "2", "Phobos, Deimos"],
+        ["Avg. temperature", "−63", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "L'Olympus Mons è alto quasi 22 km: due volte e mezzo l'Everest.",
+      en: "Olympus Mons is nearly 22 km tall: two and a half times Mount Everest.",
+    },
+  },
+  {
+    nome: { it: "Giove", en: "Jupiter" },
+    tipo: { it: "Gigante gassoso", en: "Gas giant" },
+    colore: "#d9a26a", coloreScuro: "#8a5a30",
+    raggio: 14.5, orbita: 0.45, periodo: 4333, fase: 5.5, bande: true,
+    descrizione: {
+      it: "Il gigante del sistema solare: tutti gli altri pianeti messi insieme non raggiungono la sua massa. La Grande Macchia Rossa è una tempesta più grande della Terra che infuria da secoli.",
+      en: "The giant of the solar system: all the other planets combined don't match its mass. The Great Red Spot is a storm larger than Earth that has raged for centuries.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "139.820", "km"],
+        ["Distanza dal Sole", "778,5", "mln km"],
+        ["Anno", "11,9", "anni terr."],
+        ["Giorno", "9,9", "ore"],
+        ["Lune", "115", "riconosciute IAU"],
+        ["Temperatura nubi", "−108", "°C"],
+      ],
+      en: [
+        ["Diameter", "139,820", "km"],
+        ["Distance from Sun", "778.5", "M km"],
+        ["Year", "11.9", "Earth years"],
+        ["Day", "9.9", "hours"],
+        ["Moons", "115", "IAU-recognised"],
+        ["Cloud temperature", "−108", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Giove è così massiccio che il baricentro Sole–Giove cade fuori dalla superficie del Sole.",
+      en: "Jupiter is so massive that the Sun–Jupiter barycentre lies outside the Sun's surface.",
+    },
+  },
+  {
+    nome: { it: "Saturno", en: "Saturn" },
+    tipo: { it: "Gigante gassoso", en: "Gas giant" },
+    colore: "#e6cd8e", coloreScuro: "#9a7e45",
+    raggio: 12.2, orbita: 0.575, periodo: 10759, fase: 0.4, anelli: true,
+    descrizione: {
+      it: "Il signore degli anelli: un sistema spettacolare di ghiaccio e roccia largo 280.000 km ma spesso, in media, solo una decina di metri. È il pianeta meno denso del sistema.",
+      en: "The lord of the rings: a spectacular system of ice and rock 280,000 km wide yet, on average, only about ten metres thick. It is the least dense planet in the system.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "116.460", "km"],
+        ["Distanza dal Sole", "1.434", "mln km"],
+        ["Anno", "29,5", "anni terr."],
+        ["Giorno", "10,7", "ore"],
+        ["Lune", "292", "riconosciute IAU"],
+        ["Temperatura nubi", "−139", "°C"],
+      ],
+      en: [
+        ["Diameter", "116,460", "km"],
+        ["Distance from Sun", "1,434", "M km"],
+        ["Year", "29.5", "Earth years"],
+        ["Day", "10.7", "hours"],
+        ["Moons", "292", "IAU-recognised"],
+        ["Cloud temperature", "−139", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Saturno è meno denso dell'acqua: in un oceano abbastanza grande, galleggerebbe.",
+      en: "Saturn is less dense than water: in a big enough ocean, it would float.",
+    },
+  },
+  {
+    nome: { it: "Urano", en: "Uranus" },
+    tipo: { it: "Gigante ghiacciato", en: "Ice giant" },
+    colore: "#9fdbe0", coloreScuro: "#4a8c93",
+    raggio: 8.4, orbita: 0.72, periodo: 30687, fase: 3.0,
+    descrizione: {
+      it: "Un mondo di ghiacci d'acqua, metano e ammoniaca dal caratteristico color verde-azzurro. Ruota praticamente sdraiato su un fianco, con l'asse inclinato di 98 gradi.",
+      en: "A world of water, methane and ammonia ices with a distinctive blue-green colour. It rotates practically lying on its side, with its axis tilted by 98 degrees.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "50.724", "km"],
+        ["Distanza dal Sole", "2.871", "mln km"],
+        ["Anno", "84", "anni terr."],
+        ["Giorno", "17,2", "ore"],
+        ["Lune", "29", "riconosciute IAU"],
+        ["Temperatura", "−197", "°C"],
+      ],
+      en: [
+        ["Diameter", "50,724", "km"],
+        ["Distance from Sun", "2,871", "M km"],
+        ["Year", "84", "Earth years"],
+        ["Day", "17.2", "hours"],
+        ["Moons", "29", "IAU-recognised"],
+        ["Temperature", "−197", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Per via dell'asse ribaltato, ai poli di Urano il giorno e la notte durano 42 anni ciascuno.",
+      en: "Because of its toppled axis, day and night at Uranus' poles each last 42 years.",
+    },
+  },
+  {
+    nome: { it: "Nettuno", en: "Neptune" },
+    tipo: { it: "Gigante ghiacciato", en: "Ice giant" },
+    colore: "#5d83e0", coloreScuro: "#2a4496",
+    raggio: 8.1, orbita: 0.86, periodo: 60190, fase: 1.9,
+    descrizione: {
+      it: "Il pianeta più lontano dal Sole, scoperto nel 1846 grazie ai calcoli matematici prima ancora di essere osservato. I suoi venti superano i 2.000 km/h: i più veloci del sistema solare.",
+      en: "The farthest planet from the Sun, discovered in 1846 through mathematical calculations before it was ever observed. Its winds exceed 2,000 km/h: the fastest in the solar system.",
+    },
+    dati: {
+      it: [
+        ["Diametro", "49.244", "km"],
+        ["Distanza dal Sole", "4.495", "mln km"],
+        ["Anno", "164,8", "anni terr."],
+        ["Giorno", "16,1", "ore"],
+        ["Lune", "16", "confermate"],
+        ["Temperatura", "−201", "°C"],
+      ],
+      en: [
+        ["Diameter", "49,244", "km"],
+        ["Distance from Sun", "4,495", "M km"],
+        ["Year", "164.8", "Earth years"],
+        ["Day", "16.1", "hours"],
+        ["Moons", "16", "confirmed"],
+        ["Temperature", "−201", "°C"],
+      ],
+    },
+    curiosita: {
+      it: "Da quando è stato scoperto, Nettuno ha completato un solo giro intorno al Sole, nel 2011.",
+      en: "Since its discovery, Neptune has completed just one orbit around the Sun, in 2011.",
+    },
+  },
+];
+
+const PIANETI_NANI = [
+  {
+    nome: { it: "Cerere", en: "Ceres" },
+    tipo: { it: "Pianeta nano · fascia principale", en: "Dwarf planet · main belt" },
+    colore: "#b8aaa0", coloreScuro: "#625750",
+    raggio: 2.4, orbita: 0.39, periodo: 1680, slug: "cerere",
+    elementi: { epoch: 2461200.5, e: 0.0797, ma: 274, n: 0.214, peri: 153.5, I: 10.59, nodo: 80.3 },
+    descrizione: {
+      it: "Cerere è il corpo più grande della fascia degli asteroidi tra Marte e Giove. La missione Dawn ha rivelato una superficie ricca di sali, ghiaccio d'acqua e tracce di attività geologica relativamente recente.",
+      en: "Ceres is the largest body in the asteroid belt between Mars and Jupiter. The Dawn mission revealed a surface rich in salts, water ice and evidence of comparatively recent geological activity.",
+    },
+    dati: {
+      it: [["Diametro", "939", "km"], ["Distanza media", "2,77", "UA"], ["Anno", "1.680", "giorni"], ["Rotazione", "9,1", "ore"], ["Lune", "0", ""], ["Scoperta", "1801", "G. Piazzi"]],
+      en: [["Diameter", "939", "km"], ["Mean distance", "2.77", "AU"], ["Year", "1,680", "days"], ["Rotation", "9.1", "hours"], ["Moons", "0", ""], ["Discovered", "1801", "G. Piazzi"]],
+    },
+    curiosita: { it: "Le macchie luminose del cratere Occator sono depositi salini lasciati da antiche risalite di acqua salata.", en: "The bright spots in Occator crater are salt deposits left by ancient upwellings of briny water." },
+  },
+  {
+    nome: { it: "Plutone", en: "Pluto" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#d7b397", coloreScuro: "#755344",
+    raggio: 3.1, orbita: 0.91, periodo: 90560, slug: "plutone",
+    elementi: { epoch: 2457588.5, e: 0.252, ma: 38.7, n: 0.00396, peri: 224, I: 17.16, nodo: 110.3 },
+    descrizione: {
+      it: "Plutone è un mondo complesso di ghiacci e roccia con montagne, dune, foschie atmosferiche e il vasto ghiacciaio di azoto Sputnik Planitia. Forma con Caronte un sistema quasi binario.",
+      en: "Pluto is a complex world of ice and rock with mountains, dunes, atmospheric haze and the vast nitrogen glacier Sputnik Planitia. Together with Charon it forms an almost binary system.",
+    },
+    dati: {
+      it: [["Diametro", "2.377", "km"], ["Distanza media", "39,6", "UA"], ["Anno", "248", "anni terr."], ["Rotazione", "6,4", "giorni"], ["Lune", "5", ""], ["Sorvolo", "2015", "New Horizons"]],
+      en: [["Diameter", "2,377", "km"], ["Mean distance", "39.6", "AU"], ["Year", "248", "Earth years"], ["Rotation", "6.4", "days"], ["Moons", "5", ""], ["Flyby", "2015", "New Horizons"]],
+    },
+    curiosita: { it: "Il baricentro con Caronte si trova fuori da Plutone: entrambi orbitano attorno a un punto nello spazio.", en: "The barycentre with Charon lies outside Pluto, so both bodies orbit a point in space." },
+  },
+  {
+    nome: { it: "Haumea", en: "Haumea" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#d8e2e5", coloreScuro: "#71838b",
+    raggio: 2.4, orbita: 0.94, periodo: 103000, slug: "haumea",
+    elementi: { epoch: 2461200.5, e: 0.194, ma: 223, n: 0.00349, peri: 240, I: 28.2, nodo: 122 },
+    descrizione: {
+      it: "Haumea ruota così rapidamente da essere allungata come un ellissoide. È circondata da un anello e possiede due lune, Hiʻiaka e Namaka.",
+      en: "Haumea spins so rapidly that it is stretched into an ellipsoid. It has a ring and two moons, Hiʻiaka and Namaka.",
+    },
+    dati: {
+      it: [["Diametro medio", "≈ 1.600", "km"], ["Distanza media", "43,1", "UA"], ["Anno", "≈ 282", "anni"], ["Rotazione", "3,9", "ore"], ["Lune", "2", ""], ["Anello", "sì", ""]],
+      en: [["Mean diameter", "≈ 1,600", "km"], ["Mean distance", "43.1", "AU"], ["Year", "≈ 282", "years"], ["Rotation", "3.9", "hours"], ["Moons", "2", ""], ["Ring", "yes", ""]],
+    },
+    curiosita: { it: "È uno dei corpi di grandi dimensioni che ruotano più velocemente nel Sistema Solare.", en: "It is one of the fastest-spinning large bodies in the Solar System." },
+  },
+  {
+    nome: { it: "Makemake", en: "Makemake" },
+    tipo: { it: "Pianeta nano · fascia di Kuiper", en: "Dwarf planet · Kuiper belt" },
+    colore: "#c8906f", coloreScuro: "#6e4433",
+    raggio: 2.5, orbita: 0.97, periodo: 112000, slug: "makemake",
+    elementi: { epoch: 2461200.5, e: 0.159, ma: 170, n: 0.0032, peri: 295, I: 29, nodo: 79.4 },
+    descrizione: {
+      it: "Makemake è un mondo molto freddo e rossastro della fascia di Kuiper. La sua superficie contiene metano, etano e probabilmente azoto congelati.",
+      en: "Makemake is a very cold, reddish world in the Kuiper belt. Its surface contains frozen methane, ethane and probably nitrogen.",
+    },
+    dati: {
+      it: [["Diametro", "≈ 1.430", "km"], ["Distanza media", "45,6", "UA"], ["Anno", "≈ 306", "anni"], ["Rotazione", "22,8", "ore"], ["Lune", "1", "MK2"], ["Scoperta", "2005", ""]],
+      en: [["Diameter", "≈ 1,430", "km"], ["Mean distance", "45.6", "AU"], ["Year", "≈ 306", "years"], ["Rotation", "22.8", "hours"], ["Moons", "1", "MK2"], ["Discovered", "2005", ""]],
+    },
+    curiosita: { it: "La scoperta della sua piccola luna MK2 ha permesso di migliorare le stime della massa del sistema.", en: "The discovery of its small moon MK2 improved estimates of the system's mass." },
+  },
+  {
+    nome: { it: "Eris", en: "Eris" },
+    tipo: { it: "Pianeta nano · disco diffuso", en: "Dwarf planet · scattered disc" },
+    colore: "#e2e0dc", coloreScuro: "#7b7974",
+    raggio: 2.7, orbita: 1, periodo: 205000, slug: "eris",
+    elementi: { epoch: 2461200.5, e: 0.438, ma: 212, n: 0.00176, peri: 151, I: 44, nodo: 35.9 },
+    descrizione: {
+      it: "Eris è uno dei corpi più massicci oltre Nettuno e percorre un'orbita molto eccentrica e inclinata. La sua scoperta contribuì direttamente alla definizione moderna di pianeta nano.",
+      en: "Eris is one of the most massive bodies beyond Neptune and follows a highly eccentric, inclined orbit. Its discovery directly contributed to the modern definition of a dwarf planet.",
+    },
+    dati: {
+      it: [["Diametro", "2.326", "km"], ["Distanza media", "67,9", "UA"], ["Anno", "≈ 561", "anni"], ["Rotazione", "25,9", "ore"], ["Lune", "1", "Disnomia"], ["Scoperta", "2005", ""]],
+      en: [["Diameter", "2,326", "km"], ["Mean distance", "67.9", "AU"], ["Year", "≈ 561", "years"], ["Rotation", "25.9", "hours"], ["Moons", "1", "Dysnomia"], ["Discovered", "2005", ""]],
+    },
+    curiosita: { it: "Alla massima distanza dal Sole arriva quasi a 98 unità astronomiche.", en: "At aphelion it travels nearly 98 astronomical units from the Sun." },
+  },
+];
+
+const FOTO_CORPI = {
+  mercurio: {
+    src: "https://science.nasa.gov/wp-content/uploads/2023/11/mercury-messenger-globe-pia15162.jpg",
+    fonte: "NASA/JHUAPL/Carnegie · PIA15162",
+    pagina: "https://science.nasa.gov/photojournal/mercury-globe-0n-180e/",
+  },
+  venere: {
+    src: "https://science.nasa.gov/wp-content/uploads/2023/05/688-venus-1200-jpg.webp",
+    fonte: "NASA/JPL-Caltech · PIA23791",
+    pagina: "https://science.nasa.gov/photojournal/venus-from-mariner-10/",
+  },
+  terra: {
+    src: "https://science.nasa.gov/wp-content/uploads/2023/05/earth-1-jpg.webp",
+    fonte: "NASA · Apollo 17 · AS17-148-22727",
+    pagina: "https://images.nasa.gov/details-as17-148-22727",
+  },
+  marte: {
+    src: "https://images-assets.nasa.gov/image/PIA00407/PIA00407~orig.jpg",
+    fonte: "NASA/JPL/USGS · PIA00407",
+    pagina: "https://science.nasa.gov/photojournal/global-color-views-of-mars/",
+  },
+  giove: {
+    src: "https://images-assets.nasa.gov/image/PIA02873/PIA02873~orig.jpg",
+    fonte: "NASA/JPL/Space Science Institute · PIA02873",
+    pagina: "https://photojournal.jpl.nasa.gov/catalog/PIA02873",
+  },
+  saturno: {
+    src: "https://science.nasa.gov/wp-content/uploads/2023/05/saturn-farewell-pia21345-sse-banner-1920x640-1.jpg",
+    fonte: "NASA/JPL-Caltech/Space Science Institute · PIA21345",
+    pagina: "https://science.nasa.gov/photojournal/so-far-from-home/",
+  },
+  urano: {
+    src: "https://images-assets.nasa.gov/image/PIA18182/PIA18182~orig.jpg",
+    fonte: "NASA/JPL-Caltech · PIA18182",
+    pagina: "https://science.nasa.gov/photojournal/uranus-as-seen-by-nasas-voyager-2/",
+  },
+  nettuno: {
+    src: "https://images-assets.nasa.gov/image/PIA01492/PIA01492~orig.jpg",
+    fonte: "NASA/JPL-Caltech · PIA01492",
+    pagina: "https://science.nasa.gov/photojournal/neptune-full-disk-view/",
+  },
+  halley: {
+    src: "https://images-assets.nasa.gov/image/PIA17485/PIA17485~orig.jpg",
+    fonte: "NASA/ESA/Giotto Project · PIA17485",
+    pagina: "https://images.nasa.gov/details-PIA17485",
+  },
+  encke: {
+    src: "https://images-assets.nasa.gov/image/PIA17693/PIA17693~orig.jpg",
+    fonte: "NASA/JHUAPL/Carnegie/SWRI · PIA17693",
+    pagina: "https://images.nasa.gov/details-PIA17693",
+  },
+  "67p": {
+    src: "https://images-assets.nasa.gov/image/PIA21068/PIA21068~orig.jpg",
+    fonte: "ESA/Rosetta/MPS for OSIRIS Team · PIA21068",
+    pagina: "https://photojournal.jpl.nasa.gov/catalog/PIA21068",
+  },
+};
+
+const CONFIG_TEXTURE_PIANETI = {
+  mercurio: { zoom: 1.16 },
+  venere: { zoom: 1.05 },
+  terra: { zoom: 1.24 },
+  marte: { zoom: 1.04 },
+  giove: { zoom: 1.2 },
+  urano: { zoom: 1.18 },
+  nettuno: { zoom: 1.14 },
+};
+const CACHE_TEXTURE_PIANETI = new Map();
+
+const COMETE = [
+  {
+    nome: { it: "Cometa di Halley", en: "Halley's Comet" },
+    slug: "halley",
+    tipo: { it: "Cometa periodica · 1P/Halley", en: "Periodic comet · 1P/Halley" },
+    colore: "#b8f2ff", periodo: 27509, perielio: 0.105, afelio: 0.91,
+    argPerielio: 111.3, inclinazione: 162.3, nodoAscendente: 58.4,
+    ultimoPerielio: "1986-02-09T00:00:00Z",
+    descrizione: {
+      it: "La più celebre cometa periodica, visibile dalla Terra circa ogni 75-76 anni. Il prossimo passaggio al perielio è previsto nel 2061.",
+      en: "The best-known periodic comet, visible from Earth roughly every 75-76 years. Its next perihelion passage is expected in 2061.",
+    },
+    dati: {
+      it: [["Periodo", "≈ 75,3", "anni"], ["Ultimo perielio", "9 feb 1986", ""], ["Prossimo perielio", "28 lug 2061", ""], ["Nucleo", "≈ 15 × 8", "km"]],
+      en: [["Period", "≈ 75.3", "years"], ["Last perihelion", "9 Feb 1986", ""], ["Next perihelion", "28 Jul 2061", ""], ["Nucleus", "≈ 15 × 8", "km"]],
+    },
+    curiosita: { it: "Osservazioni storiche della cometa risalgono almeno al 240 a.C.", en: "Historical observations of the comet date back to at least 240 BCE." },
+  },
+  {
+    nome: { it: "Cometa di Encke", en: "Encke's Comet" },
+    slug: "encke",
+    tipo: { it: "Cometa periodica · 2P/Encke", en: "Periodic comet · 2P/Encke" },
+    colore: "#8ee9d2", periodo: 1203, perielio: 0.09, afelio: 0.49,
+    argPerielio: 186.5, inclinazione: 11.8, nodoAscendente: 334.6,
+    ultimoPerielio: "2023-10-22T00:00:00Z",
+    descrizione: {
+      it: "La cometa periodica con il periodo orbitale più breve tra quelle ben note: ritorna vicino al Sole ogni 3,3 anni.",
+      en: "The well-known periodic comet with the shortest orbital period, returning near the Sun every 3.3 years.",
+    },
+    dati: {
+      it: [["Periodo", "3,30", "anni"], ["Perielio", "0,34", "UA"], ["Afelio", "4,09", "UA"], ["Scoperta", "1786", "P. Méchain"]],
+      en: [["Period", "3.30", "years"], ["Perihelion", "0.34", "AU"], ["Aphelion", "4.09", "AU"], ["Discovered", "1786", "P. Méchain"]],
+    },
+    curiosita: { it: "È associata allo sciame meteorico delle Tauridi.", en: "It is associated with the Taurid meteor shower." },
+  },
+  {
+    nome: { it: "67P/Churyumov-Gerasimenko", en: "67P/Churyumov-Gerasimenko" },
+    slug: "67p",
+    tipo: { it: "Cometa periodica · famiglia di Giove", en: "Periodic comet · Jupiter family" },
+    colore: "#d8ecff", periodo: 2352, perielio: 0.15, afelio: 0.65,
+    argPerielio: 12.8, inclinazione: 3.9, nodoAscendente: 50.2,
+    ultimoPerielio: "2021-11-02T00:00:00Z",
+    descrizione: {
+      it: "La cometa studiata da vicino dalla missione Rosetta dell'ESA, che nel 2014 vi depositò il lander Philae.",
+      en: "The comet explored up close by ESA's Rosetta mission, which deployed the Philae lander in 2014.",
+    },
+    dati: {
+      it: [["Periodo", "6,44", "anni"], ["Perielio", "1,21", "UA"], ["Afelio", "5,68", "UA"], ["Nucleo", "≈ 4,3", "km"]],
+      en: [["Period", "6.44", "years"], ["Perihelion", "1.21", "AU"], ["Aphelion", "5.68", "AU"], ["Nucleus", "≈ 4.3", "km"]],
+    },
+    curiosita: { it: "Il suo nucleo bilobato ricorda due corpi uniti da un collo stretto.", en: "Its bilobed nucleus resembles two bodies joined by a narrow neck." },
+  },
+];
+
+const DETTAGLI_CORPI = {
+  Sole: {
+    it: [
+      "Ogni secondo converte circa 600 milioni di tonnellate di idrogeno in elio; una piccola parte della massa diventa energia.",
+      "La luce impiega circa 8 minuti e 20 secondi per raggiungere la Terra.",
+      "Il campo magnetico solare segue un ciclo di circa 11 anni, con macchie, brillamenti ed espulsioni di plasma.",
+    ],
+    en: [
+      "Every second it converts roughly 600 million tonnes of hydrogen into helium; a small fraction of that mass becomes energy.",
+      "Sunlight takes about 8 minutes and 20 seconds to reach Earth.",
+      "Its magnetic activity follows an approximately 11-year cycle of sunspots, flares and plasma eruptions.",
+    ],
+  },
+  Mercurio: {
+    it: [
+      "Il suo nucleo metallico occupa gran parte del pianeta e genera ancora un debole campo magnetico.",
+      "Nelle zone permanentemente in ombra dei crateri polari esistono depositi di ghiaccio d'acqua.",
+      "La risonanza spin-orbita 3:2 gli fa compiere tre rotazioni ogni due rivoluzioni intorno al Sole.",
+    ],
+    en: [
+      "Its metallic core fills much of the planet and still produces a weak magnetic field.",
+      "Permanently shadowed polar craters contain deposits of water ice.",
+      "A 3:2 spin-orbit resonance makes it rotate three times for every two trips around the Sun.",
+    ],
+  },
+  Venere: {
+    it: [
+      "La pressione al suolo è circa 92 volte quella terrestre, simile a quella a quasi un chilometro sotto il mare.",
+      "Le nubi riflettono molta luce, ma l'atmosfera di anidride carbonica intrappola il calore con estrema efficacia.",
+      "Un giorno siderale venusiano dura più del suo anno e la rotazione è retrograda.",
+    ],
+    en: [
+      "Surface pressure is about 92 times Earth's, comparable to the pressure nearly one kilometre beneath the ocean.",
+      "Its clouds reflect abundant sunlight, while the carbon-dioxide atmosphere traps heat extremely efficiently.",
+      "A Venusian sidereal day is longer than its year, and the planet rotates backwards.",
+    ],
+  },
+  Terra: {
+    it: [
+      "La tettonica a placche ricicla la crosta e partecipa al ciclo del carbonio che stabilizza il clima su tempi geologici.",
+      "Il nucleo esterno liquido alimenta il campo magnetico che devia gran parte del vento solare.",
+      "È l'unico mondo noto con oceani superficiali stabili e una biosfera globale.",
+    ],
+    en: [
+      "Plate tectonics recycles the crust and supports the carbon cycle that stabilises climate over geological time.",
+      "Its liquid outer core powers a magnetic field that deflects much of the solar wind.",
+      "It is the only known world with stable surface oceans and a global biosphere.",
+    ],
+  },
+  Marte: {
+    it: [
+      "Valles Marineris è un sistema di canyon lungo oltre 4.000 km.",
+      "Il pianeta conserva calotte polari di ghiaccio d'acqua e anidride carbonica, oltre a molto ghiaccio nel sottosuolo.",
+      "Meteoriti marziani arrivati sulla Terra permettono di studiarne le rocce anche senza una missione di ritorno campioni.",
+    ],
+    en: [
+      "Valles Marineris is a canyon system more than 4,000 km long.",
+      "Mars retains polar caps of water and carbon-dioxide ice, plus extensive underground ice.",
+      "Martian meteorites found on Earth let scientists study its rocks without a sample-return mission.",
+    ],
+  },
+  Giove: {
+    it: [
+      "Ruota in meno di dieci ore: questa velocità lo schiaccia ai poli e alimenta potenti correnti atmosferiche.",
+      "Il suo campo magnetico crea la magnetosfera planetaria più grande del Sistema Solare.",
+      "Le lune galileiane Io, Europa e Ganimede sono legate da una risonanza 4:2:1 che produce intenso riscaldamento mareale.",
+    ],
+    en: [
+      "It rotates in under ten hours, flattening the planet at the poles and driving powerful atmospheric jets.",
+      "Its magnetic field creates the largest planetary magnetosphere in the Solar System.",
+      "Io, Europa and Ganymede share a 4:2:1 resonance that drives intense tidal heating.",
+    ],
+  },
+  Saturno: {
+    it: [
+      "Gli anelli sono composti soprattutto da ghiaccio d'acqua, con frammenti che vanno da polvere a blocchi grandi come edifici.",
+      "Le lune pastore modellano bordi, onde e divisioni negli anelli attraverso risonanze gravitazionali.",
+      "Al polo nord è presente una corrente atmosferica dalla sorprendente forma esagonale.",
+    ],
+    en: [
+      "Its rings consist mainly of water ice, with pieces ranging from dust grains to building-sized blocks.",
+      "Shepherd moons shape ring edges, waves and gaps through gravitational resonances.",
+      "A remarkable hexagon-shaped atmospheric current surrounds the north pole.",
+    ],
+  },
+  Urano: {
+    it: [
+      "L'inclinazione di circa 98 gradi produce stagioni estreme che durano decenni.",
+      "Il colore deriva dal metano atmosferico, che assorbe soprattutto la luce rossa.",
+      "Possiede anelli scuri e stretti, scoperti nel 1977 osservando l'occultazione di una stella.",
+    ],
+    en: [
+      "Its roughly 98-degree axial tilt produces extreme seasons lasting decades.",
+      "Its colour comes from atmospheric methane, which preferentially absorbs red light.",
+      "It has narrow, dark rings discovered in 1977 during a stellar occultation.",
+    ],
+  },
+  Nettuno: {
+    it: [
+      "I venti possono superare 2.000 km/h nonostante il pianeta riceva pochissima energia solare.",
+      "Emette più calore di quanto ne riceva dal Sole, segno di una sorgente energetica interna.",
+      "La cattura di Tritone potrebbe avere sconvolto un antico sistema di satelliti regolari.",
+    ],
+    en: [
+      "Winds can exceed 2,000 km/h even though the planet receives very little sunlight.",
+      "It radiates more heat than it receives from the Sun, revealing a substantial internal energy source.",
+      "The capture of Triton may have disrupted an earlier system of regular moons.",
+    ],
+  },
+  Luna: {
+    it: [
+      "La superficie conserva una cronologia di impatti che sulla Terra è stata cancellata da erosione e tettonica.",
+      "Il lato nascosto ha una crosta mediamente più spessa e molti meno mari basaltici del lato rivolto verso la Terra.",
+      "Ghiaccio d'acqua è stato rilevato nelle regioni polari permanentemente in ombra.",
+    ],
+    en: [
+      "Its surface preserves an impact history erased on Earth by erosion and plate tectonics.",
+      "The far side has a thicker average crust and far fewer basaltic maria than the Earth-facing side.",
+      "Water ice has been detected in permanently shadowed polar regions.",
+    ],
+  },
+  Io: {
+    it: ["Ospita centinaia di vulcani attivi.", "I pennacchi possono salire per centinaia di chilometri.", "Lo zolfo produce i suoi colori gialli, rossi e neri."],
+    en: ["It hosts hundreds of active volcanoes.", "Its plumes can rise hundreds of kilometres.", "Sulphur compounds create its yellow, red and black colours."],
+  },
+  Europa: {
+    it: ["L'oceano globale potrebbe contenere più acqua di tutti gli oceani terrestri.", "La superficie giovane è attraversata da fratture e pochissimi crateri.", "Europa Clipper studierà abitabilità, ghiaccio e composizione."],
+    en: ["Its global ocean may contain more water than all Earth's oceans.", "Its young surface has many fractures and few craters.", "Europa Clipper will investigate its habitability, ice shell and composition."],
+  },
+  Ganimede: {
+    it: ["È più grande di Mercurio.", "Possiede un campo magnetico intrinseco.", "Il suo oceano potrebbe essere disposto in strati alternati di acqua e ghiacci ad alta pressione."],
+    en: ["It is larger than Mercury.", "It has an intrinsic magnetic field.", "Its ocean may form alternating layers of liquid water and high-pressure ice."],
+  },
+  Callisto: {
+    it: ["È il mondo più densamente craterizzato tra i grandi satelliti.", "Potrebbe nascondere un oceano salato.", "La sua superficie è molto antica e geologicamente poco rielaborata."],
+    en: ["It is the most densely cratered of the large moons.", "It may conceal a salty ocean.", "Its surface is ancient and has undergone little geological reworking."],
+  },
+  Encelado: {
+    it: ["I geyser alimentano l'anello E di Saturno.", "Nel pennacchio sono stati rilevati sali, composti organici e fosfati.", "Il fondale oceanico potrebbe ospitare attività idrotermale."],
+    en: ["Its geysers feed Saturn's E ring.", "Salts, organic compounds and phosphates have been detected in the plume.", "Its ocean floor may host hydrothermal activity."],
+  },
+  Titano: {
+    it: ["Ha un ciclo meteorologico del metano con nubi, piogge, fiumi e laghi.", "Sotto la crosta si trova probabilmente un oceano d'acqua.", "La missione Dragonfly esplorerà la chimica organica della superficie."],
+    en: ["It has a methane weather cycle with clouds, rain, rivers and lakes.", "A water ocean probably lies beneath its crust.", "The Dragonfly mission will explore its surface organic chemistry."],
+  },
+  Tritone: {
+    it: ["Voyager 2 osservò geyser scuri di azoto.", "La sua orbita retrograda indica una probabile cattura dalla fascia di Kuiper.", "Sta lentamente spiraleggiando verso Nettuno e in un futuro remoto potrebbe disgregarsi."],
+    en: ["Voyager 2 observed dark nitrogen geysers.", "Its retrograde orbit points to capture from the Kuiper belt.", "It is slowly spiralling inward and may eventually break apart."],
+  },
+  Phobos: {
+    it: ["Orbita più velocemente di quanto Marte ruoti.", "Si avvicina al pianeta di circa due centimetri l'anno.", "Il grande cratere Stickney occupa una parte notevole della sua superficie."],
+    en: ["It orbits faster than Mars rotates.", "It moves roughly two centimetres closer to Mars each year.", "The large Stickney crater dominates much of its surface."],
+  },
+  Deimos: {
+    it: ["La regolite rende più morbidi i contorni dei suoi crateri.", "Si allontana lentamente da Marte.", "La sua forma irregolare misura appena una quindicina di chilometri."],
+    en: ["Loose regolith softens the outlines of its craters.", "It is slowly moving away from Mars.", "Its irregular body is only about fifteen kilometres across."],
+  },
+  Rea: {
+    it: ["È composta soprattutto da ghiaccio d'acqua e roccia.", "La sua superficie mostra terreni luminosi fratturati.", "Una tenue atmosfera di ossigeno e anidride carbonica è stata rilevata dalla missione Cassini."],
+    en: ["It consists mainly of water ice and rock.", "Its surface includes bright fractured terrain.", "Cassini detected an extremely tenuous oxygen and carbon-dioxide atmosphere."],
+  },
+  Giapeto: {
+    it: ["La cresta equatoriale raggiunge altezze di circa 20 km.", "La dicotomia di colore dipende anche dalla migrazione termica del ghiaccio.", "La sua orbita lontana offre una vista privilegiata degli anelli di Saturno."],
+    en: ["Its equatorial ridge reaches heights of roughly 20 km.", "Its colour dichotomy is reinforced by thermal migration of surface ice.", "Its distant orbit provides a broad view of Saturn's rings."],
+  },
+  Miranda: {
+    it: ["Verona Rupes è una delle scarpate più alte note nel Sistema Solare.", "Le grandi coronae suggeriscono una complessa attività interna passata.", "La superficie sembra assemblata da terreni di età e origine diverse."],
+    en: ["Verona Rupes is among the tallest known cliffs in the Solar System.", "Its large coronae suggest complex past internal activity.", "Its surface looks assembled from terrains of different ages and origins."],
+  },
+  Ariel: {
+    it: ["È la più riflettente delle grandi lune di Urano.", "Canyon e pianure lisce indicano attività geologica relativamente recente.", "Potrebbe conservare un oceano profondo sotto la crosta."],
+    en: ["It is the most reflective of Uranus's major moons.", "Canyons and smooth plains point to comparatively recent geological activity.", "It may retain a deep ocean beneath its crust."],
+  },
+  Titania: {
+    it: ["È la più grande luna di Urano.", "Enormi sistemi di faglie testimoniano l'espansione del suo interno.", "Modelli termici consentono la possibile presenza di un oceano residuo."],
+    en: ["It is Uranus's largest moon.", "Enormous fault systems record expansion of its interior.", "Thermal models allow for a possible residual ocean."],
+  },
+  Oberon: {
+    it: ["È la più esterna delle cinque grandi lune di Urano.", "Materiale scuro ricopre il fondo di alcuni crateri.", "La superficie antica registra una lunga storia di impatti."],
+    en: ["It is the outermost of Uranus's five major moons.", "Dark material covers the floors of some craters.", "Its ancient surface records a long history of impacts."],
+  },
+  Proteo: {
+    it: ["È uno dei più grandi corpi non sferici del Sistema Solare.", "Il cratere Pharos misura oltre metà del diametro della luna.", "Fu scoperto nelle immagini di Voyager 2 nel 1989."],
+    en: ["It is one of the largest non-spherical bodies in the Solar System.", "Pharos crater spans more than half the moon's diameter.", "It was discovered in Voyager 2 images in 1989."],
+  },
+};
+
+/* ============================================================
+   LUNE DEI PIANETI / PLANETARY MOONS
+   ============================================================ */
+function creaLuna(o) {
+  return {
+    nome: { it: o.it, en: o.en || o.it },
+    colore: o.c, coloreScuro: o.cs,
+    raggio: o.r, periodo: o.per, retro: !!o.retro,
+    descrizione: o.descr,
+    dati: {
+      it: [
+        ["Diametro", o.diam[0], "km"],
+        ["Distanza dal pianeta", o.dist[0], "km"],
+        ["Orbita", o.orb[0], o.orb[2]],
+      ],
+      en: [
+        ["Diameter", o.diam[1], "km"],
+        ["Distance from planet", o.dist[1], "km"],
+        ["Orbit", o.orb[1], o.orb[3]],
+      ],
+    },
+    curiosita: o.curiosita || null,
+    sempre: !!o.sempre,
+    principale: o.principale !== false,
+  };
+}
+
+// Terra
+PIANETI[2].lune = [{
+  nome: { it: "Luna", en: "Moon" },
+  colore: "#cdccd4", coloreScuro: "#71707e",
+  raggio: 1.8, periodo: 27.32, fase: 2.6, sempre: true,
+  principale: true,
+  descrizione: {
+    it: "L'unico satellite naturale della Terra e l'unico altro corpo celeste mai visitato dall'essere umano. La sua attrazione gravitazionale genera le maree e stabilizza l'asse terrestre.",
+    en: "Earth's only natural satellite and the only other celestial body ever visited by humans. Its gravitational pull drives the tides and stabilises Earth's axis.",
+  },
+  dati: {
+    it: [
+      ["Diametro", "3.474", "km"],
+      ["Distanza dal pianeta", "384.400", "km"],
+      ["Orbita", "27,3", "giorni"],
+      ["Giorno", "29,5", "giorni terr."],
+      ["Gravità", "1/6", "di quella terrestre"],
+      ["Temperatura", "−173 / +127", "°C"],
+    ],
+    en: [
+      ["Diameter", "3,474", "km"],
+      ["Distance from planet", "384,400", "km"],
+      ["Orbit", "27.3", "days"],
+      ["Day", "29.5", "Earth days"],
+      ["Gravity", "1/6", "of Earth's"],
+      ["Temperature", "−173 / +127", "°C"],
+    ],
+  },
+  curiosita: {
+    it: "La Luna mostra sempre la stessa faccia alla Terra e si allontana da noi di circa 3,8 cm ogni anno.",
+    en: "The Moon always shows the same face to Earth and drifts about 3.8 cm farther from us every year.",
+  },
+}];
+
+// Marte
+PIANETI[3].lune = [
+  creaLuna({ it: "Phobos", c: "#9b8a7a", cs: "#5a4d42", r: 1.0, per: 0.319,
+    diam: ["≈ 22,5", "≈ 22.5"], dist: ["9.376", "9,376"], orb: ["7,7", "7.7", "ore", "hours"],
+    descr: {
+      it: "La più grande e vicina delle due lune di Marte: orbita così bassa che un giorno si schianterà sul pianeta o si sbriciolerà in un anello.",
+      en: "The larger and closer of Mars' two moons: it orbits so low that one day it will crash into the planet or crumble into a ring.",
+    } }),
+  creaLuna({ it: "Deimos", c: "#a89a88", cs: "#635849", r: 0.9, per: 1.263,
+    diam: ["≈ 12,4", "≈ 12.4"], dist: ["23.463", "23,463"], orb: ["30,3", "30.3", "ore", "hours"],
+    descr: {
+      it: "Piccola, lontana e ricoperta di polvere: dal suolo marziano appare poco più di una stella luminosa.",
+      en: "Small, distant and covered in dust: from the Martian surface it looks like little more than a bright star.",
+    } }),
+];
+
+// Giove
+PIANETI[4].lune = [
+  creaLuna({ it: "Io", c: "#e3c95f", cs: "#9a7a2a", r: 1.7, per: 1.769,
+    diam: ["3.643", "3,643"], dist: ["421.700", "421,700"], orb: ["1,8", "1.8", "giorni", "days"],
+    descr: {
+      it: "Il corpo più vulcanicamente attivo del sistema solare, impastato senza sosta dalle maree gravitazionali di Giove.",
+      en: "The most volcanically active body in the solar system, relentlessly kneaded by Jupiter's gravitational tides.",
+    } }),
+  creaLuna({ it: "Europa", c: "#d8cfc0", cs: "#7a6f5a", r: 1.5, per: 3.551,
+    diam: ["3.122", "3,122"], dist: ["671.100", "671,100"], orb: ["3,6", "3.6", "giorni", "days"],
+    descr: {
+      it: "Sotto la sua crosta di ghiaccio si nasconde un oceano d'acqua liquida: uno dei luoghi più promettenti dove cercare la vita.",
+      en: "Beneath its icy crust hides an ocean of liquid water: one of the most promising places to look for life.",
+    } }),
+  creaLuna({ it: "Ganimede", en: "Ganymede", c: "#b3a89a", cs: "#6b6052", r: 2.0, per: 7.155,
+    diam: ["5.268", "5,268"], dist: ["1.070.400", "1,070,400"], orb: ["7,2", "7.2", "giorni", "days"],
+    descr: {
+      it: "La luna più grande del sistema solare, più grande perfino di Mercurio, e l'unica con un proprio campo magnetico.",
+      en: "The largest moon in the solar system, bigger even than Mercury, and the only one with its own magnetic field.",
+    } }),
+  creaLuna({ it: "Callisto", c: "#8a7d70", cs: "#4d443c", r: 1.9, per: 16.689,
+    diam: ["4.821", "4,821"], dist: ["1.882.700", "1,882,700"], orb: ["16,7", "16.7", "giorni", "days"],
+    descr: {
+      it: "Uno dei corpi più craterizzati del sistema solare: una superficie antichissima, quasi immutata da miliardi di anni.",
+      en: "One of the most heavily cratered bodies in the solar system: an ancient surface nearly unchanged for billions of years.",
+    } }),
+];
+
+// Saturno
+PIANETI[5].lune = [
+  creaLuna({ it: "Encelado", en: "Enceladus", c: "#e8eef2", cs: "#8a9aa6", r: 1.2, per: 1.370,
+    diam: ["504", "504"], dist: ["238.000", "238,000"], orb: ["1,4", "1.4", "giorni", "days"],
+    descr: {
+      it: "Piccola e bianchissima, spara nello spazio geyser d'acqua provenienti dal suo oceano sotterraneo.",
+      en: "Tiny and brilliantly white, it shoots geysers of water from its underground ocean into space.",
+    } }),
+  creaLuna({ it: "Rea", en: "Rhea", c: "#c9c5bd", cs: "#76726a", r: 1.5, per: 4.518,
+    diam: ["1.527", "1,527"], dist: ["527.100", "527,100"], orb: ["4,5", "4.5", "giorni", "days"],
+    descr: {
+      it: "La seconda luna di Saturno per dimensioni: un mondo di ghiaccio e roccia butterato di crateri.",
+      en: "Saturn's second-largest moon: a world of ice and rock pockmarked with craters.",
+    } }),
+  creaLuna({ it: "Titano", en: "Titan", c: "#d9a85f", cs: "#8a6230", r: 2.1, per: 15.945,
+    diam: ["5.150", "5,150"], dist: ["1.221.900", "1,221,900"], orb: ["15,9", "15.9", "giorni", "days"],
+    descr: {
+      it: "L'unica luna con un'atmosfera densa: ha laghi e fiumi di metano liquido e una chimica simile a quella della Terra primordiale.",
+      en: "The only moon with a dense atmosphere: it has lakes and rivers of liquid methane and a chemistry similar to early Earth's.",
+    } }),
+  creaLuna({ it: "Giapeto", en: "Iapetus", c: "#b5a890", cs: "#57503f", r: 1.4, per: 79.32,
+    diam: ["1.469", "1,469"], dist: ["3.560.800", "3,560,800"], orb: ["79,3", "79.3", "giorni", "days"],
+    descr: {
+      it: "La luna bicolore: un emisfero scuro come il carbone, l'altro brillante come la neve.",
+      en: "The two-toned moon: one hemisphere as dark as coal, the other as bright as snow.",
+    } }),
+];
+
+// Urano
+PIANETI[6].lune = [
+  creaLuna({ it: "Miranda", c: "#bcc4c9", cs: "#6a7479", r: 1.1, per: 1.413,
+    diam: ["472", "472"], dist: ["129.900", "129,900"], orb: ["1,4", "1.4", "giorni", "days"],
+    descr: {
+      it: "Un mosaico di terreni fratturati con scogliere alte fino a 20 km: forse in passato si è rotta e riassemblata.",
+      en: "A mosaic of fractured terrain with cliffs up to 20 km tall: it may have broken apart and reassembled in the past.",
+    } }),
+  creaLuna({ it: "Ariel", c: "#c8cdd3", cs: "#737a82", r: 1.4, per: 2.520,
+    diam: ["1.158", "1,158"], dist: ["190.900", "190,900"], orb: ["2,5", "2.5", "giorni", "days"],
+    descr: {
+      it: "La più luminosa delle lune di Urano, segnata da profonde valli e canyon.",
+      en: "The brightest of Uranus' moons, marked by deep valleys and canyons.",
+    } }),
+  creaLuna({ it: "Titania", c: "#b9b2ac", cs: "#6a635c", r: 1.6, per: 8.706,
+    diam: ["1.578", "1,578"], dist: ["435.900", "435,900"], orb: ["8,7", "8.7", "giorni", "days"],
+    descr: {
+      it: "La luna più grande di Urano, attraversata da enormi faglie sulla superficie ghiacciata.",
+      en: "Uranus' largest moon, crossed by enormous faults on its icy surface.",
+    } }),
+  creaLuna({ it: "Oberon", c: "#a89e96", cs: "#5c544d", r: 1.5, per: 13.46,
+    diam: ["1.523", "1,523"], dist: ["583.500", "583,500"], orb: ["13,5", "13.5", "giorni", "days"],
+    descr: {
+      it: "La più esterna delle grandi lune di Urano, antica e ricoperta di crateri.",
+      en: "The outermost of Uranus' major moons, ancient and covered in craters.",
+    } }),
+];
+
+// Nettuno
+PIANETI[7].lune = [
+  creaLuna({ it: "Proteo", en: "Proteus", c: "#8d8378", cs: "#4c453d", r: 1.2, per: 1.122,
+    diam: ["≈ 420", "≈ 420"], dist: ["117.600", "117,600"], orb: ["1,1", "1.1", "giorni", "days"],
+    descr: {
+      it: "Irregolare e scurissimo, è al limite della massa oltre la quale un corpo celeste diventa sferico.",
+      en: "Irregular and very dark, it sits at the mass limit beyond which a celestial body becomes spherical.",
+    } }),
+  creaLuna({ it: "Tritone", en: "Triton", c: "#d3c8d8", cs: "#7a6f85", r: 1.8, per: 5.877, retro: true,
+    diam: ["2.707", "2,707"], dist: ["354.800", "354,800"], orb: ["5,9", "5.9", "giorni (retrograda)", "days (retrograde)"],
+    descr: {
+      it: "Orbita al contrario rispetto alla rotazione di Nettuno: probabilmente è un oggetto della fascia di Kuiper catturato dal pianeta.",
+      en: "It orbits backwards relative to Neptune's rotation: it is probably a Kuiper belt object captured by the planet.",
+    } }),
+];
+
+/* Catalogo completo delle lune riconosciute dalla IAU, dati orbitali JPL 2026.
+   Formato: nome~anno scoperta~semiasse maggiore km~periodo giorni~retrograda */
+const CATALOGO_LUNE_JPL = {
+  jupiter: [
+    "Io~1610~421800.~1.762732~0",
+    "Europa~1610~671100.~3.525463~0",
+    "Ganymede~1610~1070400.~7.155588~0",
+    "Callisto~1610~1882700.~16.690440~0",
+    "Amalthea~1892~181400.~0.499918~0",
+    "Himalia~1904~11439000.~249.9090~0",
+    "Elara~1905~11710700.~258.8861~0",
+    "Pasiphae~1908~23463200.~734.4215~1",
+    "Sinope~1914~23679300.~744.5951~1",
+    "Lysithea~1938~11699100.~258.5035~0",
+    "Carme~1938~23139200.~719.2806~1",
+    "Ananke~1951~21029500.~623.1097~1",
+    "Leda~1974~11145200.~240.3264~0",
+    "Thebe~1979~221900.~0.676105~0",
+    "Adrastea~1979~129000.~0.298260~0",
+    "Metis~1979~128000.~0.294779~0",
+    "Callirrhoe~1999~23789400.~749.7910~1",
+    "Themisto~1975, 2000~7397000.~129.9681~0",
+    "Megaclite~2000~~~",
+    "Taygete~2000~23103400.~717.5917~1",
+    "Chaldene~2000~22926300.~709.3625~1",
+    "Harpalyke~2000~20887500.~616.7833~1",
+    "Kalyke~2000~23298000.~726.7007~1",
+    "Iocaste~2000~21062300.~624.5479~1",
+    "Erinome~2000~23027200.~714.0542~1",
+    "Isonoe~2000~22976300.~711.6604~1",
+    "Praxidike~2000~20931100.~618.7229~1",
+    "Autonoe~2001~23785200.~749.6097~1",
+    "Thyone~2001~20972700.~620.5875~1",
+    "Hermippe~2001~21103600.~626.3799~1",
+    "Aitne~2001~23059400.~715.5396~1",
+    "Eurydome~2001~22894500.~707.8569~1",
+    "Euanthe~2001~20822900.~613.9278~1",
+    "Euporie~2001~19261900.~546.1778~1",
+    "Orthosie~2001~20897800.~617.2347~1",
+    "Sponde~2001~23538700.~737.9542~1",
+    "Kale~2001~23047800.~715.0160~1",
+    "Pasithee~2001~22840800.~705.4090~1",
+    "Hegemone~2003~23342600.~728.7743~1",
+    "Mneme~2003~20815800.~613.6104~1",
+    "Aoede~2003~23773100.~749.0708~1",
+    "Thelxinoe~2003~20972300.~620.5458~1",
+    "Arche~2002~23093200.~717.1056~1",
+    "Kallichore~2003~23017100.~713.5931~1",
+    "Helike~2003~20911400.~617.8625~1",
+    "Carpo~2003~17039500.~454.4000~0",
+    "Eukelade~2003~23062400.~715.6868~1",
+    "Cyllene~2003~23650000.~743.2062~1",
+    "Kore~2003~24203300.~769.4229~1",
+    "Herse~2003~23146700.~719.6264~1",
+    "S/2010 J1~2010~~~",
+    "S/2010 J2~2010~~~",
+    "Dia~2000~12257900.~277.2472~0",
+    "S/2016 J1~2016~~~",
+    "S/2003 J18~2003~~~",
+    "S/2011 J2~2011~~~",
+    "Eirene~2003~23051300.~715.1910~1",
+    "Philophrosyne~2003~~~",
+    "S/2017 J1~2017~~~",
+    "Eupheme~2003~20763400.~611.3160~1",
+    "S/2003 J19~2003~~~",
+    "Valetudo~2016~18690100.~522.0743~0",
+    "S/2017 J2~2017~~~",
+    "S/2017 J3~2017~~~",
+    "Pandia~2017~11479600.~251.2319~0",
+    "S/2017 J5~2017~~~",
+    "S/2017 J6~2017~~~",
+    "S/2017 J7~2017~~~",
+    "S/2017 J8~2017~~~",
+    "S/2017 J9~2017~~~",
+    "Ersa~2018~11399400.~248.6153~0",
+    "S/2011 J1~2011~~~",
+    "S/2003 J2~2003~~~",
+    "S/2003 J4~2003~~~",
+    "S/2003 J9~2003~~~",
+    "S/2003 J10~2003~~~",
+    "S/2003 J12~2003~~~",
+    "S/2003 J16~2003~~~",
+    "S/2003 J23~2003~~~",
+    "S/2003 J24~2003~~~",
+    "S/2010 J3~2010~~~",
+    "S/2010 J4~2010~~~",
+    "S/2010 J5~2010~~~",
+    "S/2010 J6~2010~~~",
+    "S/2011 J3~2011~~~",
+    "S/2011 J4~2011~~~",
+    "S/2011 J5~2011~~~",
+    "S/2011 J6~2011~~~",
+    "S/2016 J3~2016~~~",
+    "S/2016 J4~2016~~~",
+    "S/2017 J10~2017~~~",
+    "S/2017 J11~2017~~~",
+    "S/2017 J12~2017~~~",
+    "S/2017 J13~2017~~~",
+    "S/2017 J14~2017~~~",
+    "S/2017 J15~2017~~~",
+    "S/2017 J16~2017~~~",
+    "S/2017 J17~2017~~~",
+    "S/2017 J18~2017~~~",
+    "S/2018 J2~2018~~~",
+    "S/2018 J3~2018~~~",
+    "S/2018 J4~2018~~~",
+    "S/2018 J5~2018~~~",
+    "S/2021 J1~2021~~~",
+    "S/2021 J2~2021~~~",
+    "S/2021 J3~2021~~~",
+    "S/2021 J4~2021~~~",
+    "S/2021 J5~2021~~~",
+    "S/2021 J6~2021~~~",
+    "S/2021 J7~2021~~~",
+    "S/2021 J8~2021~~~",
+    "S/2022 J1~2022~~~",
+    "S/2022 J2~2022~~~",
+    "S/2022 J3~2022~~~",
+    "S/2024 J1~2024~~~",
+  ].join("|"),
+  saturn: [
+    "Mimas~1789~186000.~0.942422~0",
+    "Enceladus~1789~238400.~1.370218~0",
+    "Tethys~1684~295000.~1.887802~0",
+    "Dione~1684~377700.~2.736916~0",
+    "Rhea~1672~527200.~4.517503~0",
+    "Titan~1655~1221900.~15.945448~0",
+    "Hyperion~1848~1481500.~21.276658~0",
+    "Iapetus~1671~3561700.~79.331002~0",
+    "Phoebe~1898~12929400.~550.303910~1",
+    "Janus~1966, 1980~151500.~0.697353~0",
+    "Epimetheus~1977, 1980~151400.~0.697012~0",
+    "Helene~1980~377600.~2.736916~0",
+    "Telesto~1980~295000.~1.887802~0",
+    "Calypso~1980~295000.~1.887803~0",
+    "Atlas~1980~137700.~0.604602~0",
+    "Prometheus~1980~139400.~0.615878~0",
+    "Pandora~1980~141700.~0.631369~0",
+    "Pan~1990~133600.~0.575051~0",
+    "Ymir~2000~22955600.~1298.6819~1",
+    "Paaliaq~2000~14997700.~685.7153~0",
+    "Tarvos~2000~18216600.~917.9840~0",
+    "Ijiraq~2000~11344700.~451.1201~0",
+    "Suttungr~2000~19391900.~1008.2451~1",
+    "Kiviuq~2000~11307400.~448.9076~0",
+    "Mundilfari~2000~18588200.~946.2903~1",
+    "Albiorix~2000~16329200.~779.0701~0",
+    "Skathi~2000~15575400.~725.7313~1",
+    "Erriapus~2000~17506900.~864.9236~0",
+    "Siarnaq~2000~17881100.~892.6799~0",
+    "Thrymr~2000~20330500.~1082.2292~1",
+    "Narvi~2003~19285000.~999.9417~1",
+    "Methone~2004~194700.~1.009549~0",
+    "Pallene~2004~212300.~1.156059~0",
+    "Polydeuces~2004~377600.~2.736916~0",
+    "Daphnis~2005~136500.~0.594080~0",
+    "Aegir~2004~20664400.~1109.1278~1",
+    "Bebhionn~2004~17027300.~829.6437~0",
+    "Bergelmir~2004~19268100.~998.6187~1",
+    "Bestla~2004~20337800.~1082.9444~1",
+    "Farbauti~2004~20290700.~1079.1243~1",
+    "Fenrir~2004~22330800.~1245.9215~1",
+    "Fornjot~2004~24936800.~1470.3618~1",
+    "Hati~2004~19695000.~1032.0236~1",
+    "Hyrrokkin~2004~18340900.~927.4569~1",
+    "Kari~2006~22032100.~1220.9757~1",
+    "Loge~2006~22919200.~1295.5243~1",
+    "Skoll~2006~17623400.~873.5736~1",
+    "Surtur~2006~22748000.~1281.1396~1",
+    "Anthe~2007~198100.~1.038898~0",
+    "Jarnsaxa~2006~19273500.~999.1271~1",
+    "Greip~2006~18380000.~930.4389~1",
+    "Tarqeq~2007~17751000.~882.8514~0",
+    "Aegaeon~2008~167500.~0.808115~0",
+    "Gridr~2004~19250600.~997.3319~1",
+    "Angrboda~2004~20591500.~1103.1986~1",
+    "Skrymir~2004~21447400.~1172.7215~1",
+    "Gerd~2004~20947500.~1131.9062~1",
+    "S/2004 S26~2004~~~",
+    "Eggther~2004~19844600.~1043.8035~1",
+    "S/2004 S29~2004~~~",
+    "Beli~2004~20703700.~1112.2687~1",
+    "Gunnlod~2004~21141800.~1147.7354~1",
+    "Thiazzi~2004~23577500.~1351.8319~1",
+    "S/2004 S34~2004~~~",
+    "Alvaldi~2004~21993800.~1217.8042~1",
+    "Geirrod~2004~22259400.~1240.0465~1",
+    "S/2004 S7~2005~~~",
+    "S/2004 S12~2005~~~",
+    "S/2004 S13~2005~~~",
+    "S/2004 S17~2005~~~",
+    "S/2004 S21~2004~~~",
+    "S/2004 S24~2004~~~",
+    "S/2004 S28~2004~~~",
+    "S/2004 S31~2004~~~",
+    "S/2004 S36~2004~~~",
+    "S/2004 S37~2004~~~",
+    "S/2004 S39~2004~~~",
+    "S/2004 S40~2004~~~",
+    "S/2004 S41~2004~~~",
+    "S/2004 S42~2004~~~",
+    "S/2004 S43~2004~~~",
+    "S/2004 S44~2004~~~",
+    "S/2004 S45~2004~~~",
+    "S/2004 S46~2004~~~",
+    "S/2004 S47~2004~~~",
+    "S/2004 S48~2004~~~",
+    "S/2004 S49~2004~~~",
+    "S/2004 S50~2004~~~",
+    "S/2004 S51~2004~~~",
+    "S/2004 S52~2004~~~",
+    "S/2004 S53~2004~~~",
+    "S/2004 S54~2004~~~",
+    "S/2004 S55~2004~~~",
+    "S/2004 S56~2004~~~",
+    "S/2004 S57~2004~~~",
+    "S/2004 S58~2004~~~",
+    "S/2004 S59~2004~~~",
+    "S/2004 S60~2004~~~",
+    "S/2004 S61~2004~~~",
+    "S/2005 S4~2005~~~",
+    "S/2005 S5~2005~~~",
+    "S/2005 S6~2005~~~",
+    "S/2005 S7~2005~~~",
+    "S/2006 S1~2006~~~",
+    "S/2006 S3~2006~~~",
+    "S/2006 S9~2006~~~",
+    "S/2006 S10~2006~~~",
+    "S/2006 S11~2006~~~",
+    "S/2006 S12~2006~~~",
+    "S/2006 S13~2006~~~",
+    "S/2006 S14~2006~~~",
+    "S/2006 S15~2006~~~",
+    "S/2006 S16~2006~~~",
+    "S/2006 S17~2006~~~",
+    "S/2006 S18~2006~~~",
+    "S/2006 S19~2006~~~",
+    "S/2006 S20~2006~~~",
+    "S/2006 S21~2006~~~",
+    "S/2006 S22~2006~~~",
+    "S/2006 S23~2006~~~",
+    "S/2006 S24~2006~~~",
+    "S/2006 S25~2006~~~",
+    "S/2006 S26~2006~~~",
+    "S/2006 S27~2006~~~",
+    "S/2006 S28~2006~~~",
+    "S/2006 S29~2006~~~",
+    "S/2007 S2~2007~~~",
+    "S/2007 S3~2007~~~",
+    "S/2007 S5~2007~~~",
+    "S/2007 S6~2007~~~",
+    "S/2007 S7~2007~~~",
+    "S/2007 S8~2007~~~",
+    "S/2007 S9~2007~~~",
+    "S/2007 S10~2007~~~",
+    "S/2007 S11~2007~~~",
+    "S/2009 S1~2009~~~",
+    "S/2019 S1~2019~~~",
+    "S/2019 S2~2019~~~",
+    "S/2019 S3~2019~~~",
+    "S/2019 S4~2019~~~",
+    "S/2019 S5~2019~~~",
+    "S/2019 S6~2019~~~",
+    "S/2019 S7~2019~~~",
+    "S/2019 S8~2019~~~",
+    "S/2019 S9~2019~~~",
+    "S/2019 S10~2019~~~",
+    "S/2019 S11~2019~~~",
+    "S/2019 S12~2019~~~",
+    "S/2019 S13~2019~~~",
+    "S/2019 S14~2019~~~",
+    "S/2019 S15~2019~~~",
+    "S/2019 S16~2019~~~",
+    "S/2019 S17~2019~~~",
+    "S/2019 S18~2019~~~",
+    "S/2019 S19~2019~~~",
+    "S/2019 S20~2019~~~",
+    "S/2019 S21~2019~~~",
+    "S/2019 S22~2019~~~",
+    "S/2019 S23~2019~~~",
+    "S/2019 S24~2019~~~",
+    "S/2019 S25~2019~~~",
+    "S/2019 S26~2019~~~",
+    "S/2019 S27~2019~~~",
+    "S/2019 S28~2019~~~",
+    "S/2019 S29~2019~~~",
+    "S/2019 S30~2019~~~",
+    "S/2019 S31~2019~~~",
+    "S/2019 S32~2019~~~",
+    "S/2019 S33~2019~~~",
+    "S/2019 S34~2019~~~",
+    "S/2019 S35~2019~~~",
+    "S/2019 S36~2019~~~",
+    "S/2019 S37~2019~~~",
+    "S/2019 S38~2019~~~",
+    "S/2019 S39~2019~~~",
+    "S/2019 S40~2019~~~",
+    "S/2019 S41~2019~~~",
+    "S/2019 S42~2019~~~",
+    "S/2019 S43~2019~~~",
+    "S/2019 S44~2019~~~",
+    "S/2020 S1~2020~~~",
+    "S/2020 S2~2020~~~",
+    "S/2020 S3~2020~~~",
+    "S/2020 S4~2020~~~",
+    "S/2020 S5~2020~~~",
+    "S/2020 S6~2020~~~",
+    "S/2020 S7~2020~~~",
+    "S/2020 S8~2020~~~",
+    "S/2020 S9~2020~~~",
+    "S/2020 S10~2020~~~",
+    "S/2020 S11~2020~~~",
+    "S/2020 S12~2020~~~",
+    "S/2020 S13~2020~~~",
+    "S/2020 S14~2020~~~",
+    "S/2020 S15~2020~~~",
+    "S/2020 S16~2020~~~",
+    "S/2020 S17~2020~~~",
+    "S/2020 S18~2020~~~",
+    "S/2020 S19~2020~~~",
+    "S/2020 S20~2020~~~",
+    "S/2020 S21~2020~~~",
+    "S/2020 S22~2020~~~",
+    "S/2020 S23~2020~~~",
+    "S/2020 S24~2020~~~",
+    "S/2020 S25~2020~~~",
+    "S/2020 S26~2020~~~",
+    "S/2020 S27~2020~~~",
+    "S/2020 S28~2020~~~",
+    "S/2020 S29~2020~~~",
+    "S/2020 S30~2020~~~",
+    "S/2020 S31~2020~~~",
+    "S/2020 S32~2020~~~",
+    "S/2020 S33~2020~~~",
+    "S/2020 S34~2020~~~",
+    "S/2020 S35~2020~~~",
+    "S/2020 S36~2020~~~",
+    "S/2020 S37~2020~~~",
+    "S/2020 S38~2020~~~",
+    "S/2020 S39~2020~~~",
+    "S/2020 S40~2020~~~",
+    "S/2020 S41~2020~~~",
+    "S/2020 S42~2020~~~",
+    "S/2020 S43~2020~~~",
+    "S/2020 S44~2020~~~",
+    "S/2020 S45~2020~~~",
+    "S/2020 S46~2020~~~",
+    "S/2020 S47~2020~~~",
+    "S/2020 S48~2020~~~",
+    "S/2020 S49~2020~~~",
+    "S/2023 S1~2023~~~",
+    "S/2023 S2~2023~~~",
+    "S/2023 S3~2023~~~",
+    "S/2023 S4~2023~~~",
+    "S/2023 S5~2023~~~",
+    "S/2023 S6~2023~~~",
+    "S/2023 S7~2023~~~",
+    "S/2023 S8~2023~~~",
+    "S/2023 S9~2023~~~",
+    "S/2023 S10~2023~~~",
+    "S/2023 S11~2023~~~",
+    "S/2023 S12~2023~~~",
+    "S/2023 S13~2023~~~",
+    "S/2023 S14~2023~~~",
+    "S/2023 S15~2023~~~",
+    "S/2023 S16~2023~~~",
+    "S/2023 S17~2023~~~",
+    "S/2023 S18~2023~~~",
+    "S/2023 S19~2023~~~",
+    "S/2023 S20~2023~~~",
+    "S/2023 S21~2023~~~",
+    "S/2023 S22~2023~~~",
+    "S/2023 S23~2023~~~",
+    "S/2023 S24~2023~~~",
+    "S/2023 S25~2023~~~",
+    "S/2023 S26~2023~~~",
+    "S/2023 S27~2023~~~",
+    "S/2023 S28~2023~~~",
+    "S/2023 S29~2023~~~",
+    "S/2023 S30~2023~~~",
+    "S/2023 S31~2023~~~",
+    "S/2023 S32~2023~~~",
+    "S/2023 S33~2023~~~",
+    "S/2023 S34~2023~~~",
+    "S/2023 S35~2023~~~",
+    "S/2023 S36~2023~~~",
+    "S/2023 S37~2023~~~",
+    "S/2023 S38~2023~~~",
+    "S/2023 S39~2023~~~",
+    "S/2023 S40~2023~~~",
+    "S/2023 S41~2023~~~",
+    "S/2023 S42~2023~~~",
+    "S/2023 S43~2023~~~",
+    "S/2023 S44~2023~~~",
+    "S/2023 S45~2023~~~",
+    "S/2023 S46~2023~~~",
+    "S/2023 S47~2023~~~",
+    "S/2023 S48~2023~~~",
+    "S/2023 S49~2023~~~",
+    "S/2023 S50~2023~~~",
+    "S/2023 S51~2023~~~",
+    "S/2023 S52~2023~~~",
+    "S/2023 S53~2023~~~",
+    "S/2023 S54~2023~~~",
+    "S/2023 S55~2023~~~",
+    "S/2023 S56~2023~~~",
+    "S/2023 S57~2023~~~",
+    "S/2023 S58~2023~~~",
+    "S/2023 S59~2023~~~",
+    "S/2023 S60~2023~~~",
+    "S/2023 S61~2023~~~",
+    "S/2023 S62~2023~~~",
+    "S/2023 S63~2023~~~",
+  ].join("|"),
+  uranus: [
+    "Ariel~1851~190929.~2.520379~0",
+    "Umbriel~1851~265986.~4.144177~0",
+    "Titania~1787~436298.~8.705869~0",
+    "Oberon~1787~583511.~13.463237~0",
+    "Miranda~1948~129846.~1.413479~0",
+    "Cordelia~1986~49755.~0.3347~0",
+    "Ophelia~1986~53765.~0.3764~0",
+    "Bianca~1986~59170.~0.4347~0",
+    "Cressida~1986~61770.~0.4639~0",
+    "Desdemona~1986~62663.~0.4736~0",
+    "Juliet~1986~64362.~0.4931~0",
+    "Portia~1986~66101.~0.5132~0",
+    "Rosalind~1986~69930.~0.5583~0",
+    "Belinda~1986~75258.~0.6236~0",
+    "Puck~1985~86007.~0.7618~0",
+    "Caliban~1997~7167000.~580.~1",
+    "Sycorax~1997~12193200.~1286.~1",
+    "Prospero~1999~16221000.~1974.~1",
+    "Setebos~1999~17519800.~2215.~1",
+    "Stephano~1999~7951400.~677.~1",
+    "Trinculo~2001~8502600.~749.~1",
+    "Francisco~2001~4275700.~267.~1",
+    "Margaret~2003~14425000.~1655.~0",
+    "Ferdinand~2001~20421400.~2788.~1",
+    "Perdita~1986~76418.~0.6382~0",
+    "Mab~2003~97737.~0.9229~0",
+    "Cupid~2003~74396.~0.6125~0",
+    "S/2025 U1~2025~~~",
+    "S/2023 U1~2023~~~",
+  ].join("|"),
+  neptune: [
+    "Triton~1846~354800.~5.876994~1",
+    "Nereid~1949~5513900.~360.133039~0",
+    "Naiad~1989~48200.~0.293980~0",
+    "Thalassa~1989~50100.~0.311078~0",
+    "Despina~1989~52500.~0.334656~0",
+    "Galatea~1989~62000.~0.428744~0",
+    "Larissa~1989~73500.~0.554989~0",
+    "Proteus~1989~117600.~1.122315~0",
+    "Halimede~2002~16590500.~1879.~1",
+    "Psamathe~2003~47646600.~9149.~1",
+    "Sao~2002~22239900.~2919.~0",
+    "Laomedeia~2002~23499900.~3168.~0",
+    "Neso~2002~49897800.~9805.~1",
+    "Hippocamp~2013~105300.~0.950390~0",
+    "S/2002 N5~2002~~~",
+    "S/2021 N1~2021~~~",
+  ].join("|"),
+};
+
+const INDICE_PIANETI_CATALOGO = { jupiter: 4, saturn: 5, uranus: 6, neptune: 7 };
+const SOGLIA_LUNE_IRREGOLARI = { jupiter: 3000000, saturn: 5000000, uranus: 1000000, neptune: 1000000 };
+const LUNE_PRINCIPALI_EXTRA = new Set([
+  "Amalthea", "Thebe", "Metis", "Himalia",
+  "Mimas", "Tethys", "Dione", "Hyperion", "Phoebe", "Janus", "Epimetheus", "Pan", "Daphnis",
+  "Umbriel", "Puck",
+  "Nereid", "Naiad", "Hippocamp",
+]);
+
+function numeroLocale(n, locale, decimali = 0) {
+  return n.toLocaleString(locale, {
+    minimumFractionDigits: decimali,
+    maximumFractionDigits: decimali,
+  });
+}
+
+function creaLunaCatalogo(pianeta, record, indice, totale) {
+  const [nome, anno, distanzaTesto, periodoTesto, retroTesto] = record.split("~");
+  const distanza = parseFloat(distanzaTesto) || 0;
+  const periodo = parseFloat(periodoTesto) || (180 + indice * 5.7);
+  const classeNota = !!distanza;
+  const irregolare = classeNota && distanza > SOGLIA_LUNE_IRREGOLARI[pianeta];
+  const retro = retroTesto === "1";
+  const nomePianeta = PIANETI[INDICE_PIANETI_CATALOGO[pianeta]].nome;
+  const distanzaIt = distanza ? numeroLocale(distanza, "it-IT") : "non ancora pubblicata";
+  const distanzaEn = distanza ? numeroLocale(distanza, "en-US") : "not yet published";
+  const periodoIt = periodoTesto ? numeroLocale(parseFloat(periodoTesto), "it-IT", parseFloat(periodoTesto) < 10 ? 2 : 1) : "in aggiornamento";
+  const periodoEn = periodoTesto ? numeroLocale(parseFloat(periodoTesto), "en-US", parseFloat(periodoTesto) < 10 ? 2 : 1) : "being refined";
+
+  return {
+    nome: { it: nome, en: nome },
+    tipo: {
+      it: `${classeNota ? (irregolare ? "Satellite irregolare" : "Satellite regolare") : "Satellite catalogato"} di ${nomePianeta.it}`,
+      en: `${classeNota ? (irregolare ? "Irregular" : "Regular") : "Catalogued"} moon of ${nomePianeta.en}`,
+    },
+    colore: irregolare ? "#a7a09a" : "#c5c8ce",
+    coloreScuro: irregolare ? "#59534e" : "#69717a",
+    raggio: irregolare ? 0.72 : 0.9,
+    periodo,
+    distanza,
+    retro,
+    irregolare,
+    principale: LUNE_PRINCIPALI_EXTRA.has(nome),
+    fase: (indice / totale) * Math.PI * 2 + (indice % 7) * 0.19,
+    descrizione: {
+      it: !classeNota
+        ? `${nome} è una luna di ${nomePianeta.it} riconosciuta dalla IAU. La sua orbita è ancora oggetto di affinamento e il catalogo pubblico JPL non riporta ancora tutti i parametri medi.`
+        : irregolare
+        ? `${nome} è una piccola luna irregolare di ${nomePianeta.it}, probabilmente il frammento di un corpo catturato e successivamente spezzato da collisioni. Le lune di questa classe percorrono orbite lontane, inclinate e spesso retrograde.`
+        : `${nome} appartiene al sistema interno di ${nomePianeta.it}. La sua orbita relativamente regolare indica che si è formata insieme al pianeta o al suo disco di satelliti e anelli.`,
+      en: !classeNota
+        ? `${nome} is an IAU-recognised moon of ${nomePianeta.en}. Its orbit is still being refined and the public JPL catalogue does not yet provide every mean parameter.`
+        : irregolare
+        ? `${nome} is a small irregular moon of ${nomePianeta.en}, probably a fragment of a captured body later disrupted by collisions. Moons in this class follow distant, inclined and often retrograde orbits.`
+        : `${nome} belongs to the inner system of ${nomePianeta.en}. Its comparatively regular orbit suggests that it formed with the planet or its original moon-and-ring disk.`,
+    },
+    dati: {
+      it: [
+        ["Scoperta", anno || "—", ""],
+        ["Distanza media", distanzaIt, distanza ? "km" : ""],
+        ["Periodo orbitale", periodoIt, periodoTesto ? "giorni" : ""],
+        ["Moto", retroTesto ? (retro ? "retrogrado" : "progrado") : "in aggiornamento", ""],
+        ["Classe", classeNota ? (irregolare ? "irregolare" : "regolare") : "in aggiornamento", ""],
+        ["Catalogo", "NASA/JPL", "IAU 2026"],
+      ],
+      en: [
+        ["Discovered", anno || "—", ""],
+        ["Mean distance", distanzaEn, distanza ? "km" : ""],
+        ["Orbital period", periodoEn, periodoTesto ? "days" : ""],
+        ["Motion", retroTesto ? (retro ? "retrograde" : "prograde") : "being refined", ""],
+        ["Class", classeNota ? (irregolare ? "irregular" : "regular") : "being refined", ""],
+        ["Catalogue", "NASA/JPL", "IAU 2026"],
+      ],
+    },
+    curiosita: {
+      it: nome.startsWith("S/")
+        ? "La designazione provvisoria verrà sostituita da un nome proprio solo dopo l'approvazione dell'Unione Astronomica Internazionale."
+        : `Il nome ${nome} segue il tema mitologico stabilito dalla IAU per i satelliti di ${nomePianeta.it}.`,
+      en: nome.startsWith("S/")
+        ? "Its provisional designation will be replaced by a proper name only after approval by the International Astronomical Union."
+        : `The name ${nome} follows the IAU mythological naming theme for moons of ${nomePianeta.en}.`,
+    },
+  };
+}
+
+for (const [pianeta, catalogo] of Object.entries(CATALOGO_LUNE_JPL)) {
+  const p = PIANETI[INDICE_PIANETI_CATALOGO[pianeta]];
+  const presenti = new Set((p.lune || []).map(m => m.nome.en));
+  const records = catalogo.split("|");
+  records.forEach((record, indice) => {
+    const nome = record.split("~")[0];
+    if (!presenti.has(nome)) p.lune.push(creaLunaCatalogo(pianeta, record, indice, records.length));
+  });
+}
+
+const SLUG = ["mercurio", "venere", "terra", "marte", "giove", "saturno", "urano", "nettuno"];
+PIANETI.forEach((p, i) => {
+  p.slug = SLUG[i];
+  if (p.lune) p.lune.forEach((m, j) => {
+    m.pianeta = p;
+    if (!m.tipo) m.tipo = { it: "Satellite di " + p.nome.it, en: "Moon of " + p.nome.en };
+    if (m.fase === undefined) m.fase = j * 2.3 + 0.6;
+  });
+});
+
+const ELEMENTI_JPL_1800_2050 = [
+  { e: 0.20563593, eRate: 0.00001906, I: 7.00497902, IRate: -0.00594749, L: 252.25032350, LRate: 149472.67411175, peri: 77.45779628, periRate: 0.16047689, nodo: 48.33076593, nodoRate: -0.12534081 },
+  { e: 0.00677672, eRate: -0.00004107, I: 3.39467605, IRate: -0.00078890, L: 181.97909950, LRate: 58517.81538729, peri: 131.60246718, periRate: 0.00268329, nodo: 76.67984255, nodoRate: -0.27769418 },
+  { e: 0.01671123, eRate: -0.00004392, I: -0.00001531, IRate: -0.01294668, L: 100.46457166, LRate: 35999.37244981, peri: 102.93768193, periRate: 0.32327364, nodo: 0, nodoRate: 0 },
+  { e: 0.09339410, eRate: 0.00007882, I: 1.84969142, IRate: -0.00813131, L: -4.55343205, LRate: 19140.30268499, peri: -23.94362959, periRate: 0.44441088, nodo: 49.55953891, nodoRate: -0.29257343 },
+  { e: 0.04838624, eRate: -0.00013253, I: 1.30439695, IRate: -0.00183714, L: 34.39644051, LRate: 3034.74612775, peri: 14.72847983, periRate: 0.21252668, nodo: 100.47390909, nodoRate: 0.20469106 },
+  { e: 0.05386179, eRate: -0.00050991, I: 2.48599187, IRate: 0.00193609, L: 49.95424423, LRate: 1222.49362201, peri: 92.59887831, periRate: -0.41897216, nodo: 113.66242448, nodoRate: -0.28867794 },
+  { e: 0.04725744, eRate: -0.00004397, I: 0.77263783, IRate: -0.00242939, L: 313.23810451, LRate: 428.48202785, peri: 170.95427630, periRate: 0.40805281, nodo: 74.01692503, nodoRate: 0.04240589 },
+  { e: 0.00859048, eRate: 0.00005105, I: 1.77004347, IRate: 0.00035372, L: -55.12002969, LRate: 218.45945325, peri: 44.96476227, periRate: -0.32241464, nodo: 131.78422574, nodoRate: -0.00508664 },
+];
+
+const ELEMENTI_JPL_ESTESI = [
+  ELEMENTI_JPL_1800_2050[0],
+  ELEMENTI_JPL_1800_2050[1],
+  ELEMENTI_JPL_1800_2050[2],
+  ELEMENTI_JPL_1800_2050[3],
+  { e: 0.04853590, eRate: 0.00018026, I: 1.29861416, IRate: -0.00322699, L: 34.33479152, LRate: 3034.90371757, peri: 14.27495244, periRate: 0.18199196, nodo: 100.29282654, nodoRate: 0.13024619, b: -0.00012452, c: 0.06064060, s: -0.35635438, f: 38.35125 },
+  { e: 0.05550825, eRate: -0.00032044, I: 2.49424102, IRate: 0.00451969, L: 50.07571329, LRate: 1222.11494724, peri: 92.86136063, periRate: 0.54179478, nodo: 113.63998702, nodoRate: -0.25015002, b: 0.00025899, c: -0.13434469, s: 0.87320147, f: 38.35125 },
+  { e: 0.04685740, eRate: -0.00001550, I: 0.77298127, IRate: -0.00180155, L: 314.20276625, LRate: 428.49512595, peri: 172.43404441, periRate: 0.09266985, nodo: 73.96250215, nodoRate: 0.05739699, b: 0.00058331, c: -0.97731848, s: 0.17689245, f: 7.67025 },
+  { e: 0.00895439, eRate: 0.00000818, I: 1.77005520, IRate: 0.00022400, L: 304.22289287, LRate: 218.46515314, peri: 46.68158724, periRate: 0.01009938, nodo: 131.78635853, nodoRate: -0.00606302, b: -0.00041348, c: 0.68346318, s: -0.10162547, f: 7.67025 },
+];
+
+let DATA_BASE = new Date();
+const GIORNO_MS = 86400000;
+const EPOCA_FASI_LUNE = 2451545; // J2000: riferimento comune per le fasi approssimate
+
+function giornoGiuliano(data) {
+  return data.getTime() / GIORNO_MS + 2440587.5;
+}
+
+function normalizzaAngolo(gradi) {
+  return ((gradi % 360) + 360) % 360;
+}
+
+function anomaliaVera(MGradi, eccentricita) {
+  const M = normalizzaAngolo(MGradi) * Math.PI / 180;
+  let E = M;
+  for (let i = 0; i < 8; i++) E -= (E - eccentricita * Math.sin(E) - M) / (1 - eccentricita * Math.cos(E));
+  return 2 * Math.atan2(
+    Math.sqrt(1 + eccentricita) * Math.sin(E / 2),
+    Math.sqrt(1 - eccentricita) * Math.cos(E / 2)
+  );
+}
+
+function angoloPianetaOggi(elementi, data) {
+  const T = (giornoGiuliano(data) - 2451545) / 36525;
+  const e = elementi.e + elementi.eRate * T;
+  const peri = elementi.peri + elementi.periRate * T;
+  const argomento = (elementi.f || 0) * T * Math.PI / 180;
+  const correzione =
+    (elementi.b || 0) * T * T +
+    (elementi.c || 0) * Math.cos(argomento) +
+    (elementi.s || 0) * Math.sin(argomento);
+  const M = elementi.L + elementi.LRate * T - peri + correzione;
+  return anomaliaVera(M, e) + peri * Math.PI / 180;
+}
+
+function anomaliaMediaNanoOggi(elementi, data) {
+  const M = elementi.ma + elementi.n * (giornoGiuliano(data) - elementi.epoch);
+  return normalizzaAngolo(M) * Math.PI / 180;
+}
+
+COMETE.forEach(c => {
+  c.argPerielio *= Math.PI / 180;
+  c.inclinazione *= Math.PI / 180;
+  c.nodoAscendente *= Math.PI / 180;
+});
+
+function aggiornaElementiPerData(data) {
+  const anno = data.getFullYear();
+  const elementiPianeti = anno >= 1800 && anno <= 2050
+    ? ELEMENTI_JPL_1800_2050
+    : ELEMENTI_JPL_ESTESI;
+  PIANETI.forEach((p, i) => {
+    const elementi = elementiPianeti[i];
+    const T = (giornoGiuliano(data) - 2451545) / 36525;
+    p.fase = angoloPianetaOggi(elementi, data);
+    p.inclinazione = (elementi.I + elementi.IRate * T) * Math.PI / 180;
+    p.nodoAscendente = (elementi.nodo + elementi.nodoRate * T) * Math.PI / 180;
+    p.angolo = p.fase;
+    if (p.scia) p.scia.length = 0;
+  });
+  PIANETI_NANI.forEach(p => {
+    p.fase = anomaliaMediaNanoOggi(p.elementi, data);
+    p.inclinazione = p.elementi.I * Math.PI / 180;
+    p.nodoAscendente = p.elementi.nodo * Math.PI / 180;
+    p.angolo = p.fase;
+    if (p.scia) p.scia.length = 0;
+  });
+  COMETE.forEach(c => {
+    c.fase = ((data - new Date(c.ultimoPerielio)) / GIORNO_MS / c.periodo) * Math.PI * 2;
+    c.angolo = c.fase;
+  });
+}
+
+aggiornaElementiPerData(DATA_BASE);
+
+/* vista dedicata alle lune di un pianeta: ?focus=<slug> */
+const PARAMETRI_URL = new URLSearchParams(location.search);
+const FOCUS = PARAMETRI_URL.get("focus");
+const TARGET_INIZIALE = PARAMETRI_URL.get("target");
+const PIANETA_FOCUS = PIANETI.find(p => p.slug === FOCUS && p.lune) || null;
+const VELOCITA_INIZIALE = PIANETA_FOCUS ? 1 : 20;
+
+/* ============================================================
+   IMPOSTAZIONE CANVAS
+   ============================================================ */
+const canvas = document.getElementById("cielo");
+const ctx = canvas.getContext("2d");
+let W = 0, H = 0, CX = 0, CY = 0, RMAX = 0, DPR = 1;
+let ORBIT_X = 0, ORBIT_Y = 0, ORBIT_MIN = 0, layoutMobile = false;
+const CHIAVE_TRANSIZIONE = "sistemasolare-transizione";
+
+function leggiTransizioneIngresso() {
+  try {
+    const dati = JSON.parse(sessionStorage.getItem(CHIAVE_TRANSIZIONE));
+    sessionStorage.removeItem(CHIAVE_TRANSIZIONE);
+    return dati;
+  } catch {
+    return null;
+  }
+}
+
+const TRANSIZIONE_INGRESSO = leggiTransizioneIngresso();
+if (TRANSIZIONE_INGRESSO) {
+  document.body.classList.add(
+    "transizione-ingresso",
+    TRANSIZIONE_INGRESSO.direzione === "avanti" ? "ingresso-avanti" : "ingresso-indietro"
+  );
+}
+
+function impostaOrigineTransizione(x, y) {
+  document.documentElement.style.setProperty("--transizione-x", `${x}px`);
+  document.documentElement.style.setProperty("--transizione-y", `${y}px`);
+}
+
+function navigaConTransizione(url, corpo, direzione) {
+  if (document.body.classList.contains("transizione-uscita")) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    location.href = url;
+    return;
+  }
+
+  const x = corpo?._x ?? CX;
+  const y = corpo?._y ?? CY;
+  impostaOrigineTransizione(x, y);
+  document.body.classList.remove("transizione-ingresso", "ingresso-avanti", "ingresso-indietro");
+  try {
+    sessionStorage.setItem(CHIAVE_TRANSIZIONE, JSON.stringify({
+      direzione,
+      slug: corpo?.slug || PIANETA_FOCUS?.slug || "",
+    }));
+  } catch {}
+
+  document.body.classList.add(
+    "transizione-uscita",
+    direzione === "avanti" ? "transizione-avanti" : "transizione-indietro"
+  );
+  setTimeout(() => { location.href = url; }, 720);
+}
+
+function completaTransizioneIngresso() {
+  if (!TRANSIZIONE_INGRESSO) return;
+
+  if (TRANSIZIONE_INGRESSO.direzione === "indietro") {
+    const pianeta = PIANETI.find(p => p.slug === TRANSIZIONE_INGRESSO.slug);
+    if (pianeta) {
+      const pos = posizione(pianeta);
+      impostaOrigineTransizione(pos.x, pos.y);
+    } else {
+      impostaOrigineTransizione(CX, CY);
+    }
+  } else {
+    impostaOrigineTransizione(CX, CY);
+  }
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.body.classList.remove("transizione-ingresso", "ingresso-avanti", "ingresso-indietro");
+    }, 950);
+  });
+}
+
+function aggiornaGeometria() {
+  layoutMobile = W <= 720;
+
+  if (!layoutMobile) {
+    CX = W / 2;
+    CY = H / 2;
+    RMAX = Math.min(W, H) / 2 - 30;
+    ORBIT_X = RMAX;
+    ORBIT_Y = RMAX;
+    ORBIT_MIN = 0;
+    return;
+  }
+
+  const header = document.querySelector("header").getBoundingClientRect();
+  const comandi = document.getElementById("pannelloComandi").getBoundingClientRect();
+  const margine = 16;
+  const alto = Math.max(header.bottom + 12, 112);
+  const basso = Math.min(comandi.top - 16, H - 72);
+  const altezzaUtile = Math.max(basso - alto, 210);
+
+  CX = W / 2;
+  CY = alto + altezzaUtile / 2;
+  ORBIT_X = Math.max(92, W / 2 - margine - 12);
+  // Il raggio verticale non deve mai superare quello orizzontale: con rx≠ry la
+  // rotazione per nodo ascendente deforma le orbite in ellissi non concentriche
+  // che sembrano incrociarsi. Limitandolo, quando c'è spazio (console ridotta)
+  // le orbite diventano circolari invece di stirarsi in verticale.
+  ORBIT_Y = Math.min(Math.max(88, altezzaUtile / 2 - 12), ORBIT_X);
+  RMAX = Math.min(ORBIT_X, ORBIT_Y);
+  ORBIT_MIN = Math.min(42, RMAX * 0.34);
+}
+
+function ridimensiona() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  aggiornaGeometria();
+  generaStelle();
+  if (typeof generaAsteroidi === "function") generaAsteroidi();
+}
+window.addEventListener("resize", ridimensiona);
+
+/* ---------- campo stellare ---------- */
+let stelle = [];
+function generaStelle() {
+  const n = Math.round((W * H) / 3800);
+  stelle = [];
+  for (let i = 0; i < n; i++) {
+    stelle.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() < 0.88 ? Math.random() * 0.9 + 0.3 : Math.random() * 1.6 + 0.9,
+      a: Math.random() * 0.55 + 0.2,
+      fase: Math.random() * Math.PI * 2,
+      vel: Math.random() * 1.4 + 0.3,
+      tinta: Math.random() < 0.12 ? "180,215,255" : (Math.random() < 0.08 ? "255,220,180" : "232,237,244"),
+    });
+  }
+}
+
+/* ============================================================
+   STATO DELLA SIMULAZIONE
+   ============================================================ */
+const stato = {
+  giorni: 0,
+  velocita: VELOCITA_INIZIALE, // giorni simulati al secondo
+  scalaPianeti: 1,
+  luce: 1,
+  scalaOrbite: 1,
+  pausa: false,
+  mostraOrbite: true,
+  mostraNomi: true,
+  mostraScie: false,
+  mostraLune: false,
+  mostraNani: false,
+  mostraAsteroidi: true,
+  mostraComete: true,
+  limiteLune: 20,
+  cameraYaw: -0.24,
+  cameraPitch: 0.56,
+  cameraZoom: 1,
+  cameraPanX: 0,
+  cameraPanY: 0,
+  cameraTarget: null,
+  selezionato: null,   // pianeta o SOLE
+  hover: null,
+};
+
+PIANETI.forEach(p => { p.angolo = p.fase; p.scia = []; });
+PIANETI_NANI.forEach(p => { p.angolo = p.fase; p.scia = []; });
+COMETE.forEach(c => { c._x = undefined; });
+
+let asteroidi = [];
+function casualeDeterministico(indice) {
+  const x = Math.sin(indice * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+function generaAsteroidi() {
+  const quantita = layoutMobile ? 260 : 560;
+  asteroidi = Array.from({ length: quantita }, (_, i) => {
+    const distribuzione = (casualeDeterministico(i * 5 + 1) + casualeDeterministico(i * 5 + 2)) / 2;
+    return {
+      orbita: 0.348 + distribuzione * 0.078,
+      angolo: casualeDeterministico(i * 5 + 3) * Math.PI * 2,
+      periodo: 1180 + distribuzione * 1080,
+      inclinazione: (casualeDeterministico(i * 5 + 4) - 0.5) * 0.075,
+      raggio: 0.35 + casualeDeterministico(i * 5 + 5) * 0.8,
+      alpha: 0.18 + casualeDeterministico(i * 7 + 6) * 0.42,
+    };
+  });
+}
+
+/* ============================================================
+   DISEGNO
+   ============================================================ */
+function raggiOrbita(p) {
+  if (!layoutMobile) {
+    const r = p.orbita * RMAX * stato.scalaOrbite;
+    return { rx: r, ry: r };
+  }
+
+  const primaOrbita = PIANETI[0].orbita;
+  const ultimaOrbita = PIANETI_NANI[PIANETI_NANI.length - 1].orbita;
+  const progressione = Math.min((p.orbita - primaOrbita) / (ultimaOrbita - primaOrbita), 1);
+  const rx = (ORBIT_MIN + progressione * (ORBIT_X - ORBIT_MIN)) * stato.scalaOrbite;
+  const ry = (ORBIT_MIN + progressione * (ORBIT_Y - ORBIT_MIN)) * stato.scalaOrbite;
+  return { rx, ry };
+}
+
+function coordinateMondo(corpo) {
+  if (!corpo || corpo === SOLE) return { x: 0, z: 0, altezza: 0 };
+  if (PIANETI_NANI.includes(corpo)) {
+    return coordinateOrbitaNano(corpo, corpo.angolo);
+  }
+  if (PIANETI.includes(corpo)) {
+    const { rx, ry } = raggiOrbita(corpo);
+    return coordinateOrbita(corpo, corpo.angolo, rx, ry);
+  }
+  return { x: 0, z: 0, altezza: 0 };
+}
+
+function trasformaPianoOrbitale(x, z, inclinazione, nodo, argPerielio = 0) {
+  const cosArg = Math.cos(argPerielio);
+  const sinArg = Math.sin(argPerielio);
+  const xArg = x * cosArg - z * sinArg;
+  const zArg = x * sinArg + z * cosArg;
+  const cosNodo = Math.cos(nodo);
+  const sinNodo = Math.sin(nodo);
+  const cosI = Math.cos(inclinazione);
+  const sinI = Math.sin(inclinazione);
+  return {
+    x: xArg * cosNodo - zArg * cosI * sinNodo,
+    z: xArg * sinNodo + zArg * cosI * cosNodo,
+    altezza: zArg * sinI,
+  };
+}
+
+function coordinateOrbitaNano(corpo, anomaliaMedia) {
+  const { rx, ry } = raggiOrbita(corpo);
+  const e = corpo.elementi.e;
+  const E = anomaliaEccentrica(anomaliaMedia, e);
+  const x = rx * (Math.cos(E) - e);
+  const z = ry * Math.sqrt(1 - e * e) * Math.sin(E);
+  const argPerielio = corpo.elementi.peri * Math.PI / 180 - corpo.nodoAscendente;
+  return trasformaPianoOrbitale(x, z, corpo.inclinazione, corpo.nodoAscendente, argPerielio);
+}
+
+function coordinateOrbita(corpo, angolo, rx, ry) {
+  const inclinazione = corpo?.inclinazione || 0;
+  const nodo = corpo?.nodoAscendente || 0;
+  const theta = angolo - nodo;
+  const xPiano = Math.cos(theta) * rx;
+  const zPiano = Math.sin(theta) * ry;
+  const cosNodo = Math.cos(nodo);
+  const sinNodo = Math.sin(nodo);
+  const cosI = Math.cos(inclinazione);
+  const sinI = Math.sin(inclinazione);
+  return {
+    x: xPiano * cosNodo - zPiano * cosI * sinNodo,
+    z: xPiano * sinNodo + zPiano * cosI * cosNodo,
+    altezza: zPiano * sinI,
+  };
+}
+
+function proiettaPunto3D(x, z, centroX = CX, centroY = CY, altezza = 0, applicaTarget = true) {
+  if (applicaTarget && !PIANETA_FOCUS) {
+    const target = coordinateMondo(stato.cameraTarget);
+    x -= target.x;
+    z -= target.z;
+    altezza -= target.altezza;
+  }
+  const cosYaw = Math.cos(stato.cameraYaw);
+  const sinYaw = Math.sin(stato.cameraYaw);
+  const cosPitch = Math.cos(stato.cameraPitch);
+  const sinPitch = Math.sin(stato.cameraPitch);
+  const zoom = stato.cameraZoom;
+  const xRuotata = (x * cosYaw - z * sinYaw) * zoom;
+  const profonditaYaw = (x * sinYaw + z * cosYaw) * zoom;
+  const yProiettata = profonditaYaw * sinPitch - altezza * cosPitch * zoom;
+  const profondita = profonditaYaw * cosPitch + altezza * sinPitch * zoom;
+  const focale = Math.max(Math.min(W, H) * 1.25, 420);
+  // Prospettiva limitata in modo continuo: evita spigoli sulle orbite
+  // quando, ad alto zoom, la profondità raggiungeva i vecchi limiti min/max.
+  const scala = 1 - 0.42 * Math.tanh(profondita / focale);
+  return {
+    x: centroX + xRuotata * scala + (applicaTarget ? stato.cameraPanX : 0),
+    y: centroY + yProiettata * scala + (applicaTarget ? stato.cameraPanY : 0),
+    profondita,
+    scala: scala * zoom,
+  };
+}
+
+function posizione(p) {
+  const { rx, ry } = raggiOrbita(p);
+  const punto = PIANETI_NANI.includes(p)
+    ? coordinateOrbitaNano(p, p.angolo)
+    : coordinateOrbita(p, p.angolo, rx, ry);
+  const proiettata = proiettaPunto3D(punto.x, punto.z, CX, CY, punto.altezza);
+  return {
+    ...proiettata,
+    r: Math.hypot(proiettata.x - CX, proiettata.y - CY),
+    rx,
+    ry,
+  };
+}
+
+function segmentiOrbita(base, massimo) {
+  return Math.min(massimo, Math.ceil(base * Math.max(1, stato.cameraZoom)));
+}
+
+function tracciaOrbita3D(rx, ry, centroX = CX, centroY = CY, applicaTarget = true, corpo = null) {
+  const segmenti = segmentiOrbita(layoutMobile ? 72 : 120, layoutMobile ? 480 : 720);
+  ctx.beginPath();
+  for (let i = 0; i <= segmenti; i++) {
+    const angolo = (i / segmenti) * Math.PI * 2;
+    const orbitale = coordinateOrbita(corpo, angolo, rx, ry);
+    const punto = proiettaPunto3D(orbitale.x, orbitale.z, centroX, centroY, orbitale.altezza, applicaTarget);
+    if (i === 0) ctx.moveTo(punto.x, punto.y);
+    else ctx.lineTo(punto.x, punto.y);
+  }
+}
+
+function disegnaStelle(t) {
+  for (const s of stelle) {
+    const tremolio = 0.65 + 0.35 * Math.sin(t * 0.001 * s.vel + s.fase);
+    ctx.globalAlpha = s.a * tremolio * Math.min(stato.luce, 1.3);
+    ctx.fillStyle = `rgb(${s.tinta})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function disegnaSole(t) {
+  const pos = PIANETA_FOCUS ? { x: CX, y: CY, scala: 1 } : proiettaPunto3D(0, 0);
+  const x = pos.x, y = pos.y;
+  const rSole = (24 + 4 * stato.scalaPianeti) * pos.scala;
+  const pulsazione = 1 + 0.03 * Math.sin(t * 0.0012);
+  const aloneR = rSole * (3.2 + 2.6 * stato.luce) * pulsazione;
+
+  // alone esterno
+  let g = ctx.createRadialGradient(x, y, rSole * 0.4, x, y, aloneR);
+  g.addColorStop(0, `rgba(255, 196, 110, ${0.45 * stato.luce})`);
+  g.addColorStop(0.35, `rgba(255, 150, 60, ${0.12 * stato.luce})`);
+  g.addColorStop(1, "rgba(255, 120, 40, 0)");
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(x, y, aloneR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // corpo
+  g = ctx.createRadialGradient(x - rSole * 0.25, y - rSole * 0.25, rSole * 0.1, x, y, rSole);
+  g.addColorStop(0, "#fff8e0");
+  g.addColorStop(0.55, "#ffd76b");
+  g.addColorStop(1, "#f59a2a");
+  ctx.fillStyle = g;
+  ctx.shadowColor = "rgba(255, 180, 80, 0.9)";
+  ctx.shadowBlur = 30 * stato.luce;
+  ctx.beginPath();
+  ctx.arc(x, y, rSole * pulsazione, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  SOLE._x = x; SOLE._y = y; SOLE._r = rSole;
+}
+
+function disegnaOrbita(p) {
+  const { rx, ry } = raggiOrbita(p);
+  ctx.strokeStyle = "rgba(232, 237, 244, 0.09)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  tracciaOrbita3D(rx, ry, CX, CY, true, p);
+  ctx.stroke();
+}
+
+function disegnaOrbitaNano(p) {
+  ctx.strokeStyle = "rgba(111, 227, 255, 0.10)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 7]);
+  ctx.beginPath();
+  const segmenti = segmentiOrbita(layoutMobile ? 100 : 180, layoutMobile ? 600 : 900);
+  for (let i = 0; i <= segmenti; i++) {
+    const puntoMondo = coordinateOrbitaNano(p, i / segmenti * Math.PI * 2);
+    const punto = proiettaPunto3D(puntoMondo.x, puntoMondo.z, CX, CY, puntoMondo.altezza);
+    if (i === 0) ctx.moveTo(punto.x, punto.y);
+    else ctx.lineTo(punto.x, punto.y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function disegnaOrbitaEvidenziata(corpo) {
+  if (!stato.mostraOrbite || !corpo || corpo === SOLE) return;
+  const pianeta = PIANETI.includes(corpo);
+  const nano = PIANETI_NANI.includes(corpo) && stato.mostraNani;
+  const cometa = COMETE.includes(corpo) && stato.mostraComete;
+  if (!pianeta && !nano && !cometa) return;
+
+  ctx.save();
+  ctx.strokeStyle = colorAlpha(corpo.colore, 0.85);
+  ctx.shadowColor = corpo.colore;
+  ctx.shadowBlur = 9;
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash(cometa ? [4, 5] : []);
+
+  if (pianeta) {
+    const { rx, ry } = raggiOrbita(corpo);
+    tracciaOrbita3D(rx, ry, CX, CY, true, corpo);
+  } else if (nano) {
+    ctx.beginPath();
+    const segmenti = segmentiOrbita(layoutMobile ? 100 : 180, layoutMobile ? 600 : 900);
+    for (let i = 0; i <= segmenti; i++) {
+      const mondo = coordinateOrbitaNano(corpo, i / segmenti * Math.PI * 2);
+      const punto = proiettaPunto3D(mondo.x, mondo.z, CX, CY, mondo.altezza);
+      if (i === 0) ctx.moveTo(punto.x, punto.y);
+      else ctx.lineTo(punto.x, punto.y);
+    }
+  } else {
+    tracciaPercorsoCometa(corpo);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function disegnaFasciaAsteroidi() {
+  const scala = RMAX * stato.scalaOrbite;
+  for (const a of asteroidi) {
+    const angolo = a.angolo + (stato.giorni / a.periodo) * Math.PI * 2;
+    const distanza = a.orbita * scala;
+    const altezza = Math.sin(angolo * 1.7) * distanza * a.inclinazione;
+    const punto = proiettaPunto3D(
+      Math.cos(angolo) * distanza,
+      Math.sin(angolo) * distanza,
+      CX, CY, altezza
+    );
+    ctx.globalAlpha = a.alpha * Math.min(stato.luce, 1.25);
+    ctx.fillStyle = punto.profondita > 0 ? "#9b8b7c" : "#c0b3a5";
+    ctx.beginPath();
+    ctx.arc(punto.x, punto.y, a.raggio * punto.scala, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function posizioneCometa(c) {
+  const afelio = c.afelio * RMAX * stato.scalaOrbite;
+  const perielio = c.perielio * RMAX * stato.scalaOrbite;
+  const a = (afelio + perielio) / 2;
+  const e = (afelio - perielio) / (afelio + perielio);
+  const b = a * Math.sqrt(1 - e * e);
+  const E = anomaliaEccentrica(c.angolo, e);
+  const x0 = a * (Math.cos(E) - e);
+  const z0 = b * Math.sin(E);
+  const punto = trasformaPianoOrbitale(
+    x0, z0, c.inclinazione, c.nodoAscendente, c.argPerielio
+  );
+  return proiettaPunto3D(punto.x, punto.z, CX, CY, punto.altezza);
+}
+
+function anomaliaEccentrica(M, e) {
+  M = ((M % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+  let E = M;
+  for (let i = 0; i < 9; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  return E;
+}
+
+function tracciaPercorsoCometa(c) {
+  const afelio = c.afelio * RMAX * stato.scalaOrbite;
+  const perielio = c.perielio * RMAX * stato.scalaOrbite;
+  const a = (afelio + perielio) / 2;
+  const e = (afelio - perielio) / (afelio + perielio);
+  const b = a * Math.sqrt(1 - e * e);
+  const segmenti = segmentiOrbita(layoutMobile ? 110 : 160, layoutMobile ? 660 : 960);
+  ctx.beginPath();
+  for (let i = 0; i <= segmenti; i++) {
+    const E = i / segmenti * Math.PI * 2;
+    const x0 = a * (Math.cos(E) - e);
+    const z0 = b * Math.sin(E);
+    const mondo = trasformaPianoOrbitale(
+      x0, z0, c.inclinazione, c.nodoAscendente, c.argPerielio
+    );
+    const punto = proiettaPunto3D(mondo.x, mondo.z, CX, CY, mondo.altezza);
+    if (i === 0) ctx.moveTo(punto.x, punto.y);
+    else ctx.lineTo(punto.x, punto.y);
+  }
+}
+
+function tracciaOrbitaCometa(c) {
+  tracciaPercorsoCometa(c);
+  ctx.strokeStyle = colorAlpha(c.colore, 0.12);
+  ctx.setLineDash([2, 8]);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function disegnaCometa(c, t) {
+  const pos = posizioneCometa(c);
+  const distanzaSole = Math.max(Math.hypot(pos.x - SOLE._x, pos.y - SOLE._y), 1);
+  const attivita = Math.max(0.25, Math.min(1, (RMAX * 0.58) / distanzaSole));
+  const r = (1.8 + attivita * 1.6) * pos.scala;
+  c._x = pos.x; c._y = pos.y; c._r = r + 5;
+
+  const dx = (pos.x - SOLE._x) / distanzaSole;
+  const dy = (pos.y - SOLE._y) / distanzaSole;
+  const coda = (18 + 48 * attivita) * pos.scala;
+  const gradiente = ctx.createLinearGradient(pos.x, pos.y, pos.x + dx * coda, pos.y + dy * coda);
+  gradiente.addColorStop(0, colorAlpha(c.colore, 0.72));
+  gradiente.addColorStop(1, colorAlpha(c.colore, 0));
+  ctx.strokeStyle = gradiente;
+  ctx.lineWidth = 2 + attivita * 3;
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+  ctx.lineTo(pos.x + dx * coda, pos.y + dy * coda);
+  ctx.stroke();
+
+  ctx.shadowColor = c.colore;
+  ctx.shadowBlur = 12 * stato.luce;
+  ctx.fillStyle = "#f5fdff";
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  if (stato.selezionato === c) {
+    ctx.strokeStyle = colorAlpha(c.colore, 0.9);
+    ctx.setLineDash([3, 4]);
+    ctx.lineDashOffset = -t * 0.02;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r + 7, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  if (stato.mostraNomi || stato.hover === c) {
+    ctx.font = "9px 'IBM Plex Mono', monospace";
+    ctx.fillStyle = stato.hover === c ? "#6fe3ff" : "rgba(138, 148, 166, 0.82)";
+    ctx.textAlign = "center";
+    ctx.fillText(c.nome[lingua].toUpperCase(), pos.x, pos.y - r - 7);
+  }
+}
+
+function disegnaScia(p) {
+  if (p.scia.length < 2) return;
+  ctx.lineWidth = 1.2;
+  for (let i = 1; i < p.scia.length; i++) {
+    const a = (i / p.scia.length) * 0.35;
+    ctx.strokeStyle = colorAlpha(p.colore, a);
+    ctx.beginPath();
+    ctx.moveTo(p.scia[i - 1].x, p.scia[i - 1].y);
+    ctx.lineTo(p.scia[i].x, p.scia[i].y);
+    ctx.stroke();
+  }
+}
+
+function colorAlpha(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+}
+
+function schiarisciColore(hex, quantita) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgb(${Math.round(r + (255 - r) * quantita)}, ${Math.round(g + (255 - g) * quantita)}, ${Math.round(b + (255 - b) * quantita)})`;
+}
+
+function ellissePianeta(pos, r, x, y, rx, ry, rotazione, colore, alpha = 1) {
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = colore;
+  ctx.beginPath();
+  ctx.ellipse(
+    pos.x + x * r,
+    pos.y + y * r,
+    Math.max(rx * r, 0.35),
+    Math.max(ry * r, 0.35),
+    rotazione,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+}
+
+function fasciaAtmosferica(pos, r, y, altezza, onda, colore, alpha) {
+  const sinistra = pos.x - r * 1.12;
+  const destra = pos.x + r * 1.12;
+  const centroY = pos.y + y * r;
+  const meta = altezza * r / 2;
+  const curva = onda * r;
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = colore;
+  ctx.beginPath();
+  ctx.moveTo(sinistra, centroY - meta);
+  ctx.bezierCurveTo(
+    pos.x - r * .58, centroY - meta - curva,
+    pos.x - r * .18, centroY - meta + curva,
+    pos.x + r * .18, centroY - meta
+  );
+  ctx.bezierCurveTo(
+    pos.x + r * .48, centroY - meta - curva * .7,
+    pos.x + r * .78, centroY - meta + curva * .9,
+    destra, centroY - meta - curva * .15
+  );
+  ctx.lineTo(destra, centroY + meta);
+  ctx.bezierCurveTo(
+    pos.x + r * .7, centroY + meta + curva * .65,
+    pos.x + r * .35, centroY + meta - curva,
+    pos.x, centroY + meta
+  );
+  ctx.bezierCurveTo(
+    pos.x - r * .32, centroY + meta + curva * .75,
+    pos.x - r * .72, centroY + meta - curva * .55,
+    sinistra, centroY + meta + curva * .2
+  );
+  ctx.closePath();
+  ctx.fill();
+}
+
+function textureFotograficaPianeta(p) {
+  const config = CONFIG_TEXTURE_PIANETI[p.slug];
+  const foto = FOTO_CORPI[p.slug];
+  if (!config || !foto) return null;
+  if (!CACHE_TEXTURE_PIANETI.has(p.slug)) {
+    const record = { immagine: new Image(), pronta: false, fallita: false };
+    record.immagine.addEventListener("load", () => { record.pronta = true; });
+    record.immagine.addEventListener("error", () => { record.fallita = true; });
+    record.immagine.src = foto.src;
+    CACHE_TEXTURE_PIANETI.set(p.slug, record);
+  }
+  return { ...CACHE_TEXTURE_PIANETI.get(p.slug), config };
+}
+
+function disegnaTextureFotografica(p, pos, r) {
+  if (r < 18) return false;
+  const inPrimoPiano =
+    p === stato.cameraTarget ||
+    p === stato.selezionato ||
+    p === stato.hover ||
+    p === PIANETA_FOCUS;
+  if (!CACHE_TEXTURE_PIANETI.has(p.slug) && !inPrimoPiano) return false;
+  const texture = textureFotograficaPianeta(p);
+  if (!texture?.pronta || texture.fallita) return false;
+  const img = texture.immagine;
+  const lato = Math.min(img.naturalWidth, img.naturalHeight) / texture.config.zoom;
+  const sx = (img.naturalWidth - lato) / 2;
+  const sy = (img.naturalHeight - lato) / 2;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r * .985, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.globalAlpha = .94;
+  ctx.drawImage(img, sx, sy, lato, lato, pos.x - r, pos.y - r, r * 2, r * 2);
+  ctx.restore();
+  return true;
+}
+
+function disegnaSuperficiePianeta(p, pos, r) {
+  if (r < 2.6) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r * 0.98, 0, Math.PI * 2);
+  ctx.clip();
+
+  switch (p.slug) {
+    case "mercurio":
+      for (const [x, y, rr] of [[-.34,-.25,.15],[.18,-.38,.1],[.38,.06,.16],[-.1,.28,.12],[-.42,.3,.07]]) {
+        ellissePianeta(pos, r, x, y, rr, rr * .82, 0, "#6f675f", .42);
+        ellissePianeta(pos, r, x - .025, y - .025, rr * .62, rr * .5, 0, "#c8b9a8", .25);
+      }
+      break;
+    case "venere":
+      ctx.strokeStyle = "rgba(255, 239, 183, 0.34)";
+      ctx.lineWidth = Math.max(.7, r * .11);
+      for (const y of [-.48, -.18, .12, .42]) {
+        ctx.beginPath();
+        ctx.bezierCurveTo(
+          pos.x - r, pos.y + (y - .08) * r,
+          pos.x - r * .25, pos.y + (y + .13) * r,
+          pos.x + r * .35, pos.y + (y - .12) * r
+        );
+        ctx.stroke();
+      }
+      break;
+    case "terra":
+      ellissePianeta(pos, r, -.27, -.15, .34, .2, -.35, "#78964b", .95);
+      ellissePianeta(pos, r, -.18, .13, .17, .32, -.2, "#6d8d45", .95);
+      ellissePianeta(pos, r, .33, -.02, .28, .18, .28, "#91a858", .95);
+      ellissePianeta(pos, r, .46, .25, .13, .09, .15, "#8fa652", .9);
+      ellissePianeta(pos, r, .05, .45, .42, .08, 0, "#e7f5f4", .72);
+      ctx.strokeStyle = "rgba(245, 252, 255, 0.72)";
+      ctx.lineWidth = Math.max(.65, r * .055);
+      for (const y of [-.33, .04, .31]) {
+        ctx.beginPath();
+        ctx.arc(pos.x + y * r * .4, pos.y + y * r, r * .62, Math.PI * 1.08, Math.PI * 1.72);
+        ctx.stroke();
+      }
+      break;
+    case "marte":
+      ellissePianeta(pos, r, -.28, -.08, .38, .2, .35, "#6e2f20", .5);
+      ellissePianeta(pos, r, .3, .22, .3, .17, -.2, "#8b3f27", .48);
+      ellissePianeta(pos, r, .05, -.78, .38, .13, 0, "#f2ded0", .72);
+      break;
+    case "giove": {
+      ctx.filter = `blur(${Math.max(.25, r * .012)}px)`;
+      fasciaAtmosferica(pos, r, -.62, .2, .035, "#d5aa7d", .52);
+      fasciaAtmosferica(pos, r, -.36, .13, .065, "#a8795f", .34);
+      fasciaAtmosferica(pos, r, -.12, .24, .04, "#ead3ad", .46);
+      fasciaAtmosferica(pos, r, .12, .12, .075, "#b27f61", .35);
+      fasciaAtmosferica(pos, r, .38, .22, .045, "#e2bf91", .52);
+      fasciaAtmosferica(pos, r, .66, .14, .055, "#936653", .28);
+      ctx.filter = "none";
+      ellissePianeta(pos, r, .38, .29, .27, .135, -.08, "#b64e35", .8);
+      ellissePianeta(pos, r, .38, .29, .18, .075, -.08, "#e59168", .55);
+      ellissePianeta(pos, r, -.43, -.43, .13, .07, .12, "#c98d69", .42);
+      break;
+    }
+    case "saturno":
+      ctx.filter = `blur(${Math.max(.2, r * .016)}px)`;
+      fasciaAtmosferica(pos, r, -.48, .18, .025, "#f1d89e", .28);
+      fasciaAtmosferica(pos, r, -.15, .14, .035, "#9f794e", .2);
+      fasciaAtmosferica(pos, r, .18, .2, .025, "#f6dda6", .27);
+      fasciaAtmosferica(pos, r, .48, .12, .03, "#8d6c47", .18);
+      ctx.filter = "none";
+      break;
+    case "urano":
+      ctx.strokeStyle = "rgba(226, 255, 255, 0.28)";
+      ctx.lineWidth = Math.max(.6, r * .07);
+      for (const y of [-.35, -.05, .25]) {
+        ctx.beginPath();
+        ctx.moveTo(pos.x - r, pos.y + y * r);
+        ctx.lineTo(pos.x + r, pos.y + (y + .08) * r);
+        ctx.stroke();
+      }
+      break;
+    case "nettuno":
+      fasciaAtmosferica(pos, r, -.45, .12, .035, "#72b4f5", .22);
+      fasciaAtmosferica(pos, r, -.05, .08, .045, "#92c9ff", .18);
+      fasciaAtmosferica(pos, r, .35, .1, .035, "#4d8ee6", .2);
+      ellissePianeta(pos, r, .28, .12, .24, .13, -.15, "#173b91", .65);
+      ellissePianeta(pos, r, -.22, -.38, .25, .06, 0, "#d5efff", .55);
+      break;
+    default:
+      for (const [x, y, rr] of [[-.32,-.2,.16],[.25,-.28,.11],[.18,.3,.14],[-.38,.26,.09]]) {
+        ellissePianeta(pos, r, x, y, rr, rr * .7, 0, p.coloreScuro, .28);
+      }
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+function disegnaPianeta(p, t) {
+  const pos = posizione(p);
+  const r = p.raggio * stato.scalaPianeti * pos.scala;
+  p._x = pos.x; p._y = pos.y; p._r = r;
+
+  // direzione della luce: dal Sole verso il pianeta
+  const distanzaLuce = Math.max(Math.hypot(SOLE._x - pos.x, SOLE._y - pos.y), 1);
+  const lx = (SOLE._x - pos.x) / distanzaLuce;
+  const ly = (SOLE._y - pos.y) / distanzaLuce;
+
+  // anelli di Saturno (metà posteriore)
+  if (p.anelli) disegnaAnelli(p, pos, r, true);
+
+  // bagliore
+  ctx.shadowColor = colorAlpha(p.colore, 0.85);
+  ctx.shadowBlur = r * 1.6 * stato.luce;
+
+  // sfera con illuminazione dal lato del Sole
+  const g = ctx.createRadialGradient(
+    pos.x + lx * r * 0.45, pos.y + ly * r * 0.45, r * 0.1,
+    pos.x, pos.y, r * 1.05
+  );
+  g.addColorStop(0, schiarisciColore(p.colore, .58));
+  g.addColorStop(0.25, p.colore);
+  g.addColorStop(0.8, p.coloreScuro);
+  g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  if (!disegnaTextureFotografica(p, pos, r)) {
+    disegnaSuperficiePianeta(p, pos, r);
+  }
+
+  // Ombra morbida sul bordo, sopra i dettagli della superficie.
+  const ombra = ctx.createRadialGradient(
+    pos.x + lx * r * .42, pos.y + ly * r * .42, r * .2,
+    pos.x, pos.y, r
+  );
+  ombra.addColorStop(.55, "rgba(4, 6, 13, 0)");
+  ombra.addColorStop(1, "rgba(4, 6, 13, 0.38)");
+  ctx.fillStyle = ombra;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // anelli di Saturno (metà anteriore)
+  if (p.anelli) disegnaAnelli(p, pos, r, false);
+
+  // anello di selezione
+  if (stato.selezionato === p) {
+    ctx.strokeStyle = colorAlpha(p.colore, 0.9);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 5]);
+    ctx.lineDashOffset = -t * 0.02;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r + 9 + (p.anelli ? r * 0.9 : 0), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // etichetta
+  if (stato.mostraNomi || stato.hover === p) {
+    ctx.font = "9px 'IBM Plex Mono', monospace";
+    ctx.fillStyle = stato.hover === p ? "#6fe3ff" : "rgba(138, 148, 166, 0.9)";
+    ctx.textAlign = "center";
+    ctx.fillText(p.nome[lingua].toUpperCase(), pos.x, pos.y - r - (p.anelli ? r * 0.8 : 0) - 9);
+  }
+}
+
+function disegnaSatellite(m, cx, cy, d, r, t, focus, mostraOrbita = true) {
+  const giorniDaEpoca = giornoGiuliano(DATA_BASE) - EPOCA_FASI_LUNE + stato.giorni;
+  const direzione = m.retro ? -1 : 1;
+  const angolo = m.fase + (giorniDaEpoca / m.periodo) * Math.PI * 2 * direzione;
+  const punto = proiettaPunto3D(Math.cos(angolo) * d, Math.sin(angolo) * d, cx, cy, 0, false);
+  const x = punto.x;
+  const y = punto.y;
+  r *= punto.scala;
+  m._x = x; m._y = y; m._r = r;
+
+  // orbita intorno al pianeta
+  if (stato.mostraOrbite && mostraOrbita) {
+    const evidenziata = stato.hover === m;
+    ctx.strokeStyle = evidenziata
+      ? colorAlpha(m.colore, 0.82)
+      : `rgba(232, 237, 244, ${focus ? 0.09 : 0.06})`;
+    ctx.shadowColor = evidenziata ? m.colore : "transparent";
+    ctx.shadowBlur = evidenziata ? 7 : 0;
+    ctx.lineWidth = evidenziata ? 1.7 : 1;
+    ctx.setLineDash([]);
+    tracciaOrbita3D(d, d, cx, cy, false);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  // luce: dal Sole nella vista principale, fissa nella vista lune
+  let lx, ly;
+  if (focus) {
+    lx = -0.7; ly = -0.7;
+  } else {
+    const dist = Math.hypot(x - SOLE._x, y - SOLE._y) || 1;
+    lx = (SOLE._x - x) / dist; ly = (SOLE._y - y) / dist;
+  }
+  if (m.principale) {
+    ctx.shadowColor = colorAlpha(m.colore, 0.7);
+    ctx.shadowBlur = r * 1.4 * stato.luce;
+    const g = ctx.createRadialGradient(
+      x + lx * r * 0.45, y + ly * r * 0.45, r * 0.1,
+      x, y, r * 1.05
+    );
+    g.addColorStop(0, "#ffffff");
+    g.addColorStop(0.3, m.colore);
+    g.addColorStop(0.85, m.coloreScuro);
+    g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  } else {
+    ctx.fillStyle = colorAlpha(m.colore, stato.hover === m ? 1 : 0.72);
+    ctx.beginPath();
+    ctx.arc(x, y, stato.hover === m ? r + 1.2 : r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // anello di selezione
+  if (stato.selezionato === m) {
+    ctx.strokeStyle = colorAlpha(m.colore, 0.9);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.lineDashOffset = -t * 0.02;
+    ctx.beginPath();
+    ctx.arc(x, y, r + 6, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // etichetta
+  if ((stato.mostraNomi && focus && m.principale) || stato.hover === m) {
+    ctx.font = "9px 'IBM Plex Mono', monospace";
+    ctx.fillStyle = stato.hover === m ? "#6fe3ff" : "rgba(138, 148, 166, 0.9)";
+    ctx.textAlign = "center";
+    ctx.fillText(m.nome[lingua].toUpperCase(), x, y - r - 7);
+  }
+}
+
+// lune nella vista principale (layer attivabile; la Luna è sempre visibile)
+function disegnaLune(p, t) {
+  if (!p.lune) return;
+  const base = p._r + (p.anelli ? p._r * 1.1 : 0) + 4;
+  p.lune.forEach((m, i) => {
+    if (!m.principale || (!stato.mostraLune && !m.sempre)) { m._x = undefined; return; }
+    const d = base + (i + 1) * (3 + 2.2 * stato.scalaPianeti);
+    disegnaSatellite(m, p._x, p._y, d, Math.max(m.raggio * stato.scalaPianeti, 0.8), t, false);
+  });
+}
+
+// vista dedicata: il pianeta al centro con le sue lune (?focus=<slug>)
+function luneVisibili(p) {
+  if (!Number.isFinite(stato.limiteLune) || stato.limiteLune >= p.lune.length) return p.lune;
+
+  const ordinate = [...p.lune].sort((a, b) => {
+    if (a === stato.selezionato) return -1;
+    if (b === stato.selezionato) return 1;
+    if (a.principale !== b.principale) return a.principale ? -1 : 1;
+    return (a.distanza || Infinity) - (b.distanza || Infinity);
+  });
+  // la priorità alla selezione decide solo QUALI lune mostrare: l'ordine di
+  // disegno (e quindi l'orbita assegnata) resta quello naturale del catalogo
+  const indice = new Map(p.lune.map((m, i) => [m, i]));
+  return ordinate.slice(0, stato.limiteLune)
+    .sort((a, b) => indice.get(a) - indice.get(b));
+}
+
+function disegnaVistaLune(t) {
+  const p = PIANETA_FOCUS;
+  const r = (12 + p.raggio * 1.6) * stato.scalaPianeti;
+  p._x = CX; p._y = CY; p._r = r;
+  const lx = -0.6, ly = -0.6;
+
+  if (p.anelli) disegnaAnelli(p, { x: CX, y: CY }, r, true);
+
+  ctx.shadowColor = colorAlpha(p.colore, 0.85);
+  ctx.shadowBlur = r * 1.2 * stato.luce;
+  const g = ctx.createRadialGradient(
+    CX + lx * r * 0.45, CY + ly * r * 0.45, r * 0.1,
+    CX, CY, r * 1.05
+  );
+  g.addColorStop(0, schiarisciColore(p.colore, .58));
+  g.addColorStop(0.25, p.colore);
+  g.addColorStop(0.8, p.coloreScuro);
+  g.addColorStop(1, "rgba(4, 6, 13, 0.9)");
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  if (!disegnaTextureFotografica(p, { x: CX, y: CY }, r)) {
+    disegnaSuperficiePianeta(p, { x: CX, y: CY }, r);
+  }
+
+  const ombra = ctx.createRadialGradient(
+    CX + lx * r * .42, CY + ly * r * .42, r * .2,
+    CX, CY, r
+  );
+  ombra.addColorStop(.55, "rgba(4, 6, 13, 0)");
+  ombra.addColorStop(1, "rgba(4, 6, 13, 0.38)");
+  ctx.fillStyle = ombra;
+  ctx.beginPath();
+  ctx.arc(CX, CY, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (p.anelli) disegnaAnelli(p, { x: CX, y: CY }, r, false);
+
+  if (stato.selezionato === p) {
+    ctx.strokeStyle = colorAlpha(p.colore, 0.9);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 5]);
+    ctx.lineDashOffset = -t * 0.02;
+    ctx.beginPath();
+    ctx.arc(CX, CY, r + 9 + (p.anelli ? r * 0.9 : 0), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  p.lune.forEach(m => { m._x = undefined; });
+  const visibili = luneVisibili(p);
+  const principali = visibili.filter(m => m.principale);
+  const minori = visibili.filter(m => !m.principale);
+  const basePrincipali = r + (p.anelli ? r * 1.1 : 0) + 14;
+  const limitePrincipali = Math.max(basePrincipali + 20, RMAX * stato.scalaOrbite * 0.74);
+
+  principali.forEach((m, i) => {
+    const progressione = principali.length === 1 ? 0.45 : i / (principali.length - 1);
+    const d = basePrincipali + (limitePrincipali - basePrincipali) * progressione;
+    disegnaSatellite(m, CX, CY, d, Math.max(m.raggio * 2.4 * stato.scalaPianeti, 2), t, true);
+  });
+
+  if (!minori.length) return;
+
+  const minD = basePrincipali + 8;
+  const maxD = Math.max(minD + 18, RMAX * stato.scalaOrbite * 0.96);
+  const distanzeNote = minori.map(m => m.distanza).filter(Boolean);
+  const maxDistanza = Math.max(...distanzeNote, 1);
+
+  if (stato.mostraOrbite) {
+    ctx.strokeStyle = "rgba(232, 237, 244, 0.045)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 7]);
+    for (const frazione of [0.2, 0.45, 0.7, 0.92]) {
+      const d = minD + (maxD - minD) * frazione;
+      tracciaOrbita3D(d, d);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  minori.forEach((m, i) => {
+    const progressione = m.distanza
+      ? Math.log1p(m.distanza) / Math.log1p(maxDistanza)
+      : 0.58 + 0.4 * ((i % 41) / 40);
+    const fascia = (i % 5) * 0.009;
+    const d = minD + (maxD - minD) * Math.min(progressione * 0.88 + fascia, 1);
+    disegnaSatellite(m, CX, CY, d, layoutMobile ? 1.05 : 1.3, t, true, false);
+  });
+}
+
+function disegnaAnelli(p, pos, r, dietro) {
+  ctx.save();
+  ctx.translate(pos.x, pos.y);
+  ctx.rotate(-0.35);
+  ctx.scale(1, 0.38);
+  const inizio = dietro ? Math.PI : 0;
+  const fine = dietro ? Math.PI * 2 : Math.PI;
+  for (const [mult, alpha, lw] of [[1.55, 0.55, r * 0.34], [2.0, 0.3, r * 0.22]]) {
+    ctx.strokeStyle = colorAlpha(p.colore, alpha);
+    ctx.lineWidth = lw;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * mult, inizio, fine);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ============================================================
+   CICLO PRINCIPALE
+   ============================================================ */
+let tPrec = performance.now();
+
+function ciclo(t) {
+  const dt = Math.min((t - tPrec) / 1000, 0.1);
+  tPrec = t;
+
+  if (!stato.pausa) {
+    stato.giorni += stato.velocita * dt;
+    for (const p of PIANETI) {
+      p.angolo = p.fase + (stato.giorni / p.periodo) * Math.PI * 2;
+      if (stato.mostraScie) {
+        const pos = posizione(p);
+        p.scia.push({ x: pos.x, y: pos.y });
+        if (p.scia.length > 90) p.scia.shift();
+      } else if (p.scia.length) {
+        p.scia.length = 0;
+      }
+    }
+    for (const p of PIANETI_NANI) {
+      p.angolo = p.fase + (stato.giorni / p.periodo) * Math.PI * 2;
+    }
+    for (const c of COMETE) {
+      c.angolo = c.fase + (stato.giorni / c.periodo) * Math.PI * 2;
+    }
+    aggiornaCronometro();
+  }
+
+  // sfondo
+  const fondo = ctx.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.75);
+  fondo.addColorStop(0, "#0a0f1e");
+  fondo.addColorStop(0.5, "#060912");
+  fondo.addColorStop(1, "#03040a");
+  ctx.fillStyle = fondo;
+  ctx.fillRect(0, 0, W, H);
+
+  disegnaStelle(t);
+  if (PIANETA_FOCUS) {
+    disegnaVistaLune(t);
+  } else {
+    if (stato.mostraOrbite) PIANETI.forEach(disegnaOrbita);
+    if (stato.mostraNani && stato.mostraOrbite) PIANETI_NANI.forEach(disegnaOrbitaNano);
+    if (stato.mostraComete && stato.mostraOrbite) COMETE.forEach(tracciaOrbitaCometa);
+    if (stato.mostraScie) PIANETI.forEach(disegnaScia);
+    if (stato.mostraAsteroidi) disegnaFasciaAsteroidi();
+    disegnaOrbitaEvidenziata(stato.hover);
+    disegnaSole(t);
+    PIANETI.forEach(p => { disegnaPianeta(p, t); disegnaLune(p, t); });
+    if (stato.mostraComete) COMETE.forEach(c => disegnaCometa(c, t));
+    else COMETE.forEach(c => { c._x = undefined; });
+    if (stato.mostraNani) {
+      PIANETI_NANI.forEach(p => disegnaPianeta(p, t));
+    } else {
+      PIANETI_NANI.forEach(p => { p._x = undefined; });
+    }
+  }
+
+  requestAnimationFrame(ciclo);
+}
+
+function aggiornaCronometro() {
+  const T = TXT[lingua];
+  const g = Math.floor(stato.giorni);
+  document.getElementById("contaGiorni").textContent =
+    T.giorno + " " + g.toLocaleString(T.locale);
+  document.getElementById("contaAnni").textContent =
+    (stato.giorni / 365.25).toLocaleString(T.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " " + T.anni;
+  const dataSimulata = new Date(DATA_BASE.getTime() + stato.giorni * GIORNO_MS);
+  document.getElementById("contaData").textContent = dataSimulata.toLocaleDateString(T.locale, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  if (!document.getElementById("campiData").contains(document.activeElement)) {
+    aggiornaCampiData(dataSimulata);
+  }
+}
+
+function dataSimulataCorrente() {
+  return new Date(DATA_BASE.getTime() + stato.giorni * GIORNO_MS);
+}
+
+function valoreCampoData(data) {
+  const anno = data.getFullYear();
+  const mese = String(data.getMonth() + 1).padStart(2, "0");
+  const giorno = String(data.getDate()).padStart(2, "0");
+  return `${anno}-${mese}-${giorno}`;
+}
+
+function aggiornaCampiData(data) {
+  document.getElementById("dataGiorno").value = String(data.getDate()).padStart(2, "0");
+  document.getElementById("dataMese").value = String(data.getMonth() + 1).padStart(2, "0");
+  document.getElementById("dataAnno").value = data.getFullYear();
+}
+
+function creaDataCalendario(anno, mese, giorno) {
+  const data = new Date(0);
+  data.setHours(12, 0, 0, 0);
+  data.setFullYear(anno, mese - 1, giorno);
+  return data;
+}
+
+function giorniNelMese(anno, mese) {
+  return creaDataCalendario(anno, mese + 1, 0).getDate();
+}
+
+function dataDaiCampi() {
+  const anno = Number(document.getElementById("dataAnno").value);
+  const mese = Number(document.getElementById("dataMese").value);
+  const giorno = Number(document.getElementById("dataGiorno").value);
+  if (anno < 1 || anno > 3000 || mese < 1 || mese > 12 || giorno < 1) return null;
+  return creaDataCalendario(anno, mese, Math.min(giorno, giorniNelMese(anno, mese)));
+}
+
+function ripristinaEpocaSelezionata() {
+  stato.giorni = 0;
+  aggiornaElementiPerData(DATA_BASE);
+  aggiornaCronometro();
+}
+
+function impostaDataAllineamento(data) {
+  const minima = creaDataCalendario(1, 1, 1);
+  const massima = creaDataCalendario(3000, 12, 31);
+  DATA_BASE = new Date(Math.max(minima, Math.min(massima, data)));
+  aggiornaCampiData(DATA_BASE);
+  aggiornaAvvisoPrecisione();
+  ripristinaEpocaSelezionata();
+}
+
+function aggiornaAvvisoPrecisione() {
+  const fuoriIntervallo = DATA_BASE.getFullYear() < 1800 || DATA_BASE.getFullYear() > 2050;
+  const avviso = document.getElementById("avvisoPrecisione");
+  avviso.textContent = TXT[lingua].precisioneRidotta;
+  avviso.classList.toggle("visibile", fuoriIntervallo);
+}
+
+function spostaDataAllineamento(unita, delta) {
+  const nuova = dataSimulataCorrente();
+  const giorno = nuova.getDate();
+  if (unita === "giorni") {
+    nuova.setDate(giorno + delta);
+  } else if (unita === "mesi") {
+    nuova.setDate(1);
+    nuova.setMonth(nuova.getMonth() + delta);
+    nuova.setDate(Math.min(giorno, giorniNelMese(nuova.getFullYear(), nuova.getMonth() + 1)));
+  } else {
+    nuova.setDate(1);
+    nuova.setFullYear(nuova.getFullYear() + delta);
+    nuova.setDate(Math.min(giorno, giorniNelMese(nuova.getFullYear(), nuova.getMonth() + 1)));
+  }
+  impostaDataAllineamento(nuova);
+}
+
+/* ============================================================
+   INTERAZIONE COL CANVAS
+   ============================================================ */
+function corpoSotto(mx, my) {
+  // prima le lune: scegli il punto più vicino, importante nei sistemi affollati
+  let lunaPiuVicina = null;
+  let distanzaLuna = Infinity;
+  for (const p of PIANETI) {
+    if (!p.lune) continue;
+    for (const m of p.lune) {
+      if (m._x === undefined) continue;
+      const distanza = Math.hypot(mx - m._x, my - m._y);
+      const margine = Math.max(m._r + (m.principale ? 5 : 3), m.principale ? 9 : 5);
+      if (distanza < margine && distanza < distanzaLuna) {
+        lunaPiuVicina = m;
+        distanzaLuna = distanza;
+      }
+    }
+  }
+  if (lunaPiuVicina) return lunaPiuVicina;
+  for (const p of PIANETI) {
+    if (p._x === undefined) continue;
+    const margine = Math.max(p._r + 7, 13) + (p.anelli ? p._r : 0);
+    if (Math.hypot(mx - p._x, my - p._y) < margine) return p;
+  }
+  for (const p of PIANETI_NANI) {
+    if (p._x === undefined) continue;
+    if (Math.hypot(mx - p._x, my - p._y) < Math.max(p._r + 7, 12)) return p;
+  }
+  for (const c of COMETE) {
+    if (c._x === undefined) continue;
+    if (Math.hypot(mx - c._x, my - c._y) < c._r) return c;
+  }
+  if (!PIANETA_FOCUS && Math.hypot(mx - SOLE._x, my - SOLE._y) < (SOLE._r || 28) + 8) return SOLE;
+  return null;
+}
+
+const etichettaHover = document.getElementById("etichettaHover");
+const trascinamentoCamera = {
+  attivo: false,
+  ruotato: false,
+  ignoraClick: false,
+  pointerId: null,
+  x: 0,
+  y: 0,
+};
+const puntatoriAttivi = new Map();
+let distanzaPinch = 0;
+canvas.classList.add("ruotabile");
+
+function applicaZoomAncora(nuovoZoom, x, y) {
+  const zoomPrecedente = stato.cameraZoom;
+  const zoomLimitato = Math.max(0.55, Math.min(8, nuovoZoom));
+  if (zoomLimitato === zoomPrecedente) return;
+  const corpoAncora = corpoSotto(x, y);
+  if (PIANETI.includes(corpoAncora) || PIANETI_NANI.includes(corpoAncora)) {
+    stato.hover = corpoAncora;
+  }
+  const posizionePrecedente = corpoAncora?._x === undefined
+    ? null
+    : { x: corpoAncora._x, y: corpoAncora._y };
+  const rapporto = zoomLimitato / zoomPrecedente;
+  stato.cameraPanX = x - CX - (x - CX - stato.cameraPanX) * rapporto;
+  stato.cameraPanY = y - CY - (y - CY - stato.cameraPanY) * rapporto;
+  stato.cameraZoom = zoomLimitato;
+
+  let posizioneNuova = null;
+  if (!PIANETA_FOCUS && (PIANETI.includes(corpoAncora) || PIANETI_NANI.includes(corpoAncora))) {
+    posizioneNuova = posizione(corpoAncora);
+  } else if (COMETE.includes(corpoAncora)) {
+    posizioneNuova = posizioneCometa(corpoAncora);
+  } else if (corpoAncora === SOLE) {
+    posizioneNuova = proiettaPunto3D(0, 0);
+  }
+  if (posizionePrecedente && posizioneNuova) {
+    stato.cameraPanX += posizionePrecedente.x - posizioneNuova.x;
+    stato.cameraPanY += posizionePrecedente.y - posizioneNuova.y;
+  }
+  PIANETI.forEach(p => { p.scia.length = 0; });
+}
+
+canvas.addEventListener("pointermove", e => {
+  if (puntatoriAttivi.has(e.pointerId)) {
+    puntatoriAttivi.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  }
+  if (puntatoriAttivi.size >= 2) {
+    const [a, b] = [...puntatoriAttivi.values()];
+    const distanza = Math.hypot(a.x - b.x, a.y - b.y);
+    if (distanzaPinch > 0) {
+      applicaZoomAncora(
+        stato.cameraZoom * (distanza / distanzaPinch),
+        (a.x + b.x) / 2,
+        (a.y + b.y) / 2
+      );
+    }
+    distanzaPinch = distanza;
+    trascinamentoCamera.ruotato = true;
+    trascinamentoCamera.ignoraClick = true;
+    etichettaHover.classList.remove("visibile");
+    return;
+  }
+
+  if (trascinamentoCamera.attivo && e.pointerId === trascinamentoCamera.pointerId) {
+    const dx = e.clientX - trascinamentoCamera.x;
+    const dy = e.clientY - trascinamentoCamera.y;
+    if (!trascinamentoCamera.ruotato && Math.hypot(dx, dy) > 4) {
+      trascinamentoCamera.ruotato = true;
+      canvas.classList.add("ruotando");
+      etichettaHover.classList.remove("visibile");
+    }
+    if (trascinamentoCamera.ruotato) {
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl/Cmd + trascinamento = ruota/inclina l'asse 3D.
+        ruotaVista(dx * 0.008, dy * 0.008);
+      } else {
+        // Trascinamento normale = pan: la scena segue il dito/cursore.
+        spostaVista(dx, dy);
+      }
+      trascinamentoCamera.x = e.clientX;
+      trascinamentoCamera.y = e.clientY;
+      stato.hover = null;
+      canvas.classList.remove("su-pianeta");
+    }
+    return;
+  }
+
+  const corpo = corpoSotto(e.clientX, e.clientY);
+  stato.hover = (corpo && corpo !== SOLE) ? corpo : null;
+  canvas.classList.toggle("su-pianeta", !!corpo);
+  // I corpi mostrano già il nome sul canvas durante l'hover.
+  // L'etichetta flottante resta utile soltanto per il Sole.
+  if (corpo === SOLE) {
+    etichettaHover.textContent = corpo.nome[lingua];
+    etichettaHover.style.left = e.clientX + "px";
+    etichettaHover.style.top = e.clientY + "px";
+    etichettaHover.classList.add("visibile");
+  } else {
+    etichettaHover.classList.remove("visibile");
+  }
+});
+
+canvas.addEventListener("pointerdown", e => {
+  if (e.button !== undefined && e.button !== 0) return;
+  puntatoriAttivi.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (puntatoriAttivi.size === 2) {
+    const [a, b] = [...puntatoriAttivi.values()];
+    distanzaPinch = Math.hypot(a.x - b.x, a.y - b.y);
+    trascinamentoCamera.ruotato = true;
+    canvas.setPointerCapture(e.pointerId);
+    return;
+  }
+  trascinamentoCamera.attivo = true;
+  trascinamentoCamera.ruotato = false;
+  trascinamentoCamera.pointerId = e.pointerId;
+  trascinamentoCamera.x = e.clientX;
+  trascinamentoCamera.y = e.clientY;
+  canvas.setPointerCapture(e.pointerId);
+});
+
+function terminaRotazioneCamera(e) {
+  puntatoriAttivi.delete(e.pointerId);
+  if (puntatoriAttivi.size < 2) distanzaPinch = 0;
+  if (!trascinamentoCamera.attivo || e.pointerId !== trascinamentoCamera.pointerId) return;
+  trascinamentoCamera.ignoraClick = trascinamentoCamera.ruotato;
+  trascinamentoCamera.attivo = false;
+  trascinamentoCamera.pointerId = null;
+  canvas.classList.remove("ruotando");
+  if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+}
+
+canvas.addEventListener("pointerup", terminaRotazioneCamera);
+canvas.addEventListener("pointercancel", terminaRotazioneCamera);
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  const fattore = Math.exp(-e.deltaY * 0.0012);
+  applicaZoomAncora(stato.cameraZoom * fattore, e.clientX, e.clientY);
+}, { passive: false });
+// Controlli vista: alternativa accessibile a rotella e trascinamento.
+const PASSO_ZOOM = 1.25;        // fattore per singolo clic/tap
+const VEL_ZOOM = 1.8;           // crescita esponenziale dello zoom al secondo, tenendo premuto
+const PASSO_ROTAZIONE = 0.18;   // radianti per singolo clic/tap
+const VEL_ROTAZIONE = 1.4;      // radianti al secondo, tenendo premuto
+const PASSO_PAN = 60;           // pixel per singolo clic/tap (spostamento)
+const VEL_PAN = 480;            // pixel al secondo, tenendo premuto
+
+let modoSposta = false;         // false = ruota/inclina · true = sposta (pan)
+
+function zoomDaPulsante(fattore) {
+  applicaZoomAncora(stato.cameraZoom * fattore, CX, CY);
+}
+function ruotaVista(dYaw, dPitch) {
+  stato.cameraYaw += dYaw;
+  stato.cameraPitch = Math.max(-1.2, Math.min(1.2, stato.cameraPitch + dPitch));
+  stato.hover = null;
+  PIANETI.forEach(p => { p.scia.length = 0; });
+  PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+}
+function spostaVista(dx, dy) {
+  // Pan: la scena segue la direzione indicata (coerente col trascinamento).
+  stato.cameraPanX += dx;
+  stato.cameraPanY += dy;
+  stato.hover = null;
+  PIANETI.forEach(p => { p.scia.length = 0; });
+  PIANETI_NANI.forEach(p => { p.scia.length = 0; });
+}
+
+// Rende un pulsante "premibile": tap singolo da mouse/tastiera + movimento continuo
+// mentre lo si tiene premuto. azioneSingola() scatta al tap; azioneContinua(dt) a ogni frame.
+function controlloPremibile(el, azioneSingola, azioneContinua) {
+  let raf = null, ultimo = 0, inizio = 0, daPuntatore = false;
+  const RITARDO = 180; // ms prima che parta il movimento continuo (così un tap = un passo)
+  function frame(t) {
+    if (!ultimo) ultimo = t;
+    const dt = Math.min((t - ultimo) / 1000, 0.05);
+    ultimo = t;
+    if (t - inizio >= RITARDO) azioneContinua(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  function ferma() {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+  }
+  el.addEventListener("pointerdown", e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    daPuntatore = true;
+    azioneSingola();
+    inizio = performance.now();
+    ultimo = 0;
+    ferma();
+    raf = requestAnimationFrame(frame);
+    try { el.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  el.addEventListener("pointerup", ferma);
+  el.addEventListener("pointercancel", ferma);
+  el.addEventListener("lostpointercapture", ferma);
+  el.addEventListener("click", () => {
+    // I puntatori sono già gestiti da pointerdown; qui resta la sola attivazione da tastiera.
+    if (daPuntatore) { daPuntatore = false; return; }
+    azioneSingola();
+  });
+}
+
+controlloPremibile(
+  document.getElementById("btnZoomIn"),
+  () => zoomDaPulsante(PASSO_ZOOM),
+  dt => zoomDaPulsante(Math.exp(VEL_ZOOM * dt))
+);
+controlloPremibile(
+  document.getElementById("btnZoomOut"),
+  () => zoomDaPulsante(1 / PASSO_ZOOM),
+  dt => zoomDaPulsante(Math.exp(-VEL_ZOOM * dt))
+);
+// Le frecce agiscono secondo la modalità attiva: ruota/inclina oppure sposta (pan).
+// segnoX/segnoY ∈ {-1,0,1}: in rotazione X=yaw e Y=pitch; nello spostamento = pan.
+function registraFreccia(id, segnoX, segnoY) {
+  controlloPremibile(
+    document.getElementById(id),
+    () => modoSposta
+      ? spostaVista(segnoX * PASSO_PAN, segnoY * PASSO_PAN)
+      : ruotaVista(segnoX * PASSO_ROTAZIONE, segnoY * PASSO_ROTAZIONE),
+    dt => modoSposta
+      ? spostaVista(segnoX * VEL_PAN * dt, segnoY * VEL_PAN * dt)
+      : ruotaVista(segnoX * VEL_ROTAZIONE * dt, segnoY * VEL_ROTAZIONE * dt)
+  );
+}
+registraFreccia("btnSu", 0, -1);
+registraFreccia("btnGiu", 0, 1);
+registraFreccia("btnSinistra", -1, 0);
+registraFreccia("btnDestra", 1, 0);
+
+// Toggle di modalità delle frecce: ruota/inclina ⟳ ↔ sposta ✥.
+const btnModo = document.getElementById("btnModo");
+function aggiornaModoControlli() {
+  const T = TXT[lingua];
+  btnModo.textContent = modoSposta ? "✥" : "⟳";
+  btnModo.setAttribute("aria-pressed", String(modoSposta));
+  btnModo.setAttribute("aria-label", modoSposta ? T.modoSposta : T.modoRuota);
+  btnModo.title = btnModo.getAttribute("aria-label");
+  const e = modoSposta ? T.frecceSposta : T.frecceRuota;
+  for (const [id, testo] of Object.entries(e)) {
+    const b = document.getElementById(id);
+    b.setAttribute("aria-label", testo);
+    b.title = testo;
+  }
+}
+btnModo.addEventListener("click", () => {
+  modoSposta = !modoSposta;
+  aggiornaModoControlli();
+});
+canvas.addEventListener("dblclick", e => {
+  e.preventDefault();
+  stato.cameraYaw = -0.24;
+  stato.cameraPitch = 0.56;
+  stato.cameraZoom = 1;
+  stato.cameraPanX = 0;
+  stato.cameraPanY = 0;
+  stato.cameraTarget = null;
+  aggiornaPulsanteCamera();
+});
+
+canvas.addEventListener("click", e => {
+  if (trascinamentoCamera.ignoraClick) {
+    trascinamentoCamera.ignoraClick = false;
+    return;
+  }
+  const corpo = corpoSotto(e.clientX, e.clientY);
+  if (corpo) {
+    apriScheda(corpo);
+    return;
+  }
+
+  scheda.classList.remove("visibile");
+  stato.selezionato = null;
+  stato.hover = null;
+  etichettaHover.classList.remove("visibile");
+  chiudiRicerca();
+  riduciConsoleAIcona();
+});
+
+/* ============================================================
+   RICERCA GLOBALE
+   ============================================================ */
+const campoRicerca = document.getElementById("campoRicerca");
+const risultatiRicerca = document.getElementById("risultatiRicerca");
+const contenitoreRicerca = document.getElementById("ricerca");
+const apriRicerca = document.getElementById("apriRicerca");
+let risultatiCorrenti = [];
+let indiceRisultato = -1;
+
+function chiudiRicerca() {
+  contenitoreRicerca.classList.remove("aperta");
+  risultatiRicerca.classList.remove("visibile");
+  campoRicerca.value = "";
+}
+
+apriRicerca.addEventListener("click", () => {
+  contenitoreRicerca.classList.add("aperta");
+  campoRicerca.focus();
+});
+
+function normalizzaRicerca(testo) {
+  return testo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function indiceRicerca() {
+  const voci = [
+    { corpo: SOLE, categoria: "stella" },
+    ...PIANETI.map(corpo => ({ corpo, categoria: "pianeta" })),
+    ...PIANETI_NANI.map(corpo => ({ corpo, categoria: "nano" })),
+    ...COMETE.map(corpo => ({ corpo, categoria: "cometa" })),
+  ];
+  for (const p of PIANETI) {
+    for (const corpo of p.lune || []) voci.push({ corpo, categoria: "luna", pianeta: p });
+  }
+  return voci;
+}
+
+const INDICE_RICERCA = indiceRicerca();
+
+function etichettaRisultato(voce) {
+  const categoria = TXT[lingua].categorie[voce.categoria];
+  return voce.pianeta ? `${categoria} · ${voce.pianeta.nome[lingua]}` : categoria;
+}
+
+function mostraRisultatiRicerca() {
+  const query = normalizzaRicerca(campoRicerca.value);
+  risultatiRicerca.replaceChildren();
+  indiceRisultato = -1;
+
+  if (!query) {
+    risultatiCorrenti = [];
+    risultatiRicerca.classList.remove("visibile");
+    return;
+  }
+
+  risultatiCorrenti = INDICE_RICERCA
+    .filter(voce => {
+      const nomi = `${voce.corpo.nome.it} ${voce.corpo.nome.en} ${voce.pianeta?.nome.it || ""} ${voce.pianeta?.nome.en || ""}`;
+      return normalizzaRicerca(nomi).includes(query);
+    })
+    .slice(0, 14);
+
+  if (!risultatiCorrenti.length) {
+    const vuoto = document.createElement("div");
+    vuoto.className = "nessun-risultato";
+    vuoto.textContent = TXT[lingua].nessunRisultato;
+    risultatiRicerca.appendChild(vuoto);
+  } else {
+    risultatiCorrenti.forEach((voce, i) => {
+      const bottone = document.createElement("button");
+      bottone.type = "button";
+      bottone.className = "risultato-ricerca";
+      const nome = document.createElement("b");
+      nome.textContent = voce.corpo.nome[lingua];
+      const tipo = document.createElement("small");
+      tipo.textContent = etichettaRisultato(voce);
+      bottone.append(nome, tipo);
+      bottone.addEventListener("click", () => apriRisultatoRicerca(voce));
+      bottone.dataset.indice = i;
+      risultatiRicerca.appendChild(bottone);
+    });
+  }
+  risultatiRicerca.classList.add("visibile");
+}
+
+function apriRisultatoRicerca(voce) {
+  chiudiRicerca();
+
+  if (voce.categoria === "luna") {
+    if (PIANETA_FOCUS === voce.pianeta) {
+      apriScheda(voce.corpo);
+      return;
+    }
+    navigaConTransizione(
+      `?focus=${voce.pianeta.slug}&target=${encodeURIComponent(voce.corpo.nome.en)}`,
+      voce.pianeta,
+      "avanti"
+    );
+    return;
+  }
+
+  if (PIANETA_FOCUS) {
+    navigaConTransizione(`?target=${encodeURIComponent(voce.corpo.nome.en)}`, PIANETA_FOCUS, "indietro");
+    return;
+  }
+
+  if (voce.categoria === "nano") {
+    stato.mostraNani = true;
+    document.getElementById("chkNani").checked = true;
+  }
+  apriScheda(voce.corpo);
+}
+
+campoRicerca.addEventListener("input", mostraRisultatiRicerca);
+campoRicerca.addEventListener("focus", mostraRisultatiRicerca);
+campoRicerca.addEventListener("keydown", e => {
+  if (!risultatiCorrenti.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    indiceRisultato = (indiceRisultato + (e.key === "ArrowDown" ? 1 : -1) + risultatiCorrenti.length) % risultatiCorrenti.length;
+    risultatiRicerca.querySelectorAll(".risultato-ricerca").forEach((b, i) => b.classList.toggle("attivo", i === indiceRisultato));
+  }
+  if (e.key === "Enter") {
+    e.preventDefault();
+    apriRisultatoRicerca(risultatiCorrenti[Math.max(indiceRisultato, 0)]);
+  }
+});
+document.addEventListener("pointerdown", e => {
+  if (!contenitoreRicerca.contains(e.target)) chiudiRicerca();
+});
+
+/* ============================================================
+   SCHEDA INFORMATIVA
+   ============================================================ */
+const scheda = document.getElementById("scheda");
+let richiestaFotoScheda = 0;
+
+function aggiornaFotoScheda(corpo) {
+  const richiesta = ++richiestaFotoScheda;
+  const foto = FOTO_CORPI[corpo.slug];
+  const contenitore = document.getElementById("schedaFoto");
+  const immagine = document.getElementById("schedaFotoImg");
+  const fonte = document.getElementById("schedaFotoFonte");
+
+  contenitore.classList.remove("visibile");
+  immagine.removeAttribute("src");
+  immagine.alt = "";
+  fonte.textContent = "";
+  fonte.removeAttribute("href");
+  if (!foto) return;
+
+  const precaricata = new Image();
+  precaricata.src = foto.src;
+  precaricata.decode()
+    .then(() => {
+      if (richiesta !== richiestaFotoScheda || stato.selezionato !== corpo) return;
+      immagine.src = foto.src;
+      immagine.alt = `${corpo.nome[lingua]} · ${foto.fonte}`;
+      fonte.textContent = foto.fonte;
+      fonte.href = foto.pagina;
+      contenitore.classList.add("visibile");
+    })
+    .catch(() => {
+      if (richiesta === richiestaFotoScheda) contenitore.classList.remove("visibile");
+    });
+}
+
+function apriScheda(corpo, mantieniRidotta = false) {
+  stato.selezionato = corpo;
+  scheda.style.setProperty("--colore-pianeta", corpo.colore);
+  document.getElementById("schedaNome").textContent = corpo.nome[lingua];
+  document.getElementById("schedaTipo").textContent = corpo.tipo[lingua];
+  document.getElementById("schedaDescrizione").textContent = corpo.descrizione[lingua];
+
+  aggiornaFotoScheda(corpo);
+
+  const dettagli = DETTAGLI_CORPI[corpo.nome.it]?.[lingua] || [];
+  const contenitoreDettagli = document.getElementById("schedaDettagli");
+  contenitoreDettagli.innerHTML = dettagli.length
+    ? `<h3>${TXT[lingua].approfondimenti}</h3><ul>${dettagli.map(d => `<li>${d}</li>`).join("")}</ul>`
+    : "";
+
+  const curiosita = document.getElementById("schedaCuriosita");
+  if (corpo.curiosita) {
+    curiosita.style.display = "";
+    curiosita.textContent = corpo.curiosita[lingua];
+  } else {
+    curiosita.style.display = "none";
+  }
+
+  // link alla simulazione delle lune del pianeta
+  const link = document.getElementById("schedaLune");
+  if (corpo.lune && corpo.slug !== FOCUS) {
+    link.style.display = "block";
+    link.href = "?focus=" + corpo.slug;
+    link.textContent = "🛰 " + TXT[lingua].vaiLune(corpo.lune.length);
+  } else {
+    link.style.display = "none";
+  }
+  aggiornaPulsanteCamera();
+
+  const griglia = document.getElementById("schedaDati");
+  const datiScheda = [...corpo.dati[lingua]];
+  if (PIANETI.includes(corpo)) {
+    const inclinazione = Math.abs(corpo.inclinazione * 180 / Math.PI);
+    datiScheda.push([
+      lingua === "it" ? "Inclinazione orbitale" : "Orbital inclination",
+      inclinazione.toLocaleString(TXT[lingua].locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      "°",
+    ]);
+  }
+  griglia.innerHTML = datiScheda.map(([nome, valore, unita]) =>
+    `<div class="dato"><dt>${nome}</dt><dd>${valore} <small>${unita}</small></dd></div>`
+  ).join("");
+
+  if (!mantieniRidotta) scheda.classList.remove("ridotta");
+  scheda.classList.add("visibile");
+}
+
+document.getElementById("schedaChiudi").addEventListener("click", e => {
+  e.stopPropagation();
+  scheda.classList.remove("visibile");
+  stato.selezionato = null;
+});
+
+document.getElementById("schedaTesta").addEventListener("click", () => {
+  scheda.classList.toggle("ridotta");
+});
+
+document.getElementById("schedaLune").addEventListener("click", e => {
+  if (!stato.selezionato?.lune) return;
+  e.preventDefault();
+  navigaConTransizione(e.currentTarget.href, stato.selezionato, "avanti");
+});
+
+function aggiornaPulsanteCamera() {
+  const bottone = document.getElementById("centraVista");
+  const corpo = stato.selezionato;
+  const centrabile = !PIANETA_FOCUS && (PIANETI.includes(corpo) || PIANETI_NANI.includes(corpo));
+  bottone.style.display = centrabile ? "block" : "none";
+  if (!centrabile) return;
+  bottone.textContent = stato.cameraTarget === corpo
+    ? TXT[lingua].liberaVista
+    : TXT[lingua].centraVista(corpo.nome[lingua]);
+}
+
+document.getElementById("centraVista").addEventListener("click", e => {
+  e.stopPropagation();
+  const corpo = stato.selezionato;
+  if (!corpo) return;
+  if (stato.cameraTarget === corpo) {
+    stato.cameraTarget = null;
+    stato.cameraZoom = 1;
+    stato.cameraPanX = 0;
+    stato.cameraPanY = 0;
+  } else {
+    stato.cameraTarget = corpo;
+    stato.cameraZoom = Math.max(stato.cameraZoom, 3.2);
+    stato.cameraPanX = 0;
+    stato.cameraPanY = 0;
+    PIANETI.forEach(p => { p.scia.length = 0; });
+  }
+  aggiornaPulsanteCamera();
+});
+
+const fontiDialogo = document.getElementById("fontiDialogo");
+document.getElementById("apriFonti").addEventListener("click", () => fontiDialogo.showModal());
+document.getElementById("chiudiFonti").addEventListener("click", () => fontiDialogo.close());
+fontiDialogo.addEventListener("click", e => {
+  if (e.target === fontiDialogo) fontiDialogo.close();
+});
+
+document.getElementById("linkIndietro").addEventListener("click", e => {
+  if (!PIANETA_FOCUS) return;
+  e.preventDefault();
+  const url = `?target=${encodeURIComponent(PIANETA_FOCUS.nome.en)}`;
+  navigaConTransizione(url, PIANETA_FOCUS, "indietro");
+});
+
+/* ============================================================
+   CONSOLE DI CONTROLLO
+   ============================================================ */
+const pannelloComandi = document.getElementById("pannelloComandi");
+aggiornaCampiData(DATA_BASE);
+const CAMPI_DATA = [
+  ["dataGiorno", "giorni"],
+  ["dataMese", "mesi"],
+  ["dataAnno", "anni"],
+];
+CAMPI_DATA.forEach(([id, unita]) => {
+  const campo = document.getElementById(id);
+  campo.addEventListener("keydown", e => {
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    e.preventDefault();
+    spostaDataAllineamento(unita, e.key === "ArrowUp" ? 1 : -1);
+  });
+  campo.addEventListener("change", () => {
+    const data = dataDaiCampi();
+    if (data) impostaDataAllineamento(data);
+    else aggiornaCampiData(DATA_BASE);
+  });
+});
+document.getElementById("btnOggi").addEventListener("click", () => {
+  impostaDataAllineamento(new Date());
+});
+
+function aggiornaGeometriaDopoConsole() {
+  requestAnimationFrame(aggiornaGeometria);
+  setTimeout(aggiornaGeometria, 480);
+}
+
+function riduciConsoleAIcona() {
+  pannelloComandi.classList.remove("chiuso");
+  pannelloComandi.classList.add("icona");
+  aggiornaGeometriaDopoConsole();
+}
+
+document.getElementById("comandiTesta").addEventListener("click", () => {
+  if (pannelloComandi.classList.contains("icona")) {
+    pannelloComandi.classList.remove("icona");
+    pannelloComandi.classList.remove("chiuso");
+  } else {
+    pannelloComandi.classList.toggle("chiuso");
+  }
+  aggiornaGeometriaDopoConsole();
+});
+
+const aggiornaSliders = [];
+
+function collegaSlider(id, outputId, formato, applica, trasforma = v => v) {
+  const slider = document.getElementById(id);
+  const uscita = document.getElementById(outputId);
+  const aggiorna = () => {
+    const posizione = parseFloat(slider.value);
+    const min = parseFloat(slider.min), max = parseFloat(slider.max);
+    const v = trasforma(posizione);
+    slider.style.setProperty("--pct", ((posizione - min) / (max - min)) * 100 + "%");
+    uscita.textContent = formato(v);
+    applica(v);
+  };
+  slider.addEventListener("input", aggiorna);
+  aggiornaSliders.push(aggiorna);
+  aggiorna();
+}
+
+function velocitaDaPosizione(posizione) {
+  const percentuale = posizione / 1000;
+  if (percentuale <= 0.5) return Math.round(percentuale * 20);
+  return Math.round(10 + ((percentuale - 0.5) / 0.5) * 190);
+}
+
+function posizioneDaVelocita(velocita) {
+  if (velocita <= 10) return (velocita / 10) * 500;
+  return 500 + ((velocita - 10) / 190) * 500;
+}
+
+document.getElementById("sVelocita").value = posizioneDaVelocita(VELOCITA_INIZIALE);
+collegaSlider("sVelocita", "vVelocita",
+  v => v === 0 ? TXT[lingua].fermo : v + " " + TXT[lingua].unitaVelocita,
+  v => stato.velocita = v,
+  velocitaDaPosizione);
+
+collegaSlider("sScala", "vScala",
+  v => v.toFixed(1) + "×",
+  v => stato.scalaPianeti = v);
+
+collegaSlider("sLuce", "vLuce",
+  v => v + "%",
+  v => stato.luce = v / 100);
+
+collegaSlider("sOrbite", "vOrbite",
+  v => v.toFixed(2).replace(/0$/, "") + "×",
+  v => { stato.scalaOrbite = v; PIANETI.forEach(p => p.scia.length = 0); });
+
+const sliderLimiteLune = document.getElementById("sLimiteLune");
+const totaleLuneFocus = PIANETA_FOCUS?.lune.length || 20;
+const SOGLIA_LUNE_LINEARE = Math.min(50, totaleLuneFocus);
+sliderLimiteLune.max = totaleLuneFocus <= SOGLIA_LUNE_LINEARE ? totaleLuneFocus : 100;
+sliderLimiteLune.value = Math.min(20, totaleLuneFocus);
+
+function limiteLuneDaSlider(posizione) {
+  if (totaleLuneFocus <= SOGLIA_LUNE_LINEARE || posizione <= SOGLIA_LUNE_LINEARE) {
+    return Math.round(posizione);
+  }
+  const progresso = (posizione - SOGLIA_LUNE_LINEARE) / (100 - SOGLIA_LUNE_LINEARE);
+  return Math.ceil(
+    SOGLIA_LUNE_LINEARE +
+    Math.pow(progresso, 1.7) * (totaleLuneFocus - SOGLIA_LUNE_LINEARE)
+  );
+}
+
+collegaSlider("sLimiteLune", "vLimiteLune",
+  v => v >= totaleLuneFocus ? TXT[lingua].tutte : String(Math.round(v)),
+  v => stato.limiteLune = Math.round(v),
+  limiteLuneDaSlider);
+
+const btnPausa = document.getElementById("btnPausa");
+btnPausa.addEventListener("click", () => {
+  stato.pausa = !stato.pausa;
+  btnPausa.textContent = stato.pausa ? TXT[lingua].riprendi : TXT[lingua].pausa;
+  btnPausa.classList.toggle("attivo", stato.pausa);
+});
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  ripristinaEpocaSelezionata();
+});
+
+document.getElementById("chkOrbite").addEventListener("change", e => stato.mostraOrbite = e.target.checked);
+document.getElementById("chkNomi").addEventListener("change", e => stato.mostraNomi = e.target.checked);
+document.getElementById("chkScie").addEventListener("change", e => {
+  stato.mostraScie = e.target.checked;
+  if (!e.target.checked) PIANETI.forEach(p => p.scia.length = 0);
+});
+document.getElementById("chkLune").addEventListener("change", e => stato.mostraLune = e.target.checked);
+document.getElementById("chkNani").addEventListener("change", e => stato.mostraNani = e.target.checked);
+document.getElementById("chkAsteroidi").addEventListener("change", e => stato.mostraAsteroidi = e.target.checked);
+document.getElementById("chkComete").addEventListener("change", e => stato.mostraComete = e.target.checked);
+document.getElementById("chkAccessibilita").addEventListener("change", e => {
+  document.body.classList.toggle("strumenti-spenti", !e.target.checked);
+});
+
+/* ============================================================
+   SOTTOFONDO MUSICALE (Web Audio)
+   Arrangiamento sintetico ispirato all'Aria sulla quarta corda
+   di J.S. Bach (composizione di pubblico dominio)
+   ============================================================ */
+const BEAT = 1.05;            // ≈ 57 bpm
+const BATTUTE = 8;
+const DURATA_LOOP = BATTUTE * 4 * BEAT;
+
+// [nota MIDI, battito d'inizio, durata in battiti]
+const MELODIA = [
+  [78, 0, 4],
+  [76, 4, 2], [74, 6, 1], [73, 7, 1],
+  [74, 8, 2], [71, 10, 2],
+  [69, 12, 4],
+  [67, 16, 2], [71, 18, 1], [74, 19, 1],
+  [78, 20, 2], [76, 22, 1], [74, 23, 1],
+  [76, 24, 3], [73, 27, 1],
+  [74, 28, 4],
+];
+const BASSO = [
+  [50, 0], [38, 1], [50, 2], [38, 3],
+  [49, 4], [37, 5], [49, 6], [45, 7],
+  [47, 8], [42, 9], [47, 10], [42, 11],
+  [45, 12], [40, 13], [45, 14], [40, 15],
+  [43, 16], [38, 17], [43, 18], [38, 19],
+  [42, 20], [38, 21], [42, 22], [38, 23],
+  [40, 24], [40, 25], [45, 26], [45, 27],
+  [38, 28, 4],
+];
+const ACCORDI = [
+  [[62, 66, 69], 0], [[61, 64, 69], 4], [[59, 62, 66], 8], [[57, 61, 64], 12],
+  [[55, 59, 62], 16], [[54, 57, 62], 20], [[57, 61, 67], 24], [[62, 66, 69], 28],
+];
+
+let audioCtx = null, musicaAttiva = false, timerMusica = null;
+let busSecco = null, padFiltro = null;
+
+function frequenza(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+
+function nota(midi, t, dur, opt) {
+  const osc = audioCtx.createOscillator();
+  osc.type = opt.tipo;
+  osc.frequency.value = frequenza(midi);
+  if (opt.detune) osc.detune.value = opt.detune;
+  const g = audioCtx.createGain();
+  const att = Math.min(opt.att, dur * 0.5);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(opt.vol, t + att);
+  g.gain.setValueAtTime(opt.vol, Math.max(t + att, t + dur - opt.rel));
+  g.gain.linearRampToValueAtTime(0.0001, t + dur);
+  osc.connect(g).connect(opt.dest);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+
+function programmaGiro(t0) {
+  // archi (pad)
+  for (const [note, inizio] of ACCORDI) {
+    for (const n of note) {
+      nota(n, t0 + inizio * BEAT, 4.3 * BEAT, { tipo: "sawtooth", vol: 0.035, att: 1.1, rel: 1.4, dest: padFiltro, detune: 5 });
+      nota(n, t0 + inizio * BEAT, 4.3 * BEAT, { tipo: "sawtooth", vol: 0.035, att: 1.1, rel: 1.4, dest: padFiltro, detune: -6 });
+    }
+  }
+  // violino (melodia)
+  for (const [n, inizio, dur] of MELODIA) {
+    nota(n, t0 + inizio * BEAT, dur * BEAT, { tipo: "triangle", vol: 0.14, att: 0.09, rel: 0.45, dest: busSecco });
+    nota(n, t0 + inizio * BEAT, dur * BEAT, { tipo: "sine", vol: 0.07, att: 0.09, rel: 0.45, dest: busSecco, detune: 4 });
+  }
+  // basso che cammina
+  for (const [n, inizio, dur = 1] of BASSO) {
+    nota(n, t0 + inizio * BEAT, dur * BEAT * 0.92, { tipo: "sine", vol: 0.16, att: 0.02, rel: 0.18, dest: busSecco });
+  }
+}
+
+function pianificaMusica(t0) {
+  if (!musicaAttiva) return;
+  programmaGiro(t0);
+  const prossimo = t0 + DURATA_LOOP;
+  timerMusica = setTimeout(() => pianificaMusica(prossimo),
+    Math.max((prossimo - audioCtx.currentTime - 1.5) * 1000, 200));
+}
+
+function avviaMusica() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const master = audioCtx.createGain();
+  master.gain.value = 0.55;
+  master.connect(audioCtx.destination);
+
+  const eco = audioCtx.createDelay();
+  eco.delayTime.value = 0.38;
+  const ritorno = audioCtx.createGain();
+  ritorno.gain.value = 0.3;
+  eco.connect(ritorno).connect(eco);
+  const bagnato = audioCtx.createGain();
+  bagnato.gain.value = 0.24;
+  eco.connect(bagnato).connect(master);
+
+  busSecco = audioCtx.createGain();
+  busSecco.connect(master);
+  busSecco.connect(eco);
+
+  padFiltro = audioCtx.createBiquadFilter();
+  padFiltro.type = "lowpass";
+  padFiltro.frequency.value = 750;
+  padFiltro.connect(busSecco);
+
+  musicaAttiva = true;
+  pianificaMusica(audioCtx.currentTime + 0.1);
+}
+
+function fermaMusica() {
+  musicaAttiva = false;
+  clearTimeout(timerMusica);
+  if (audioCtx) { audioCtx.close(); audioCtx = null; }
+}
+
+const btnMusica = document.getElementById("btnMusica");
+btnMusica.addEventListener("click", () => {
+  if (musicaAttiva) fermaMusica(); else avviaMusica();
+  btnMusica.classList.toggle("attivo", musicaAttiva);
+});
+
+/* ============================================================
+   SELETTORE LINGUA
+   ============================================================ */
+function applicaLingua() {
+  const T = TXT[lingua];
+  document.documentElement.lang = lingua;
+
+  if (PIANETA_FOCUS) {
+    const nomeFocus = PIANETA_FOCUS.nome[lingua];
+    document.title = T.titoloPaginaFocus(nomeFocus);
+    document.getElementById("titolo").innerHTML = T.titoloFocus(nomeFocus);
+  } else {
+    document.title = T.titoloPagina;
+    document.getElementById("titolo").innerHTML = T.titolo;
+  }
+  document.getElementById("linkIndietro").textContent = T.indietro;
+  document.getElementById("lblTempo").textContent = T.tempo;
+  document.getElementById("suggerimento").textContent = T.suggerimento;
+  document.getElementById("lblConsole").textContent = T.console;
+  document.getElementById("lblDataAllineamento").textContent = T.dataAllineamento;
+  document.getElementById("btnOggi").textContent = T.oggi;
+  document.getElementById("dataGiorno").setAttribute("aria-label", T.campoGiorno);
+  document.getElementById("dataMese").setAttribute("aria-label", T.campoMese);
+  document.getElementById("dataAnno").setAttribute("aria-label", T.campoAnno);
+  aggiornaAvvisoPrecisione();
+  document.getElementById("lblVelocita").textContent = T.velocita;
+  document.getElementById("lblScala").textContent = T.scala;
+  document.getElementById("lblLuce").textContent = T.luce;
+  document.getElementById("lblOrbite").textContent = T.ampiezzaOrbite;
+  document.getElementById("lblChkOrbite").textContent = T.orbite;
+  document.getElementById("lblChkNomi").textContent = T.nomi;
+  document.getElementById("lblChkAccessibilita").textContent = T.accessibilita;
+  document.getElementById("lblChkScie").textContent = T.scie;
+  document.getElementById("lblChkLune").textContent = T.lune;
+  document.getElementById("lblChkNani").textContent = T.nani;
+  document.getElementById("lblChkAsteroidi").textContent = T.asteroidi;
+  document.getElementById("lblChkComete").textContent = T.comete;
+  document.getElementById("lblLimiteLune").textContent = T.limiteLune;
+  document.getElementById("campoRicerca").placeholder = T.cerca;
+  document.getElementById("apriRicerca").setAttribute("aria-label", T.cerca);
+  document.getElementById("btnZoomIn").setAttribute("aria-label", T.zoomAvanti);
+  document.getElementById("btnZoomIn").title = T.zoomAvanti;
+  document.getElementById("btnZoomOut").setAttribute("aria-label", T.zoomIndietro);
+  document.getElementById("btnZoomOut").title = T.zoomIndietro;
+  aggiornaModoControlli(); // etichette delle frecce + toggle, secondo modalità e lingua
+  document.getElementById("btnReset").textContent = T.reset;
+  document.getElementById("btnMusica").textContent = T.musica;
+  document.getElementById("schedaChiudi").title = T.chiudi;
+  document.getElementById("chiudiFonti").title = T.chiudi;
+  document.getElementById("apriFonti").textContent = T.fonti;
+  document.getElementById("titoloFonti").textContent = T.titoloFonti;
+  document.querySelectorAll("[data-lingua-contenuto]").forEach(el => {
+    el.hidden = el.dataset.linguaContenuto !== lingua;
+  });
+  btnPausa.textContent = stato.pausa ? T.riprendi : T.pausa;
+
+  document.querySelectorAll("#selettoreLingue button").forEach(b =>
+    b.classList.toggle("attiva", b.dataset.lingua === lingua));
+
+  aggiornaSliders.forEach(f => f());
+  aggiornaCronometro();
+  if (campoRicerca.value) mostraRisultatiRicerca();
+  if (layoutMobile) requestAnimationFrame(aggiornaGeometria);
+
+  // ritraduce la scheda aperta mantenendone lo stato
+  if (stato.selezionato) {
+    apriScheda(stato.selezionato, scheda.classList.contains("ridotta"));
+  }
+  aggiornaPulsanteCamera();
+}
+
+document.querySelectorAll("#selettoreLingue button").forEach(b => {
+  b.addEventListener("click", () => {
+    if (b.dataset.lingua === lingua) return;
+    lingua = b.dataset.lingua;
+    localStorage.setItem("sistemasolare-lingua", lingua);
+    applicaLingua();
+  });
+});
+
+/* tasti rapidi */
+window.addEventListener("keydown", e => {
+  if (e.code === "Space") { e.preventDefault(); btnPausa.click(); }
+  if (e.key === "Escape") {
+    chiudiRicerca();
+    scheda.classList.remove("visibile");
+    stato.selezionato = null;
+  }
+});
+
+function apriTargetIniziale() {
+  if (!TARGET_INIZIALE) return;
+  const target = TARGET_INIZIALE;
+  const corpi = PIANETA_FOCUS
+    ? [PIANETA_FOCUS, ...PIANETA_FOCUS.lune]
+    : [SOLE, ...PIANETI, ...PIANETI_NANI, ...COMETE];
+  const corpo = corpi.find(c => c.nome.en === target || c.nome.it === target);
+  if (!corpo) return;
+  if (PIANETI_NANI.includes(corpo)) {
+    stato.mostraNani = true;
+    document.getElementById("chkNani").checked = true;
+  }
+  apriScheda(corpo);
+}
+
+/* via! */
+if (PIANETA_FOCUS) document.body.classList.add("focus");
+ridimensiona();
+applicaLingua();
+apriTargetIniziale();
+completaTransizioneIngresso();
+setTimeout(aggiornaGeometria, 1200);
+requestAnimationFrame(ciclo);
